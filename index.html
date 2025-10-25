@@ -35,6 +35,8 @@
   .btn{display:inline-flex;gap:8px;align-items:center;border-radius:999px;padding:10px 16px;border:1px solid var(--primary);background:var(--primary);color:#fff;cursor:pointer;font-weight:600;transition:.2s}
   .btn:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,.1)}
   .btn.ghost{background:#fff;color:var(--primary-dark)}
+  .btn.danger{background:#ef4444;border-color:#ef4444;color:#fff}
+  .btn.danger:hover{background:#dc2626}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:900px){.row{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
   .kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -69,6 +71,12 @@
   .npk-good { color: #10b981; }
   .npk-medium { color: #f59e0b; }
   .npk-low { color: #ef4444; }
+
+  /* Team name editor */
+  .team-name-editor { display: flex; gap: 8px; align-items: center; }
+  .team-name { cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
+  .team-name:hover { background: var(--primary-light); }
+  .team-name-input { width: 120px; padding: 4px 8px; font-size: 14px; }
 
   /* cartoon vibe */
   .theme-kid .mascot, .theme-teen .mascot { animation: bob 2.5s ease-in-out infinite; }
@@ -123,6 +131,7 @@
     <button class="btn ghost" id="navDash"><i class="fa-solid fa-gauge"></i> แดชบอร์ด</button>
     <button class="btn ghost" id="navInsight"><i class="fa-solid fa-heart-pulse"></i> สรุปเชิงลึก</button>
     <span class="muted" id="profileBadge" style="display:none"><i class="fa-solid fa-circle-check"></i> บันทึกโปรไฟล์แล้ว</span>
+    <button class="btn danger ghost" id="btnReset" style="margin-left:auto"><i class="fa-solid fa-rotate-left"></i> ล้างการตั้งค่า</button>
   </div>
 
   <!-- FORM -->
@@ -147,6 +156,16 @@
         <div>
           <label>ทีม B</label>
           <input id="webappB" placeholder="ปล่อยว่างได้ ถ้าใช้ URL เดียวกัน">
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>ชื่อทีม A</label>
+          <input id="teamNameA" placeholder="ชื่อทีม A" value="ทีม A">
+        </div>
+        <div>
+          <label>ชื่อทีม B</label>
+          <input id="teamNameB" placeholder="ชื่อทีม B" value="ทีม B">
         </div>
       </div>
       <div class="row" style="margin-top:8px">
@@ -201,12 +220,18 @@
 
   <!-- DASHBOARD -->
   <div class="card" id="secDash" style="display:none">
-    <div class="hd">แดชบอร์ด 2 กระถาง (ทีม A vs ทีม B)</div>
+    <div class="hd">แดชบอร์ด 2 กระถาง (<span id="teamALabel">ทีม A</span> vs <span id="teamBLabel">ทีม B</span>)</div>
     <div class="bd grid2">
       <!-- LEFT -->
       <div>
         <div class="flex" style="justify-content:space-between">
-          <div class="teamBadge"><svg class="teamIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#86efac"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#16a34a"/></svg><div class="muted">ทีม A</div></div>
+          <div class="teamBadge">
+            <svg class="teamIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#86efac"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#16a34a"/></svg>
+            <div class="muted team-name-editor">
+              <span class="team-name" id="teamANameDisplay">ทีม A</span>
+              <input type="text" class="team-name-input" id="teamANameInput" style="display:none" maxlength="20">
+            </div>
+          </div>
           <div class="badge"><i class="fa-solid fa-database"></i> <span id="dsA">—</span></div>
         </div>
         <div class="kpi" style="margin-top:8px">
@@ -227,7 +252,13 @@
       <!-- RIGHT -->
       <div>
         <div class="flex" style="justify-content:space-between">
-          <div class="teamBadge"><svg class="teamIcon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="#93c5fd"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#2563eb"/></svg><div class="muted">ทีม B</div></div>
+          <div class="teamBadge">
+            <svg class="teamIcon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="#93c5fd"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#2563eb"/></svg>
+            <div class="muted team-name-editor">
+              <span class="team-name" id="teamBNameDisplay">ทีม B</span>
+              <input type="text" class="team-name-input" id="teamBNameInput" style="display:none" maxlength="20">
+            </div>
+          </div>
           <div class="badge"><i class="fa-solid fa-database"></i> <span id="dsB">—</span></div>
         </div>
         <div class="kpi" style="margin-top:8px">
@@ -248,6 +279,7 @@
     <div class="bd" style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn" id="btnGoInsights"><i class="fa-solid fa-heart-pulse"></i> ไปหน้าสรุปเชิงลึก</button>
       <button class="btn ghost" id="btnRefresh"><i class="fa-solid fa-rotate"></i> รีเฟรชทันที</button>
+      <button class="btn ghost" id="btnEditTeams"><i class="fa-solid fa-pen-to-square"></i> เปลี่ยนชื่อทีม</button>
     </div>
   </div>
 
@@ -267,13 +299,13 @@
       <!-- NPK Section -->
       <div class="grid2" style="margin-top:12px">
         <div class="card" style="margin:0">
-          <div class="hd">ทีม A — ค่า NPK ปัจจุบัน</div>
+          <div class="hd"><span id="insightTeamA">ทีม A</span> — ค่า NPK ปัจจุบัน</div>
           <div class="bd">
             <div id="npkA">—</div>
           </div>
         </div>
         <div class="card" style="margin:0">
-          <div class="hd">ทีม B — ค่า NPK ปัจจุบัน</div>
+          <div class="hd"><span id="insightTeamB">ทีม B</span> — ค่า NPK ปัจจุบัน</div>
           <div class="bd">
             <div id="npkB">—</div>
           </div>
@@ -282,13 +314,13 @@
 
       <div class="grid2" style="margin-top:12px">
         <div class="card" style="margin:0">
-          <div class="hd">ทีม A — สุขภาพวันนี้</div>
+          <div class="hd"><span id="healthTeamA">ทีม A</span> — สุขภาพวันนี้</div>
           <div class="bd">
             <div id="healthA">—</div>
           </div>
         </div>
         <div class="card" style="margin:0">
-          <div class="hd">ทีม B — สุขภาพวันนี้</div>
+          <div class="hd"><span id="healthTeamB">ทีม B</span> — สุขภาพวันนี้</div>
           <div class="bd">
             <div id="healthB">—</div>
           </div>
@@ -315,7 +347,7 @@
 
 <script>
 // ===== Configuration =====
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyEMeOfF9wqrsoduyFCIlxid7lFzzOqXsIN_GxO9V6QgUY_OXx5atJKZd0fkMlg7P9mbw/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/ของดีลาดกระบัง888/exec";
 
 // ===== Helpers =====
 const $  = s => document.querySelector(s);
@@ -340,13 +372,163 @@ onReady(()=>{
     applyTheme(saved);
     themeSel.addEventListener('change',e=>applyTheme(e.target.value));
   }
-  ['webapp','webappA','webappB','limit','plant','size','lightCond','airflow','ac','name','interval','demo'].forEach(id=>{
+  
+  // Load all settings including team names
+  ['webapp','webappA','webappB','limit','plant','size','lightCond','airflow','ac','name','interval','demo','teamNameA','teamNameB'].forEach(id=>{
     const el = byId(id); if(!el) return;
-    const v = localStorage.getItem('gs_'+id); if(v!==null) el.value=v;
-    el.addEventListener('change',e=> localStorage.setItem('gs_'+id, e.target.value));
+    const v = localStorage.getItem('gs_'+id); 
+    if(v !== null) {
+      el.value = v;
+      // Update team name displays if they exist
+      if (id === 'teamNameA' && byId('teamANameDisplay')) {
+        byId('teamANameDisplay').textContent = v || 'ทีม A';
+        byId('teamALabel').textContent = v || 'ทีม A';
+        byId('insightTeamA').textContent = v || 'ทีม A';
+        byId('healthTeamA').textContent = v || 'ทีม A';
+      }
+      if (id === 'teamNameB' && byId('teamBNameDisplay')) {
+        byId('teamBNameDisplay').textContent = v || 'ทีม B';
+        byId('teamBLabel').textContent = v || 'ทีม B';
+        byId('insightTeamB').textContent = v || 'ทีม B';
+        byId('healthTeamB').textContent = v || 'ทีม B';
+      }
+    }
+    el.addEventListener('change',e=> {
+      localStorage.setItem('gs_'+id, e.target.value);
+      // Update team name displays in real-time
+      if (id === 'teamNameA') {
+        updateTeamName('A', e.target.value);
+      }
+      if (id === 'teamNameB') {
+        updateTeamName('B', e.target.value);
+      }
+    });
   });
 });
+
 const applyTheme = v => { document.body.className=''; if(v && v!=='default') document.body.classList.add('theme-'+v); localStorage.setItem('theme',v||'default'); };
+
+// ===== Team Name Management =====
+function updateTeamName(team, name) {
+  const displayName = name || (team === 'A' ? 'ทีม A' : 'ทีม B');
+  byId(`team${team}NameDisplay`).textContent = displayName;
+  byId(`team${team}Label`).textContent = displayName;
+  byId(`insightTeam${team}`).textContent = displayName;
+  byId(`healthTeam${team}`).textContent = displayName;
+}
+
+function setupTeamNameEditing() {
+  // Team A name editing
+  const teamANameDisplay = byId('teamANameDisplay');
+  const teamANameInput = byId('teamANameInput');
+  
+  teamANameDisplay.addEventListener('click', () => {
+    teamANameDisplay.style.display = 'none';
+    teamANameInput.style.display = 'block';
+    teamANameInput.value = teamANameDisplay.textContent;
+    teamANameInput.focus();
+    teamANameInput.select();
+  });
+
+  teamANameInput.addEventListener('blur', () => {
+    saveTeamName('A', teamANameInput.value);
+  });
+
+  teamANameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      saveTeamName('A', teamANameInput.value);
+    }
+  });
+
+  // Team B name editing
+  const teamBNameDisplay = byId('teamBNameDisplay');
+  const teamBNameInput = byId('teamBNameInput');
+  
+  teamBNameDisplay.addEventListener('click', () => {
+    teamBNameDisplay.style.display = 'none';
+    teamBNameInput.style.display = 'block';
+    teamBNameInput.value = teamBNameDisplay.textContent;
+    teamBNameInput.focus();
+    teamBNameInput.select();
+  });
+
+  teamBNameInput.addEventListener('blur', () => {
+    saveTeamName('B', teamBNameInput.value);
+  });
+
+  teamBNameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      saveTeamName('B', teamBNameInput.value);
+    }
+  });
+}
+
+function saveTeamName(team, name) {
+  const displayName = name.trim() || (team === 'A' ? 'ทีม A' : 'ทีม B');
+  const inputId = `teamName${team}`;
+  const displayEl = byId(`team${team}NameDisplay`);
+  const inputEl = byId(`team${team}NameInput`);
+  
+  // Update all displays
+  updateTeamName(team, displayName);
+  
+  // Update form input
+  const formInput = byId(inputId);
+  if (formInput) formInput.value = displayName;
+  
+  // Save to localStorage
+  localStorage.setItem('gs_' + inputId, displayName);
+  
+  // Hide input, show display
+  displayEl.style.display = 'block';
+  inputEl.style.display = 'none';
+}
+
+// ===== Reset Function =====
+function resetAllSettings() {
+  if (confirm('ต้องการล้างการตั้งค่าทั้งหมดใช่ไหม? การดำเนินการนี้ไม่สามารถย้อนกลับได้')) {
+    // Clear all localStorage items
+    const keys = [
+      'gs_profile_done', 'gs_last_urlA', 'gs_last_urlB', 'gs_last_limit', 
+      'gs_last_interval', 'gs_last_demo', 'gs_webapp', 'gs_webappA', 'gs_webappB',
+      'gs_limit', 'gs_plant', 'gs_size', 'gs_lightCond', 'gs_airflow', 'gs_ac',
+      'gs_name', 'gs_interval', 'gs_demo', 'gs_teamNameA', 'gs_teamNameB'
+    ];
+    
+    keys.forEach(key => localStorage.removeItem(key));
+    
+    // Reset form values
+    byId('webapp').value = WEBAPP_URL;
+    byId('webappA').value = '';
+    byId('webappB').value = '';
+    byId('limit').value = '50';
+    byId('teamNameA').value = 'ทีม A';
+    byId('teamNameB').value = 'ทีม B';
+    byId('plant').value = 'มอนสเตอร่า';
+    byId('size').value = '1.5 x 2 เมตร';
+    byId('lightCond').value = 'พอประมาณ';
+    byId('airflow').value = 'พอใช้';
+    byId('ac').value = 'บางเวลา';
+    byId('name').value = 'ทีม GreenSync';
+    byId('interval').value = '20';
+    byId('demo').value = 'off';
+    
+    // Reset team names display
+    updateTeamName('A', 'ทีม A');
+    updateTeamName('B', 'ทีม B');
+    
+    // Show form and hide dashboard
+    show('secForm');
+    byId('navForm').style.display = 'inline-flex';
+    byId('btnEditProfile').style.display = 'none';
+    byId('profileBadge').style.display = 'none';
+    
+    // Clear status
+    setStatus('', '');
+    
+    alert('ล้างการตั้งค่าสำเร็จ! กรอกข้อมูลใหม่เพื่อเริ่มใช้งาน');
+  }
+}
 
 // ===== Column adapters =====
 const COLS = {
@@ -424,6 +606,11 @@ onReady(()=>{
   bind('navDash','click', ()=> show('secDash'));
   bind('navInsight','click', ()=> show('secInsights'));
   bind('btnEditProfile','click', ()=> show('secForm'));
+  bind('btnReset','click', resetAllSettings);
+  bind('btnEditTeams','click', ()=> {
+    // Switch to form to edit team names
+    show('secForm');
+  });
 });
 
 // ===== Start flow & auto-continue =====
@@ -437,6 +624,12 @@ let ctx={urlA:WEBAPP_URL,urlB:WEBAPP_URL,limit:50, interval:20000, cache:{A:{},B
     const limit = +(localStorage.getItem('gs_last_limit')||50);
     const interval = +(localStorage.getItem('gs_last_interval')||20000);
     const demo = localStorage.getItem('gs_last_demo')==='on';
+    
+    // Load team names
+    const teamNameA = localStorage.getItem('gs_teamNameA') || 'ทีม A';
+    const teamNameB = localStorage.getItem('gs_teamNameB') || 'ทีม B';
+    updateTeamName('A', teamNameA);
+    updateTeamName('B', teamNameB);
     
     if(done && (urlA || urlB)){
       if(!urlA && urlB) urlA=urlB; 
@@ -463,6 +656,7 @@ let ctx={urlA:WEBAPP_URL,urlB:WEBAPP_URL,limit:50, interval:20000, cache:{A:{},B
       
       show('secDash');
       startDashboard();
+      setupTeamNameEditing(); // Initialize team name editing
     }
   });
 })();
@@ -542,6 +736,14 @@ onReady(()=>{
       }
     }
 
+    // Save team names
+    const teamNameA = byId('teamNameA')?.value.trim() || 'ทีม A';
+    const teamNameB = byId('teamNameB')?.value.trim() || 'ทีม B';
+    localStorage.setItem('gs_teamNameA', teamNameA);
+    localStorage.setItem('gs_teamNameB', teamNameB);
+    updateTeamName('A', teamNameA);
+    updateTeamName('B', teamNameB);
+
     localStorage.setItem('gs_last_urlA', urlA);
     localStorage.setItem('gs_last_urlB', urlB);
     localStorage.setItem('gs_last_limit', String(Number(byId('limit')?.value||50)));
@@ -573,6 +775,7 @@ onReady(()=>{
     setStatus('ok','พร้อมแล้ว - กำลังโหลดข้อมูล...');
     show('secDash');
     startDashboard();
+    setupTeamNameEditing(); // Initialize team name editing
   });
 
   bind('btnGoInsights','click', async ()=>{
@@ -838,7 +1041,7 @@ function renderInsights(){
         labels,
         datasets: [
           {
-            label: 'ทีม A', 
+            label: byId('teamANameDisplay').textContent, 
             data: dataA, 
             tension: 0.25, 
             pointRadius: 2, 
@@ -848,7 +1051,7 @@ function renderInsights(){
             fill: false
           },
           {
-            label: 'ทีม B', 
+            label: byId('teamBNameDisplay').textContent, 
             data: dataB, 
             tension: 0.25, 
             pointRadius: 2, 
@@ -1003,8 +1206,8 @@ function tableSummary(obj){
     <thead>
       <tr>
         <th style="text-align:left">ช่วงเวลา</th>
-        <th>ทีม A</th>
-        <th>ทีม B</th>
+        <th>${byId('teamANameDisplay').textContent}</th>
+        <th>${byId('teamBNameDisplay').textContent}</th>
       </tr>
     </thead>
     <tbody>`;
