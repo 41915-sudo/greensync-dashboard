@@ -61,6 +61,15 @@
   .teamBadge{display:flex;align-items:center;gap:8px}
   .teamIcon{width:18px;height:18px}
 
+  /* NPK specific styles */
+  .npk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0; }
+  .npk-item { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center; }
+  .npk-value { font-weight: 700; font-size: 16px; }
+  .npk-label { font-size: 12px; color: var(--muted); }
+  .npk-good { color: #10b981; }
+  .npk-medium { color: #f59e0b; }
+  .npk-low { color: #ef4444; }
+
   /* cartoon vibe */
   .theme-kid .mascot, .theme-teen .mascot { animation: bob 2.5s ease-in-out infinite; }
   @keyframes bob { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-3px) } }
@@ -89,7 +98,7 @@
         </svg>
         <div>
           <div class="h1">🌿 GreenSync — Duel Mode</div>
-          <div class="muted">กรอกโปรไฟล์ → แดชบอร์ด 2 กระถาง → สรุปเชิงลึก (หัวใจ/สุขภาพ)</div>
+          <div class="muted">กรอกโปรไฟล์ → แดชบอร์ด 2 กระถาง → สรุปเชิงลึก (หัวใจ/สุขภาพ/NPK)</div>
         </div>
       </div>
       <div class="flex">
@@ -244,15 +253,31 @@
 
   <!-- INSIGHTS -->
   <div class="card" id="secInsights" style="display:none">
-    <div class="hd">สรุปเชิงลึก: หัวใจสะสม + สิ่งแวดล้อม & สุขภาพ</div>
+    <div class="hd">สรุปเชิงลึก: หัวใจสะสม + สิ่งแวดล้อม & สุขภาพ + NPK</div>
     <div class="bd">
       <div class="chips">
         <span class="chip">คะแนน = รูปหัวใจ (1–10)</span>
         <span class="chip">PM2.5 ใช้ µg/m³</span>
-        <span class="chip">UV Index ใช้ค่าจากชีต (ถ้ามี)</span>
+        <span class="chip">NPK ใช้ mg/kg</span>
       </div>
       <div style="margin:12px 0">
         <canvas id="chartHearts" height="120"></canvas>
+      </div>
+
+      <!-- NPK Section -->
+      <div class="grid2" style="margin-top:12px">
+        <div class="card" style="margin:0">
+          <div class="hd">ทีม A — ค่า NPK ปัจจุบัน</div>
+          <div class="bd">
+            <div id="npkA">—</div>
+          </div>
+        </div>
+        <div class="card" style="margin:0">
+          <div class="hd">ทีม B — ค่า NPK ปัจจุบัน</div>
+          <div class="bd">
+            <div id="npkB">—</div>
+          </div>
+        </div>
       </div>
 
       <div class="grid2" style="margin-top:12px">
@@ -331,7 +356,11 @@ const COLS = {
   soil: ['Soil Moisture (%)','Soil Moisture (%','SoilMoist_%','Soil'],
   light:['Light (%)','Light_%','Light'],
   pm25: ['PM2.5 (µg/m³)','PM2.5 (μg/m³)','PM2_5','pm25','PM2.5'],
-  uv:   ['UV Index','UV','UV_Index']
+  uv:   ['UV Index','UV','UV_Index'],
+  // NPK columns
+  n:    ['N (mg/kg)','N_mg_kg','N'],
+  p:    ['P (mg/kg)','P_mg_kg','P'],
+  k:    ['K (mg/kg)','K_mg_kg','K']
 };
 const SCORE = { score:['Score_1_10','Score','Score1_10'], advice:['Advice','AI_Advice','Note'], ts:['Timestamp','Timestamp (Asia/Bangkok)','time'] };
 const pick = (row, keys)=>{ for(const k of keys){ if(row && row[k]!=null && row[k]!=='' && row[k]!==undefined) return row[k]; } return null; };
@@ -576,7 +605,10 @@ function demoRows(){
     'Air Humidity (%)': 55+((i*7)%10),
     'Soil Moisture (%)': 40+((i*5)%20),
     'Light (%)': 60+((i*3)%20),
-    'PM2.5 (µg/m³)': 22+((i*13)%40)
+    'PM2.5 (µg/m³)': 22+((i*13)%40),
+    'N (mg/kg)': 30 + Math.round(Math.random() * 20),
+    'P (mg/kg)': 25 + Math.round(Math.random() * 15),
+    'K (mg/kg)': 35 + Math.round(Math.random() * 25)
   });
   return Array.from({length:50},(_,i)=>mk(i));
 }
@@ -700,6 +732,75 @@ async function startDashboard(){
   }, ctx.interval || 20000);
 }
 
+// ===== NPK Functions =====
+function getNPKClass(value, nutrient) {
+  if (value === null || value === undefined) return '';
+  
+  const thresholds = {
+    'N': { good: 30, medium: 20 },
+    'P': { good: 25, medium: 15 },
+    'K': { good: 30, medium: 20 }
+  };
+  
+  const threshold = thresholds[nutrient];
+  if (!threshold) return '';
+  
+  if (value >= threshold.good) return 'npk-good';
+  if (value >= threshold.medium) return 'npk-medium';
+  return 'npk-low';
+}
+
+function getNPKAdvice(n, p, k) {
+  const advice = [];
+  
+  if (n < 20) advice.push("ไนโตรเจนต่ำ - ควรเติมปุ๋ยไนโตรเจน");
+  else if (n > 50) advice.push("ไนโตรเจนสูง - ลดการให้ปุ๋ยไนโตรเจน");
+  
+  if (p < 15) advice.push("ฟอสฟอรัสต่ำ - ควรเติมปุ๋ยฟอสฟอรัส");
+  else if (p > 40) advice.push("ฟอสฟอรัสสูง - ลดการให้ปุ๋ยฟอสฟอรัส");
+  
+  if (k < 20) advice.push("โพแทสเซียมต่ำ - ควรเติมปุ๋ยโพแทสเซียม");
+  else if (k > 50) advice.push("โพแทสเซียมสูง - ลดการให้ปุ๋ยโพแทสเซียม");
+  
+  if (advice.length === 0) return "ระดับธาตุอาหารเหมาะสม";
+  return advice.join(", ");
+}
+
+function renderNPK(team) {
+  const rows = (team === 'A' ? ctx.cache.A.data : ctx.cache.B.data);
+  if (!rows || !rows.length) return '<div class="muted">ไม่มีข้อมูล NPK</div>';
+  
+  const latest = rows[0];
+  const n = safeNum(pick(latest, COLS.n));
+  const p = safeNum(pick(latest, COLS.p));
+  const k = safeNum(pick(latest, COLS.k));
+  
+  const advice = getNPKAdvice(n, p, k);
+  
+  return `
+    <div class="npk-grid">
+      <div class="npk-item">
+        <div class="npk-value ${getNPKClass(n, 'N')}">${n ?? '—'}</div>
+        <div class="npk-label">ไนโตรเจน (N)</div>
+      </div>
+      <div class="npk-item">
+        <div class="npk-value ${getNPKClass(p, 'P')}">${p ?? '—'}</div>
+        <div class="npk-label">ฟอสฟอรัส (P)</div>
+      </div>
+      <div class="npk-item">
+        <div class="npk-value ${getNPKClass(k, 'K')}">${k ?? '—'}</div>
+        <div class="npk-label">โพแทสเซียม (K)</div>
+      </div>
+    </div>
+    <div style="margin-top: 8px; font-size: 14px;">
+      <strong>คำแนะนำ:</strong> ${advice}
+    </div>
+    <div style="margin-top: 4px; font-size: 12px; color: var(--muted);">
+      หน่วย: mg/kg | อัปเดต: ${fmtTime(pick(latest, COLS.ts))}
+    </div>
+  `;
+}
+
 // ===== Insights page =====
 let heartChart = null;
 function renderInsights(){
@@ -773,6 +874,10 @@ function renderInsights(){
         }
       }
     });
+
+    // อัพเดทข้อมูล NPK
+    byId('npkA') && (byId('npkA').innerHTML = renderNPK('A'));
+    byId('npkB') && (byId('npkB').innerHTML = renderNPK('B'));
 
     // อัพเดทข้อมูลสุขภาพ
     byId('healthA') && (byId('healthA').innerHTML = healthHTML(latestEnv('A')));
