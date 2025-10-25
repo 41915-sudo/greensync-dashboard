@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🌿 GreenSync Duel — Form → Dashboard → Insights</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+<style>
+  :root{
+    --bg:#f5f7fa;--text:#1f2430;--muted:#667085;--card:#fff;--border:#e5e7eb;
+    --primary:#10b981;--primary-light:#d1fae5;--primary-dark:#047857;
+    --secondary:#8b5cf6;--accent:#f59e0b;
+  }
+  .theme-kid{--bg:#e0f7fa;--text:#01579b;--muted:#4dd0e1;--card:#fff;--border:#b2ebf2;--primary:#00bcd4;--primary-light:#b2ebf2;--primary-dark:#00838f;--secondary:#ff4081;--accent:#ffc107;}
+  .theme-teen{--bg:#f3e5f5;--text:#4a148c;--muted:#8e24aa;--card:#fff;--border:#e1bee7;--primary:#9c27b0;--primary-light:#e1bee7;--primary-dark:#6a1b9a;--secondary:#ff9800;--accent:#4caf50;}
+  .theme-adult{--bg:#f5f5f5;--text:#212121;--muted:#757575;--card:#fff;--border:#e0e0e0;--primary:#455a64;--primary-light:#cfd8dc;--primary-dark:#263238;--secondary:#607d8b;--accent:#ff5722;}
+  .theme-cny{--bg:#fff9f9;--text:#b71c1c;--muted:#d32f2f;--card:#fff;--border:#ffcdd2;--primary:#d32f2f;--primary-light:#ffcdd2;--primary-dark:#b71c1c;--secondary:#ffc107;--accent:#4caf50;}
+  .theme-valentine{--bg:#fff5f7;--text:#880e4f;--muted:#ad1457;--card:#fff;--border:#f8bbd9;--primary:#e91e63;--primary-light:#f8bbd9;--primary-dark:#ad1457;--secondary:#ec407a;--accent:#ab47bc;}
+  .theme-newyear{--bg:#f0f8ff;--text:#0d47a1;--muted:#1565c0;--card:#fff;--border:#bbdefb;--primary:#0d47a1;--primary-light:#bbdefb;--primary-dark:#002171;--secondary:#ff6d00;--accent:#00c853;}
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Noto Sans Thai",system-ui;transition:.3s}
+  .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+  .h1{font-weight:700;font-size:28px}
+  .muted{color:var(--muted)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin-bottom:16px;transition:.3s}
+  .hd{padding:14px 16px;border-bottom:1px solid var(--border);font-weight:600;background:var(--primary-light);color:var(--primary-dark)}
+  .bd{padding:14px 16px}
+  label{display:block;margin-bottom:6px;font-size:14px}
+  input,select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;transition:.2s}
+  input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .btn{display:inline-flex;gap:8px;align-items:center;border-radius:999px;padding:10px 16px;border:1px solid var(--primary);background:var(--primary);color:#fff;cursor:pointer;font-weight:600;transition:.2s}
+  .btn:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,.1)}
+  .btn.ghost{background:#fff;color:var(--primary-dark)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.row{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+  .kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .kpi .it{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:8px 10px}
+  .kpi .v{font-weight:700}
+  .hearts{font-size:28px;line-height:1.1;color:#e91e63;word-break:break-word}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:6px 8px;border-bottom:1px solid var(--border);font-size:13px}
+  thead th{background:#f8fafc}
+  .flex{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:var(--primary-light);color:var(--primary-dark);font-weight:600;font-size:12px}
+  .err{color:#b91c1c;font-weight:600}
+  .ok{color:#047857;font-weight:600}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#fff}
+  .sub{font-size:12px;color:var(--muted)}
+  .sp{display:inline-flex;align-items:center;gap:8px}
+  .dot{width:10px;height:10px;border-radius:999px;background:#9ca3af;display:inline-block}
+  .dot.ok{background:#10b981}.dot.fail{background:#ef4444}.dot.load{background:#f59e0b}
+  .spinner{width:18px;height:18px;border:3px solid #e5e7eb;border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero{display:flex;align-items:center;gap:12px}
+  .mascot{width:64px;height:64px}
+  .teamBadge{display:flex;align-items:center;gap:8px}
+  .teamIcon{width:18px;height:18px}
+
+  /* cartoon vibe */
+  .theme-kid .mascot, .theme-teen .mascot { animation: bob 2.5s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-3px) } }
+  .theme-kid body{ background:linear-gradient(180deg,#e0f7fa 0%, #f5f7fa 100%) }
+  .theme-teen body{ background:linear-gradient(180deg,#f3e5f5 0%, #f5f7fa 100%) }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- Header -->
+  <div class="card">
+    <div class="bd flex" style="justify-content:space-between">
+      <div class="hero">
+        <svg class="mascot" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-opacity="1" stop-color="#34d399"/>
+              <stop offset="100%" stop-opacity="1" stop-color="#10b981"/>
+            </linearGradient>
+          </defs>
+          <circle cx="64" cy="64" r="62" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="4"/>
+          <path d="M64 72c-14 0-22-10-22-22 10 0 18 4 22 10 4-6 12-10 22-10 0 12-8 22-22 22z" fill="url(#g1)"/>
+          <rect x="36" y="76" width="56" height="26" rx="8" fill="#f59e0b"/>
+          <rect x="42" y="82" width="44" height="6" rx="3" fill="#fed7aa"/>
+          <rect x="48" y="92" width="32" height="6" rx="3" fill="#fed7aa"/>
+        </svg>
+        <div>
+          <div class="h1">🌿 GreenSync — Duel Mode</div>
+          <div class="muted">กรอกโปรไฟล์ → แดชบอร์ด 2 กระถาง → สรุปเชิงลึก (หัวใจ/สุขภาพ)</div>
+        </div>
+      </div>
+      <div class="flex">
+        <button class="btn ghost" id="btnEditProfile" title="แก้ไขโปรไฟล์" style="display:none"><i class="fa-solid fa-user-pen"></i> แก้ไขโปรไฟล์</button>
+        <select id="theme" title="ธีม">
+          <option value="default">ธีมปกติ</option>
+          <option value="kid">ธีมเด็ก</option>
+          <option value="teen">ธีมวัยรุ่น</option>
+          <option value="adult">ธีมผู้ใหญ่</option>
+          <option value="cny">ธีมตรุษจีน</option>
+          <option value="valentine">ธีมวาเลนไทน์</option>
+          <option value="newyear">ธีมปีใหม่</option>
+        </select>
+        <span class="badge"><i class="fa-solid fa-clock"></i> <span id="nowTH">—</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="flex" style="margin:0 0 12px 2px">
+    <button class="btn ghost" id="navForm"><i class="fa-regular fa-rectangle-list"></i> แบบฟอร์ม</button>
+    <button class="btn ghost" id="navDash"><i class="fa-solid fa-gauge"></i> แดชบอร์ด</button>
+    <button class="btn ghost" id="navInsight"><i class="fa-solid fa-heart-pulse"></i> สรุปเชิงลึก</button>
+    <span class="muted" id="profileBadge" style="display:none"><i class="fa-solid fa-circle-check"></i> บันทึกโปรไฟล์แล้ว</span>
+  </div>
+
+  <!-- FORM -->
+  <div class="card" id="secForm">
+    <div class="hd">โปรไฟล์ & การเชื่อมต่อ</div>
+    <div class="bd">
+      <div class="row">
+        <div>
+          <label>Web App URL (รวมทีม A/B) — ลงท้าย /exec</label>
+          <input id="webapp" placeholder="https://script.google.com/macros/s/DEPLOYMENT_ID/exec" value="https://script.google.com/macros/s/AKfycbyEMeOfF9wqrsoduyFCIlxid7lFzzOqXsIN_GxO9V6QgUY_OXx5atJKZd0fkMlg7P9mbw/exec">
+        </div>
+        <div>
+          <label>จำนวนแถว (limit)</label>
+          <select id="limit"><option>10</option><option>30</option><option selected>50</option><option>100</option></select>
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>หรือกำหนด Web App แยกทีม (ไม่บังคับ) — ทีม A</label>
+          <input id="webappA" placeholder="ปล่อยว่างได้ ถ้าใช้ URL เดียวกัน">
+        </div>
+        <div>
+          <label>ทีม B</label>
+          <input id="webappB" placeholder="ปล่อยว่างได้ ถ้าใช้ URL เดียวกัน">
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>ชื่อพันธุ์ต้นไม้</label>
+          <input id="plant" placeholder="เช่น ยางอินเดีย / มอนสเตอร่า" value="มอนสเตอร่า">
+        </div>
+        <div>
+          <label>ขนาดพื้นที่ปลูก</label>
+          <input id="size" placeholder="เช่น 2 x 3 เมตร" value="1.5 x 2 เมตร">
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>แสง</label>
+          <select id="lightCond"><option>พอมาก</option><option selected>พอประมาณ</option><option>น้อย/อับแสง</option></select>
+        </div>
+        <div>
+          <label>การถ่ายเทอากาศ</label>
+          <select id="airflow"><option>โปร่ง</option><option selected>พอใช้</option><option>อับ</option></select>
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>แอร์</label>
+          <select id="ac"><option>ตลอดวัน</option><option selected>บางเวลา</option><option>ไม่เปิด</option></select>
+        </div>
+        <div>
+          <label>ชื่อผู้ปลูก (ใช้โปรไฟล์ร่วม A/B)</label>
+          <input id="name" placeholder="เช่น ครูรัชพล" value="ทีม GreenSync">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>รอบอัปเดต (วินาที)</label>
+          <select id="interval"><option>10</option><option selected>20</option><option>30</option><option>60</option></select>
+        </div>
+        <div>
+          <label>โหมดทดสอบ (ไม่มีเว็บแอป)</label>
+          <select id="demo"><option value="off" selected>ปิด</option><option value="on">เปิด</option></select>
+        </div>
+      </div>
+
+      <div style="margin-top:12px" class="flex">
+        <button class="btn" id="btnStart"><i class="fa-solid fa-play"></i> เริ่มแข่งขัน ➜ เปิดแดชบอร์ด</button>
+        <span id="status" class="muted sp"><span class="dot" id="dot"></span><span id="statusText"></span></span>
+        <button class="btn ghost" id="btnTest"><i class="fa-solid fa-plug"></i> ทดสอบการเชื่อมต่อ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="card" id="secDash" style="display:none">
+    <div class="hd">แดชบอร์ด 2 กระถาง (ทีม A vs ทีม B)</div>
+    <div class="bd grid2">
+      <!-- LEFT -->
+      <div>
+        <div class="flex" style="justify-content:space-between">
+          <div class="teamBadge"><svg class="teamIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#86efac"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#16a34a"/></svg><div class="muted">ทีม A</div></div>
+          <div class="badge"><i class="fa-solid fa-database"></i> <span id="dsA">—</span></div>
+        </div>
+        <div class="kpi" style="margin-top:8px">
+          <div class="it"><div>Temp (°C)</div><div class="v" id="a_temp">-</div></div>
+          <div class="it"><div>Humid (%)</div><div class="v" id="a_hum">-</div></div>
+          <div class="it"><div>Soil (%)</div><div class="v" id="a_soil">-</div></div>
+          <div class="it"><div>Light (%)</div><div class="v" id="a_light">-</div></div>
+        </div>
+        <div style="margin-top:8px">หัวใจวันนี้:</div>
+        <div class="hearts" id="a_hearts">—</div>
+        <div class="muted" id="a_advice" style="margin-top:6px">—</div>
+        <table style="margin-top:10px">
+          <thead><tr><th style="text-align:left">เวลา</th><th>Temp</th><th>RH</th><th>Soil</th><th>Light</th></tr></thead>
+          <tbody id="a_tbl"></tbody>
+        </table>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="flex" style="justify-content:space-between">
+          <div class="teamBadge"><svg class="teamIcon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="#93c5fd"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#2563eb"/></svg><div class="muted">ทีม B</div></div>
+          <div class="badge"><i class="fa-solid fa-database"></i> <span id="dsB">—</span></div>
+        </div>
+        <div class="kpi" style="margin-top:8px">
+          <div class="it"><div>Temp (°C)</div><div class="v" id="b_temp">-</div></div>
+          <div class="it"><div>Humid (%)</div><div class="v" id="b_hum">-</div></div>
+          <div class="it"><div>Soil (%)</div><div class="v" id="b_soil">-</div></div>
+          <div class="it"><div>Light (%)</div><div class="v" id="b_light">-</div></div>
+        </div>
+        <div style="margin-top:8px">หัวใจวันนี้:</div>
+        <div class="hearts" id="b_hearts">—</div>
+        <div class="muted" id="b_advice" style="margin-top:6px">—</div>
+        <table style="margin-top:10px">
+          <thead><tr><th style="text-align:left">เวลา</th><th>Temp</th><th>RH</th><th>Soil</th><th>Light</th></tr></thead>
+          <tbody id="b_tbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="bd" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="btnGoInsights"><i class="fa-solid fa-heart-pulse"></i> ไปหน้าสรุปเชิงลึก</button>
+      <button class="btn ghost" id="btnRefresh"><i class="fa-solid fa-rotate"></i> รีเฟรชทันที</button>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="card" id="secInsights" style="display:none">
+    <div class="hd">สรุปเชิงลึก: หัวใจสะสม + สิ่งแวดล้อม & สุขภาพ</div>
+    <div class="bd">
+      <div class="chips">
+        <span class="chip">คะแนน = รูปหัวใจ (1–10)</span>
+        <span class="chip">PM2.5 ใช้ µg/m³</span>
+        <span class="chip">UV Index ใช้ค่าจากชีต (ถ้ามี)</span>
+      </div>
+      <div style="margin:12px 0">
+        <canvas id="chartHearts" height="120"></canvas>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div class="card" style="margin:0">
+          <div class="hd">ทีม A — สุขภาพวันนี้</div>
+          <div class="bd">
+            <div id="healthA">—</div>
+          </div>
+        </div>
+        <div class="card" style="margin:0">
+          <div class="hd">ทีม B — สุขภาพวันนี้</div>
+          <div class="bd">
+            <div id="healthB">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <div class="h1" style="font-size:18px;margin:0 0 6px">สรุปคะแนนรายวัน</div>
+          <div id="dailyTable" class="sub">—</div>
+        </div>
+        <div>
+          <div class="h1" style="font-size:18px;margin:0 0 6px">สรุปคะแนนรายสัปดาห์</div>
+          <div id="weeklyTable" class="sub">—</div>
+        </div>
+      </div>
+
+      <div class="flex" style="margin-top:12px">
+        <button class="btn ghost" id="btnBackDash"><i class="fa-solid fa-gauge"></i> กลับแดชบอร์ด</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Configuration =====
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyEMeOfF9wqrsoduyFCIlxid7lFzzOqXsIN_GxO9V6QgUY_OXx5atJKZd0fkMlg7P9mbw/exec";
+
+// ===== Helpers =====
+const $  = s => document.querySelector(s);
+const tz = 'Asia/Bangkok';
+const byId = id => document.getElementById(id);
+const setTextSafe = (id, text)=>{ const el = byId(id); if(el) el.textContent = text; };
+const bind = (id, ev, fn)=>{ const el = byId(id); if(el) el.addEventListener(ev, fn); else console.warn('Missing element:', id); };
+const fmtTime = iso => !iso?'-': new Date(iso).toLocaleString('th-TH',{timeZone:tz,hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'});
+const fmtDate = iso => !iso?'-': new Date(iso).toLocaleDateString('th-TH',{timeZone:tz});
+const hearts = n => n>0 ? '❤'.repeat(Math.max(1,Math.min(10,Math.round(n)))) : '—';
+const safeNum = v => { const n = Number(String(v).replace(/,/g,'')); return isFinite(n)? n:null; };
+const nowTick = ()=> setTextSafe('nowTH', new Date().toLocaleString('th-TH',{ timeZone: tz }));
+function onReady(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+
+// ===== Theme & local persistence =====
+onReady(()=>{
+  setInterval(nowTick,1000); nowTick();
+  const themeSel = byId('theme');
+  if(themeSel){
+    const saved = localStorage.getItem('theme')||'default';
+    themeSel.value = saved;
+    applyTheme(saved);
+    themeSel.addEventListener('change',e=>applyTheme(e.target.value));
+  }
+  ['webapp','webappA','webappB','limit','plant','size','lightCond','airflow','ac','name','interval','demo'].forEach(id=>{
+    const el = byId(id); if(!el) return;
+    const v = localStorage.getItem('gs_'+id); if(v!==null) el.value=v;
+    el.addEventListener('change',e=> localStorage.setItem('gs_'+id, e.target.value));
+  });
+});
+const applyTheme = v => { document.body.className=''; if(v && v!=='default') document.body.classList.add('theme-'+v); localStorage.setItem('theme',v||'default'); };
+
+// ===== Column adapters =====
+const COLS = {
+  ts:   ['Timestamp (Asia/Bangkok)','Timestamp','Timestamp (Asia)','time','Time'],
+  tC:   ['Temperature (°C)','Temperature (°C','AirTemp_C','Temp_C','Temp','Temperature'],
+  rh:   ['Air Humidity (%)','Humid (%)','AirHumid_%RH','Humidity'],
+  soil: ['Soil Moisture (%)','Soil Moisture (%','SoilMoist_%','Soil'],
+  light:['Light (%)','Light_%','Light'],
+  pm25: ['PM2.5 (µg/m³)','PM2.5 (μg/m³)','PM2_5','pm25','PM2.5'],
+  uv:   ['UV Index','UV','UV_Index']
+};
+const SCORE = { score:['Score_1_10','Score','Score1_10'], advice:['Advice','AI_Advice','Note'], ts:['Timestamp','Timestamp (Asia/Bangkok)','time'] };
+const pick = (row, keys)=>{ for(const k of keys){ if(row && row[k]!=null && row[k]!=='' && row[k]!==undefined) return row[k]; } return null; };
+
+// ===== Backend helper =====
+const buildURL = (base, obj={}) => { 
+  const u=new URL(base); 
+  Object.entries(obj).forEach(([k,v])=>u.searchParams.set(k,v)); 
+  return u.toString();
+};
+
+async function getJSON(url){ 
+  try {
+    console.log('Fetching:', url);
+    const r=await fetch(url, {cache:'no-store'}); 
+    if(!r.ok) throw new Error('HTTP '+r.status); 
+    const data = await r.json();
+    console.log('Response:', data);
+    return data;
+  } catch(e) {
+    console.error('Fetch error:', e);
+    throw e;
+  }
+}
+
+async function postJSON(url, payload){ 
+  const r=await fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }); 
+  return r.json().catch(()=>({})); 
+}
+
+// ===== UI status helpers =====
+function setStatus(type,msg){
+  const dot = byId('dot');
+  const statusText = byId('statusText');
+  if(!dot || !statusText) return;
+  dot.classList.remove('ok','fail','load');
+  if(type==='ok') dot.classList.add('ok');
+  else if(type==='fail') dot.classList.add('fail');
+  else dot.classList.add('load');
+  statusText.textContent = msg||'';
+}
+
+// ===== Navigation =====
+const show = id => { 
+  ['secForm','secDash','secInsights'].forEach(x=> { 
+    const el=byId(x); 
+    if(el) el.style.display = (x===id)?'block':'none'; 
+  }); 
+};
+
+onReady(()=>{
+  bind('navForm','click', ()=>{
+    const done = localStorage.getItem('gs_profile_done')==='1';
+    if(done){ alert('คุณบันทึกโปรไฟล์แล้ว ให้กด "แก้ไขโปรไฟล์" หากต้องการแก้'); return; }
+    show('secForm');
+  });
+  bind('navDash','click', ()=> show('secDash'));
+  bind('navInsight','click', ()=> show('secInsights'));
+  bind('btnEditProfile','click', ()=> show('secForm'));
+});
+
+// ===== Start flow & auto-continue =====
+let ctx={urlA:WEBAPP_URL,urlB:WEBAPP_URL,limit:50, interval:20000, cache:{A:{},B:{}}};
+
+(function autoStart(){
+  onReady(()=>{
+    const done = localStorage.getItem('gs_profile_done')==='1';
+    let urlA = localStorage.getItem('gs_last_urlA')||WEBAPP_URL;
+    let urlB = localStorage.getItem('gs_last_urlB')||WEBAPP_URL;
+    const limit = +(localStorage.getItem('gs_last_limit')||50);
+    const interval = +(localStorage.getItem('gs_last_interval')||20000);
+    const demo = localStorage.getItem('gs_last_demo')==='on';
+    
+    if(done && (urlA || urlB)){
+      if(!urlA && urlB) urlA=urlB; 
+      if(!urlB && urlA) urlB=urlA;
+      
+      ctx={urlA,urlB,limit,interval,cache:{A:{},B:{}}};
+      
+      try{ 
+        byId('dsA') && (byId('dsA').textContent= demo? 'DEMO' : (new URL(urlA)).host); 
+      }catch(e){}
+      
+      try{ 
+        byId('dsB') && (byId('dsB').textContent= demo? 'DEMO' : (new URL(urlB)).host); 
+      }catch(e){}
+      
+      const navForm = byId('navForm'); 
+      if(navForm) navForm.style.display='none';
+      
+      const btnEdit = byId('btnEditProfile'); 
+      if(btnEdit) btnEdit.style.display='inline-flex';
+      
+      const profBadge = byId('profileBadge'); 
+      if(profBadge) profBadge.style.display='inline-flex';
+      
+      show('secDash');
+      startDashboard();
+    }
+  });
+})();
+
+// ===== Buttons =====
+onReady(()=>{
+  bind('btnTest','click', async ()=>{
+    const baseA = (byId('webappA')?.value.trim()||byId('webapp')?.value.trim()||WEBAPP_URL);
+    if(!baseA){ setStatus('fail','ยังไม่ได้ใส่ URL'); return; }
+    
+    try{ 
+      new URL(baseA); 
+    }catch(_){ 
+      setStatus('fail','URL ไม่ถูกต้อง'); 
+      return; 
+    }
+    
+    setStatus('load','ทดสอบเชื่อมต่อ…');
+    
+    try{
+      const ping = await getJSON(buildURL(baseA,{action:'ping'}));
+      if(ping && ping.ok) {
+        setStatus('ok','เชื่อมต่อได้ ✔ เวอร์ชัน: ' + (ping.version || '2.2'));
+      } else {
+        setStatus('fail','ตอบกลับไม่ถูกต้อง');
+      }
+    }catch(e){ 
+      console.error('Connection test failed:', e);
+      setStatus('fail','ติดต่อไม่ได้: ' + e.message);
+    }
+  });
+
+  bind('btnStart','click', async ()=>{
+    const base = byId('webapp')?.value.trim()||WEBAPP_URL;
+    const baseA = byId('webappA')?.value.trim()||'';
+    const baseB = byId('webappB')?.value.trim()||'';
+    const demo = byId('demo')?.value==='on';
+    
+    if(!demo && !base && !(baseA && baseB)){ 
+      setStatus('fail','ใส่ Web App URL หรือเปิดโหมดทดสอบ'); 
+      return; 
+    }
+    
+    const urlA = demo? 'demo://A' : (baseA || base);
+    const urlB = demo? 'demo://B' : (baseB || base);
+    
+    if(!demo){ 
+      try{ 
+        new URL(urlA); 
+        new URL(urlB); 
+      }catch(_){ 
+        setStatus('fail','URL ไม่ถูกต้อง'); 
+        return; 
+      } 
+    }
+
+    const pf = {
+      action:'saveProfile', 
+      name:byId('name')?.value.trim()||'', 
+      plant:byId('plant')?.value.trim()||'', 
+      size:byId('size')?.value.trim()||'', 
+      light:byId('lightCond')?.value, 
+      airflow:byId('airflow')?.value, 
+      ac:byId('ac')?.value
+    };
+    
+    setStatus('load','กำลังบันทึกโปรไฟล์…');
+    
+    if(!demo) {
+      try {
+        await Promise.allSettled([ 
+          postJSON(urlA,{...pf,team:'A'}), 
+          postJSON(urlB,{...pf,team:'B'}) 
+        ]);
+      } catch(e) {
+        console.warn('Profile save warning:', e);
+      }
+    }
+
+    localStorage.setItem('gs_last_urlA', urlA);
+    localStorage.setItem('gs_last_urlB', urlB);
+    localStorage.setItem('gs_last_limit', String(Number(byId('limit')?.value||50)));
+    localStorage.setItem('gs_last_interval', String(Number(byId('interval')?.value||20)*1000));
+    localStorage.setItem('gs_last_demo', demo?'on':'off');
+    localStorage.setItem('gs_profile_done','1');
+
+    const navForm = byId('navForm'); 
+    if(navForm) navForm.style.display='none';
+    
+    const btnEdit = byId('btnEditProfile'); 
+    if(btnEdit) btnEdit.style.display='inline-flex';
+    
+    const profBadge = byId('profileBadge'); 
+    if(profBadge) profBadge.style.display='inline-flex';
+
+    ctx={
+      urlA,urlB,
+      limit:Number(byId('limit')?.value||50), 
+      interval:Number(byId('interval')?.value||20)*1000, 
+      cache:{A:{},B:{}}
+    };
+    
+    try{
+      byId('dsA') && (byId('dsA').textContent = (demo? 'DEMO' : (new URL(urlA)).host));
+      byId('dsB') && (byId('dsB').textContent = (demo? 'DEMO' : (new URL(urlB)).host));
+    }catch(e){}
+    
+    setStatus('ok','พร้อมแล้ว - กำลังโหลดข้อมูล...');
+    show('secDash');
+    startDashboard();
+  });
+
+  bind('btnGoInsights','click', async ()=>{
+    show('secInsights');
+    const tasks=[];
+    if(!ctx.urlA.startsWith('demo://')) tasks.push(
+      fetch(buildURL(ctx.urlA,{action:'analyzenow',team:'A'})).catch(e=>console.error('Analyze A failed:', e))
+    );
+    if(!ctx.urlB.startsWith('demo://')) tasks.push(
+      fetch(buildURL(ctx.urlB,{action:'analyzenow',team:'B'})).catch(e=>console.error('Analyze B failed:', e))
+    );
+    Promise.allSettled(tasks).finally(()=> {
+      setTimeout(() => renderInsights(), 500);
+    });
+  });
+
+  bind('btnBackDash','click', ()=> show('secDash'));
+  bind('btnRefresh','click', ()=> {
+    setStatus('load','รีเฟรช...');
+    tickOnce().finally(() => setStatus('ok','อัพเดทแล้ว'));
+  });
+});
+
+// ===== Demo generators =====
+function demoRows(){
+  const now=Date.now();
+  const mk = i=>({
+    'Timestamp (Asia/Bangkok)': new Date(now - i*60000).toISOString(),
+    'Temperature (°C)': +(25+Math.sin(i/6)*2).toFixed(1),
+    'Air Humidity (%)': 55+((i*7)%10),
+    'Soil Moisture (%)': 40+((i*5)%20),
+    'Light (%)': 60+((i*3)%20),
+    'PM2.5 (µg/m³)': 22+((i*13)%40)
+  });
+  return Array.from({length:50},(_,i)=>mk(i));
+}
+
+function demoScores(){
+  const now=Date.now();
+  const mk = i=>({
+    'Timestamp': new Date(now - i*3600000).toISOString(),
+    'Score_1_10': 5 + Math.round(Math.sin(i/3)*3),
+    'Score': 5 + Math.round(Math.sin(i/3)*3),
+    'Advice': 'รดน้ำเล็กน้อย/ตรวจแสง'
+  });
+  return Array.from({length:20},(_,i)=>mk(i));
+}
+
+// ===== Dashboard polling =====
+async function pack(url, team, limit){
+  if(url.startsWith('demo://')) {
+    return { 
+      data: demoRows(), 
+      score: demoScores() 
+    };
+  }
+  
+  try {
+    const dataUrl = buildURL(url,{action:'data',team,limit});
+    const scoreUrl = buildURL(url,{action:'score',team,limit:50});
+    
+    const [dRes, sRes] = await Promise.allSettled([
+      getJSON(dataUrl),
+      getJSON(scoreUrl)
+    ]);
+    
+    return {
+      data: dRes.status==='fulfilled' ? (dRes.value.rows||[]) : [],
+      score: sRes.status==='fulfilled'? (sRes.value.rows||[]) : []
+    };
+  } catch(e) {
+    console.error(`Pack error for ${team}:`, e);
+    return { data: [], score: [] };
+  }
+}
+
+async function renderTeam(url, team, prefix){
+  try{
+    const {data, score} = await pack(url, team, ctx.limit);
+    ctx.cache[team] = {data, score};
+
+    // อัพเดทข้อมูลล่าสุด
+    if(data.length > 0){
+      const latest = data[0];
+      const tC = safeNum(pick(latest, COLS.tC));
+      const rh = safeNum(pick(latest, COLS.rh));
+      const soil = safeNum(pick(latest, COLS.soil));
+      const light = safeNum(pick(latest, COLS.light));
+      
+      setTextSafe(prefix+'temp', tC != null ? tC.toFixed(1) : '-');
+      setTextSafe(prefix+'hum', rh != null ? rh : '-');
+      setTextSafe(prefix+'soil', soil != null ? soil : '-');
+      setTextSafe(prefix+'light', light != null ? light : '-');
+      
+      // อัพเดทตาราง
+      const tb = byId(prefix+'tbl');
+      if(tb){
+        tb.innerHTML = '';
+        data.slice(0, 10).forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${fmtTime(pick(row, COLS.ts))}</td>
+            <td style="text-align:center">${pick(row, COLS.tC) ?? '-'}</td>
+            <td style="text-align:center">${pick(row, COLS.rh) ?? '-'}</td>
+            <td style="text-align:center">${pick(row, COLS.soil) ?? '-'}</td>
+            <td style="text-align:center">${pick(row, COLS.light) ?? '-'}</td>
+          `;
+          tb.appendChild(tr);
+        });
+      }
+    } else {
+      setTextSafe(prefix+'temp', '-');
+      setTextSafe(prefix+'hum', '-');
+      setTextSafe(prefix+'soil', '-');
+      setTextSafe(prefix+'light', '-');
+    }
+
+    // อัพเดทคะแนนและคำแนะนำ
+    if(score.length > 0){
+      const latestScore = score[0];
+      const scoreValue = safeNum(pick(latestScore, SCORE.score)) || 0;
+      const advice = pick(latestScore, SCORE.advice);
+      
+      setTextSafe(prefix+'hearts', hearts(scoreValue));
+      setTextSafe(prefix+'advice', advice ? `คำแนะนำ: ${advice}` : '—');
+    } else {
+      setTextSafe(prefix+'hearts', '—');
+      setTextSafe(prefix+'advice', '—');
+    }
+  } catch(e){
+    console.error(`Render error for ${team}:`, e);
+    setTextSafe(prefix+'hearts', '—');
+    setTextSafe(prefix+'advice', 'ติดต่อข้อมูลไม่สำเร็จ');
+  }
+}
+
+async function tickOnce(){
+  try {
+    await Promise.all([
+      renderTeam(ctx.urlA, 'A', 'a_'),
+      renderTeam(ctx.urlB, 'B', 'b_')
+    ]);
+  } catch(e) {
+    console.error('Tick error:', e);
+  }
+}
+
+let timer = null;
+async function startDashboard(){
+  await tickOnce();
+  if(timer) clearInterval(timer);
+  timer = setInterval(() => { 
+    tickOnce().catch(e => console.error('Interval tick error:', e));
+  }, ctx.interval || 20000);
+}
+
+// ===== Insights page =====
+let heartChart = null;
+function renderInsights(){
+  try {
+    const A = (ctx.cache.A.score || []).map(o => ({
+      ts: pick(o, SCORE.ts), 
+      s: +(pick(o, SCORE.score) || 0)
+    })).slice(0, 30).reverse();
+    
+    const B = (ctx.cache.B.score || []).map(o => ({
+      ts: pick(o, SCORE.ts), 
+      s: +(pick(o, SCORE.score) || 0)
+    })).slice(0, 30).reverse();
+    
+    const labels = (A.length > 0 ? A : B).map(x => 
+      x.ts ? new Date(x.ts).toLocaleTimeString('th-TH', {
+        timeZone: tz,
+        hour: '2-digit',
+        minute: '2-digit'
+      }) : ''
+    );
+    
+    const dataA = A.map(x => x.s);
+    const dataB = B.map(x => x.s);
+
+    const canvas = byId('chartHearts');
+    if(!canvas) return;
+    
+    const ctx2 = canvas.getContext('2d');
+    if(heartChart) heartChart.destroy();
+    
+    heartChart = new Chart(ctx2, {
+      type: 'line',
+      data: { 
+        labels,
+        datasets: [
+          {
+            label: 'ทีม A', 
+            data: dataA, 
+            tension: 0.25, 
+            pointRadius: 2, 
+            borderWidth: 2, 
+            borderColor: '#10b981',
+            backgroundColor: '#10b98120',
+            fill: false
+          },
+          {
+            label: 'ทีม B', 
+            data: dataB, 
+            tension: 0.25, 
+            pointRadius: 2, 
+            borderWidth: 2, 
+            borderColor: '#8b5cf6',
+            backgroundColor: '#8b5cf620',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: { 
+          y: { 
+            suggestedMin: 0, 
+            suggestedMax: 10, 
+            ticks: { stepSize: 1 } 
+          } 
+        },
+        plugins: { 
+          legend: { display: true }, 
+          tooltip: { enabled: true } 
+        }
+      }
+    });
+
+    // อัพเดทข้อมูลสุขภาพ
+    byId('healthA') && (byId('healthA').innerHTML = healthHTML(latestEnv('A')));
+    byId('healthB') && (byId('healthB').innerHTML = healthHTML(latestEnv('B')));
+    
+    // อัพเดทตารางสรุป
+    byId('dailyTable') && (byId('dailyTable').innerHTML = tableSummary(avgBy('day')));
+    byId('weeklyTable') && (byId('weeklyTable').innerHTML = tableSummary(avgBy('week')));
+    
+  } catch(e) {
+    console.error('Render insights error:', e);
+  }
+}
+
+function latestEnv(team){
+  const rows = (team === 'A' ? ctx.cache.A.data : ctx.cache.B.data);
+  if(!rows || !rows.length) return null;
+  
+  const r = rows[0];
+  return {
+    ts: pick(r, COLS.ts),
+    tC: safeNum(pick(r, COLS.tC)),
+    rh: safeNum(pick(r, COLS.rh)),
+    pm25: safeNum(pick(r, COLS.pm25)),
+    uv: safeNum(pick(r, COLS.uv))
+  };
+}
+
+function pm25Cat(v){
+  if(v == null) return {cat: '—', tip: 'ไม่มีข้อมูล PM2.5'};
+  if(v <= 25) return {cat: 'ดีมาก', tip: 'อากาศดี ออกกำลังกายกลางแจ้งได้'};
+  if(v <= 37) return {cat: 'ดี', tip: 'ทำกิจกรรมกลางแจ้งได้ตามปกติ'};
+  if(v <= 50) return {cat: 'ปานกลาง', tip: 'ผู้ป่วยโรคทางเดินหายใจควรลดกิจกรรมหนัก'};
+  if(v <= 90) return {cat: 'เริ่มมีผล', tip: 'สวมหน้ากากเมื่อต้องอยู่นอกอาคารนาน'};
+  return {cat: 'มีผลกระทบ', tip: 'ควรสวมหน้ากาก/อยู่ในอาคารที่มีการกรองอากาศ'};
+}
+
+function uvTip(u){
+  if(u == null) return 'ไม่มีข้อมูล UV';
+  if(u < 3) return 'UV ต่ำ — ปลอดภัยโดยทั่วไป';
+  if(u < 6) return 'UV ปานกลาง — ทาครีมกันแดดเมื่ออยู่นอกอาคาร';
+  if(u < 8) return 'UV สูง — หาหมวก/แว่นกันแดด';
+  if(u < 11) return 'UV สูงมาก — เลี่ยงกลางแจ้งช่วงเที่ยง';
+  return 'UV อันตราย — จำกัดเวลาโดนแดดให้สั้นที่สุด';
+}
+
+function healthHTML(env){
+  if(!env) return '<div class="muted">ไม่มีข้อมูล</div>';
+  
+  const pm = pm25Cat(env.pm25);
+  const humidTip = env.rh != null ? 
+    (env.rh < 40 ? 'อากาศแห้ง — เติมความชื้น' : 
+     env.rh > 70 ? 'อับชื้น — เพิ่มการถ่ายเท' : 'ความชื้นเหมาะสม') : 
+    'ไม่มีข้อมูลความชื้น';
+    
+  const tempTip = env.tC != null ? 
+    (env.tC < 22 ? 'ค่อนข้างเย็น — เลี่ยงลมเย็นจัด' : 
+     env.tC > 30 ? 'ค่อนข้างร้อน — ระบายอากาศ' : 'อุณหภูมิเหมาะสม') : 
+    'ไม่มีข้อมูลอุณหภูมิ';
+  
+  return `
+    <div class="chips">
+      <span class="chip">เวลา: ${fmtTime(env.ts)}</span>
+      <span class="chip">PM2.5: ${env.pm25 ?? '—'} µg/m³ (${pm.cat})</span>
+      <span class="chip">RH: ${env.rh ?? '—'}%</span>
+      <span class="chip">Temp: ${env.tC ?? '—'}°C</span>
+      <span class="chip">UV: ${env.uv ?? '—'}</span>
+    </div>
+    <div style="margin-top:8px">
+      <div><strong>คำแนะนำด้านสุขภาพ:</strong></div>
+      <ul style="margin:6px 0 0 18px; font-size:14px;">
+        <li>${pm.tip}</li>
+        <li>${humidTip}</li>
+        <li>${tempTip}</li>
+        <li>${uvTip(env.uv)}</li>
+      </ul>
+    </div>
+  `;
+}
+
+function avgBy(kind){
+  const coll = (rows) => (rows || []).map(o => ({
+    d: kind === 'day' ? fmtDate(pick(o, SCORE.ts)) : weekKey(pick(o, SCORE.ts)), 
+    s: +(pick(o, SCORE.score) || 0)
+  }));
+  
+  const A = coll(ctx.cache.A.score);
+  const B = coll(ctx.cache.B.score);
+  
+  const agg = (arr) => arr.reduce((m, x) => {
+    const k = x.d;
+    (m[k] = m[k] || []).push(x.s);
+    return m;
+  }, {});
+  
+  const avg = (obj) => Object.entries(obj).map(([d, vals]) => ({
+    date: d, 
+    avg: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2)
+  })).sort((a, b) => a.date.localeCompare(b.date));
+  
+  return { A: avg(agg(A)), B: avg(agg(B)) };
+}
+
+function weekKey(iso){
+  if(!iso) return '-';
+  const d = new Date(iso);
+  const y = d.getFullYear();
+  const firstDay = new Date(y, 0, 1);
+  const days = Math.floor((d - firstDay) / 86400000) + firstDay.getDay() + 1;
+  const w = Math.floor(days / 7);
+  return `${y}-W${('0' + w).slice(-2)}`;
+}
+
+function tableSummary(obj){
+  const keys = Array.from(new Set([
+    ...(obj.A || []).map(x => x.date), 
+    ...(obj.B || []).map(x => x.date)
+  ])).sort();
+  
+  if(keys.length === 0) return '<div class="muted">ไม่มีข้อมูล</div>';
+  
+  let html = `<table style="width:100%; font-size:11px;">
+    <thead>
+      <tr>
+        <th style="text-align:left">ช่วงเวลา</th>
+        <th>ทีม A</th>
+        <th>ทีม B</th>
+      </tr>
+    </thead>
+    <tbody>`;
+  
+  keys.forEach(k => {
+    const a = (obj.A || []).find(x => x.date === k)?.avg ?? '-';
+    const b = (obj.B || []).find(x => x.date === k)?.avg ?? '-';
+    html += `<tr>
+      <td>${k}</td>
+      <td style="text-align:center">${a}</td>
+      <td style="text-align:center">${b}</td>
+    </tr>`;
+  });
+  
+  html += `</tbody></table>`;
+  return html;
+}
+
+// ===== Self-tests =====
+function runSelfTests(){
+  const mustHave = ['nowTH','theme','navDash','secDash','chartHearts','a_tbl','b_tbl','btnStart'];
+  const miss = mustHave.filter(id => !byId(id));
+  if(miss.length > 0) {
+    console.warn('Missing elements:', miss);
+  }
+}
+
+onReady(() => { 
+  runSelfTests(); 
+  console.log('GreenSync Duel loaded successfully');
+});
+</script>
+</body>
+</html>
