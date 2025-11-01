@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>🌱 Dashboard แปลงปลูก (Realtime)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2e7d32;
+      --primary-light: #4caf50;
+      --secondary: #ff9800;
+      --accent: #2196f3;
+      --danger: #f44336;
+      --pm-good: #4caf50;
+      --pm-moderate: #ff9800;
+      --pm-unhealthy: #f44336;
+      --pm-very-unhealthy: #9c27b0;
+      --pm-hazardous: #795548;
+      --light-bg: #f8fdf8;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: linear-gradient(135deg, #e8f5e9, #ffffff);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    #lastUpdate {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    .pot-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+      border: 3px solid var(--primary);
+      background: linear-gradient(135deg, #f0f9f0, #ffffff);
+      margin-bottom: 20px;
+    }
+
+    .edit-pot {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .edit-pot:hover {
+      background: #1976d2;
+      transform: scale(1.1);
+    }
+
+    .pot-icon {
+      font-size: 4rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .pot-name {
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .pot-id {
+      font-size: 1rem;
+      color: var(--text-light);
+      margin-bottom: 30px;
+    }
+
+    .sensor-data {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .sensor-item {
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 15px;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .sensor-item:hover {
+      background: #e9ecef;
+      border-color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .sensor-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .sensor-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 10px 0;
+    }
+
+    .sensor-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .moisture { color: #4caf50; }
+    .temp { color: #f44336; }
+    .light { color: #ff9800; }
+    .humidity { color: #2196f3; }
+
+    /* สีตามระดับคุณภาพอากาศ */
+    .pm-good { color: var(--pm-good); }
+    .pm-moderate { color: var(--pm-moderate); }
+    .pm-unhealthy { color: var(--pm-unhealthy); }
+    .pm-very-unhealthy { color: var(--pm-very-unhealthy); }
+    .pm-hazardous { color: var(--pm-hazardous); }
+
+    .status-indicator {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #4caf50;
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    .status-needs-water {
+      background: #ff9800;
+    }
+
+    .status-warning {
+      background: #f44336;
+    }
+
+    .air-quality-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+    }
+
+    .air-quality-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .air-quality-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .air-quality-icon {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .pm-data {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .pm-item {
+      text-align: center;
+      padding: 15px;
+      border-radius: 12px;
+      background: #f8f9fa;
+    }
+
+    .pm-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    .pm-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+
+    .pm-status {
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: var(--pm-good);
+      color: white;
+    }
+
+    .quality-indicator {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Prompt', sans-serif;
+      font-weight: 500;
+      transition: all 0.3s;
+      font-size: 1rem;
+      min-width: 100px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        max-width: 100%;
+        padding: 0 15px;
+      }
+      
+      .pot-card {
+        padding: 20px;
+      }
+      
+      .sensor-data {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .pm-data {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .sensor-value, .pm-value {
+        font-size: 1.8rem;
+      }
+    }
+
+    .last-updated {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .reset-btn {
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-top: 10px;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    .reset-btn:hover {
+      background: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-seedling"></i> Dashboard แปลงปลูก</h1>
+      <div id="lastUpdate">อัปเดตล่าสุด: -</div>
+      <button class="reset-btn" id="resetBtn">รีเซ็ตชื่อเป็นค่าเริ่มต้น</button>
+    </header>
+
+    <div id="singlePotContainer">
+      <!-- กระถางเดียวจะถูกแสดงที่นี่ -->
+    </div>
+
+    <div id="airQualityContainer">
+      <!-- ข้อมูลคุณภาพอากาศจะถูกแสดงที่นี่ -->
+    </div>
+
+    <div class="last-updated">
+      ข้อมูลอัปเดตทุก 6 วินาที
+    </div>
+  </div>
+
+  <!-- Modal สำหรับแก้ไขชื่อกระถาง -->
+  <div class="modal" id="editPotModal">
+    <div class="modal-content">
+      <h2><i class="fas fa-edit"></i> เปลี่ยนชื่อกระถาง</h2>
+      <div class="form-group">
+        <label for="editPotNumber">หมายเลขกระถาง</label>
+        <input type="text" id="editPotNumber" readonly>
+      </div>
+      <div class="form-group">
+        <label for="editPlantName">ชื่อพืช</label>
+        <input type="text" id="editPlantName" placeholder="ใส่ชื่อพืชใหม่">
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" id="cancelEditBtn">ยกเลิก</button>
+        <button class="btn btn-primary" id="saveEditBtn">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sheetId = "1FGToSoeDyyJxIrvHDD9VXmXhYC6jQMsJKUQQZI6ChK0";
+    const apiKey = "AIzaSyCPLAhrLCwLeFxAEeg0wg3hTgk52HD8Y-c";
+    const sheetName = "SoilSensor";
+
+    // ข้อมูลเริ่มต้น
+    const defaultPot = {
+      id: "001",
+      name: "กะเพรา",
+      status: "ปกติ"
+    };
+
+    // ฟังก์ชันโหลดข้อมูลจาก Local Storage
+    function loadPotData() {
+      const savedPot = localStorage.getItem('plantPotData');
+      if (savedPot) {
+        return JSON.parse(savedPot);
+      }
+      return defaultPot;
+    }
+
+    // ฟังก์ชันบันทึกข้อมูลลง Local Storage
+    function savePotData(potData) {
+      localStorage.setItem('plantPotData', JSON.stringify(potData));
+    }
+
+    // ข้อมูลกระถางเดียว - โหลดจาก Local Storage
+    let currentPot = loadPotData();
+
+    let currentPotData = {
+      moisture: 0,
+      temp: 0,
+      light: 0,
+      humidity: 0,
+      pm1: 0,
+      pm25: 0,
+      pm10: 0
+    };
+
+    // DOM Elements
+    const singlePotContainer = document.getElementById('singlePotContainer');
+    const airQualityContainer = document.getElementById('airQualityContainer');
+    const editPotModal = document.getElementById('editPotModal');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    const editPotNumber = document.getElementById('editPotNumber');
+    const editPlantName = document.getElementById('editPlantName');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // ฟังก์ชันกำหนดสีและสถานะ PM2.5
+    function getPm25Status(pm25) {
+      if (pm25 <= 25) return { status: "ดี", color: "pm-good", bgColor: "var(--pm-good)" };
+      if (pm25 <= 50) return { status: "ปานกลาง", color: "pm-moderate", bgColor: "var(--pm-moderate)" };
+      if (pm25 <= 100) return { status: "มีผลต่อสุขภาพ", color: "pm-unhealthy", bgColor: "var(--pm-unhealthy)" };
+      if (pm25 <= 200) return { status: "มีผลต่อสุขภาพมาก", color: "pm-very-unhealthy", bgColor: "var(--pm-very-unhealthy)" };
+      return { status: "อันตราย", color: "pm-hazardous", bgColor: "var(--pm-hazardous)" };
+    }
+
+    // ฟังก์ชันกำหนดสีและสถานะ PM10
+    function getPm10Status(pm10) {
+      if (pm10 <= 50) return { status: "ดี", color: "pm-good", bgColor: "var(--pm-good)" };
+      if (pm10 <= 100) return { status: "ปานกลาง", color: "pm-moderate", bgColor: "var(--pm-moderate)" };
+      if (pm10 <= 200) return { status: "มีผลต่อสุขภาพ", color: "pm-unhealthy", bgColor: "var(--pm-unhealthy)" };
+      if (pm10 <= 300) return { status: "มีผลต่อสุขภาพมาก", color: "pm-very-unhealthy", bgColor: "var(--pm-very-unhealthy)" };
+      return { status: "อันตราย", color: "pm-hazardous", bgColor: "var(--pm-hazardous)" };
+    }
+
+    // ฟังก์ชันแสดงกระถางเดียว
+    function renderSinglePot() {
+      // กำหนดสถานะตามความชื้น
+      let status = "ปกติ";
+      let statusClass = "";
+      
+      if (currentPotData.moisture < 30) {
+        status = "ต้องการน้ำ";
+        statusClass = "status-needs-water";
+      } else if (currentPotData.moisture < 50) {
+        status = "ความชื้นต่ำ";
+        statusClass = "status-warning";
+      }
+
+      singlePotContainer.innerHTML = `
+        <div class="pot-card">
+          <button class="edit-pot" id="editPotBtn">
+            <i class="fas fa-edit"></i>
+          </button>
+          <div class="pot-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <div class="pot-name">${currentPot.name}</div>
+          <div class="pot-id">กระถาง ${currentPot.id}</div>
+          <div class="status-indicator ${statusClass}">${status}</div>
+          
+          <div class="sensor-data">
+            <div class="sensor-item">
+              <div class="sensor-icon moisture"><i class="fas fa-tint"></i></div>
+              <div class="sensor-value moisture">${currentPotData.moisture}%</div>
+              <div class="sensor-label">ความชื้นดิน</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-icon temp"><i class="fas fa-thermometer-half"></i></div>
+              <div class="sensor-value temp">${currentPotData.temp}°C</div>
+              <div class="sensor-label">อุณหภูมิ</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-icon light"><i class="fas fa-sun"></i></div>
+              <div class="sensor-value light">${currentPotData.light}%</div>
+              <div class="sensor-label">ระดับแสง</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-icon humidity"><i class="fas fa-cloud"></i></div>
+              <div class="sensor-value humidity">${currentPotData.humidity}%</div>
+              <div class="sensor-label">ความชื้นอากาศ</div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // เพิ่ม event listener ให้ปุ่มแก้ไข
+      document.getElementById('editPotBtn').addEventListener('click', showEditModal);
+    }
+
+    // ฟังก์ชันแสดงข้อมูลคุณภาพอากาศ
+    function renderAirQuality() {
+      const pm25Status = getPm25Status(currentPotData.pm25);
+      const pm10Status = getPm10Status(currentPotData.pm10);
+
+      airQualityContainer.innerHTML = `
+        <div class="air-quality-card">
+          <div class="air-quality-header">
+            <i class="fas fa-wind air-quality-icon"></i>
+            <div class="air-quality-title">คุณภาพอากาศ (PMS5003)</div>
+          </div>
+          
+          <div class="pm-data">
+            <div class="pm-item">
+              <div class="pm-label">PM 1.0</div>
+              <div class="pm-value pm-good">${currentPotData.pm1}</div>
+              <div class="sensor-label">μg/m³</div>
+            </div>
+            <div class="pm-item">
+              <div class="pm-label">PM 2.5</div>
+              <div class="pm-value ${pm25Status.color}">${currentPotData.pm25}</div>
+              <div class="pm-status" style="background: ${pm25Status.bgColor}">${pm25Status.status}</div>
+              <div class="sensor-label">μg/m³</div>
+            </div>
+            <div class="pm-item">
+              <div class="pm-label">PM 10.0</div>
+              <div class="pm-value ${pm10Status.color}">${currentPotData.pm10}</div>
+              <div class="pm-status" style="background: ${pm10Status.bgColor}">${pm10Status.status}</div>
+              <div class="sensor-label">μg/m³</div>
+            </div>
+            <div class="pm-item">
+              <div class="pm-label">ดัชนีคุณภาพอากาศ</div>
+              <div class="pm-value ${pm25Status.color}">${currentPotData.pm25}</div>
+              <div class="sensor-label">AQI (PM2.5)</div>
+            </div>
+          </div>
+
+          <div class="quality-indicator" style="background: ${pm25Status.bgColor}; color: white;">
+            💨 คุณภาพอากาศ: ${pm25Status.status} (PM2.5: ${currentPotData.pm25} μg/m³)
+          </div>
+        </div>
+      `;
+    }
+
+    // ฟังก์ชันแสดง Modal แก้ไขชื่อกระถาง
+    function showEditModal() {
+      editPotNumber.value = currentPot.id;
+      editPlantName.value = currentPot.name;
+      editPotModal.style.display = 'flex';
+      editPlantName.focus();
+    }
+
+    // ฟังก์ชันบันทึกการแก้ไขชื่อกระถาง
+    function saveEditPot() {
+      const newName = editPlantName.value.trim();
+      if (newName) {
+        currentPot.name = newName;
+        
+        // บันทึกการเปลี่ยนแปลงลง Local Storage
+        savePotData(currentPot);
+        
+        renderSinglePot();
+        editPotModal.style.display = 'none';
+        
+        // แสดงข้อความยืนยัน
+        showNotification('เปลี่ยนชื่อพืชเป็น "' + newName + '" เรียบร้อยแล้ว');
+      } else {
+        alert('กรุณากรอกชื่อพืช');
+      }
+    }
+
+    // ฟังก์ชันรีเซ็ตชื่อเป็นค่าเริ่มต้น
+    function resetPotName() {
+      if (confirm('คุณแน่ใจว่าต้องการรีเซ็ตชื่อพืชเป็น "กะเพรา"?')) {
+        currentPot = {...defaultPot};
+        
+        // บันทึกการเปลี่ยนแปลงลง Local Storage
+        savePotData(currentPot);
+        
+        renderSinglePot();
+        showNotification('รีเซ็ตชื่อพืชเป็นค่าเริ่มต้นเรียบร้อยแล้ว');
+      }
+    }
+
+    // ฟังก์ชันแสดงการแจ้งเตือน
+    function showNotification(message) {
+      // สร้าง element สำหรับการแจ้งเตือน
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        z-index: 1001;
+        font-family: 'Prompt', sans-serif;
+        font-weight: 500;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // แสดงการแจ้งเตือน
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 100);
+      
+      // ซ่อนการแจ้งเตือนหลังจาก 3 วินาที
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // ฟังก์ชันปิด Modal แก้ไข
+    cancelEditBtn.addEventListener('click', () => {
+      editPotModal.style.display = 'none';
+    });
+
+    // ฟังก์ชันบันทึกการแก้ไข
+    saveEditBtn.addEventListener('click', saveEditPot);
+
+    // ฟังก์ชันรีเซ็ตชื่อ
+    resetBtn.addEventListener('click', resetPotName);
+
+    // ฟังก์ชันดึงข้อมูลจาก Google Sheets
+    async function fetchData() {
+      try {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const values = data.values;
+
+        if (!values || values.length < 2) {
+          throw new Error('ไม่มีข้อมูล');
+        }
+
+        const headers = values[0];
+        const dataRows = values.slice(1);
+
+        // ข้อมูลล่าสุด
+        const lastRow = dataRows[dataRows.length - 1];
+        
+        // อัปเดตข้อมูลกระถาง
+        currentPotData = {
+          moisture: parseInt(lastRow[1]) || 0,
+          temp: parseFloat(lastRow[4]) || 0,
+          light: parseInt(lastRow[2]) || 0,
+          humidity: parseInt(lastRow[3]) || 0,
+          pm1: parseInt(lastRow[5]) || 0,
+          pm25: parseInt(lastRow[6]) || 0,
+          pm10: parseInt(lastRow[7]) || 0
+        };
+
+        // อัปเดตเวลาล่าสุด
+        const lastUpdateEl = document.getElementById("lastUpdate");
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('th-TH');
+        lastUpdateEl.innerText = `อัปเดตล่าสุด: ${timeString}`;
+
+        // อัปเดตการแสดงผล
+        renderSinglePot();
+        renderAirQuality();
+
+      } catch (err) {
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", err);
+        
+        // ใช้ข้อมูลตัวอย่างหากดึงข้อมูลไม่ได้
+        currentPotData = {
+          moisture: Math.floor(Math.random() * 30) + 40,
+          temp: (Math.random() * 10 + 25).toFixed(1),
+          light: Math.floor(Math.random() * 40) + 40,
+          humidity: Math.floor(Math.random() * 30) + 50,
+          pm1: Math.floor(Math.random() * 10),
+          pm25: Math.floor(Math.random() * 50) + 10,
+          pm10: Math.floor(Math.random() * 70) + 20
+        };
+        
+        const lastUpdateEl = document.getElementById("lastUpdate");
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('th-TH');
+        lastUpdateEl.innerText = `อัปเดตล่าสุด: ${timeString} (ข้อมูลตัวอย่าง)`;
+        
+        renderSinglePot();
+        renderAirQuality();
+      }
+    }
+
+    // เริ่มต้นการทำงาน
+    renderSinglePot();
+    renderAirQuality();
+    fetchData();
+    setInterval(fetchData, 6000); // ดึงข้อมูลใหม่ทุก 6 วินาที
+  </script>
+</body>
+</html>
