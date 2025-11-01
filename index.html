@@ -64,82 +64,23 @@
   .teamBadge{display:flex;align-items:center;gap:8px}
   .teamIcon{width:18px;height:18px}
 
-  /* Status badges */
-  .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-  .status-excellent { background: #dcfce7; color: #166534; }
-  .status-good { background: #dbeafe; color: #1e40af; }
-  .status-fair { background: #fef3c7; color: #92400e; }
-  .status-poor { background: #fecaca; color: #991b1b; }
-  .status-critical { background: #fecaca; color: #991b1b; }
+  .status-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+  .status-excellent{background:#dcfce7;color:#166534}
+  .status-good{background:#dbeafe;color:#1e40af}
+  .status-fair{background:#fef3c7;color:#92400e}
+  .status-poor,.status-critical{background:#fecaca;color:#991b1b}
 
-  /* AI Advice Styles */
-  .ai-advice { 
-    background: #f8fafc; 
-    border-left: 4px solid var(--primary); 
-    padding: 12px; 
-    border-radius: 8px; 
-    margin-top: 12px; 
-    transition: all 0.3s ease;
-  }
-  .ai-advice.collapsed {
-    max-height: 60px;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  .ai-advice.expanded {
-    max-height: 500px;
-    overflow-y: auto;
-  }
-  .ai-advice-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 8px; 
-    cursor: pointer;
-  }
-  .ai-advice-header h4 { 
-    margin: 0; 
-    color: var(--primary-dark); 
-    display: flex; 
-    align-items: center; 
-    gap: 8px;
-  }
-  .ai-advice-toggle {
-    background: none;
-    border: none;
-    color: var(--primary);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background 0.2s;
-  }
-  .ai-advice-toggle:hover {
-    background: var(--primary-light);
-  }
-  .ai-advice-content { 
-    white-space: pre-line; 
-    line-height: 1.5; 
-    font-size: 14px;
-  }
-  .ai-advice.collapsed .ai-advice-content {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  
-  /* Real-time update indicator */
-  .real-time-update {
-    animation: pulse 2s infinite;
-    color: var(--primary);
-    font-size: 12px;
-    font-weight: normal;
-  }
-  @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-  }
+  .ai-advice{background:#f8fafc;border-left:4px solid var(--primary);padding:12px;border-radius:8px;margin-top:12px;transition:.3s}
+  .ai-advice.collapsed{max-height:60px;overflow:hidden;cursor:pointer}
+  .ai-advice.expanded{max-height:500px;overflow-y:auto}
+  .ai-advice-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:pointer}
+  .ai-advice-header h4{margin:0;color:var(--primary-dark);display:flex;align-items:center;gap:8px}
+  .ai-advice-toggle{background:none;border:none;color:var(--primary);cursor:pointer;padding:4px;border-radius:4px}
+  .ai-advice-toggle:hover{background:var(--primary-light)}
+  .ai-advice-content{white-space:pre-line;line-height:1.5;font-size:14px}
+  .ai-advice.collapsed .ai-advice-content{-webkit-line-clamp:2;-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden}
+  .real-time-update{animation:pulse 2s infinite;color:var(--primary);font-size:12px}
+  @keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
 </style>
 </head>
 <body>
@@ -305,8 +246,7 @@
           <div class="special-hearts" id="a_special_hearts"></div>
         </div>
         <div class="muted" id="a_advice" style="margin-top:6px">—</div>
-        
-        <!-- AI Advice for Team A -->
+
         <div id="aiAdviceDashA" class="ai-advice collapsed" style="margin-top:12px; display:none">
           <div class="ai-advice-header">
             <h4><i class="fa-solid fa-robot"></i> คำแนะนำจาก AI <span class="real-time-update" id="aiUpdateIndicatorDashA">• อัพเดทเรียลไทม์</span></h4>
@@ -316,7 +256,7 @@
           </div>
           <div id="aiAdviceContentDashA" class="ai-advice-content"></div>
         </div>
-        
+
         <table style="margin-top:10px">
           <thead><tr><th style="text-align:left">เวลา</th><th>Temp</th><th>RH</th><th>Soil</th><th>Light</th></tr></thead>
           <tbody id="a_tbl"></tbody>
@@ -347,8 +287,7 @@
           <div class="special-hearts" id="b_special_hearts"></div>
         </div>
         <div class="muted" id="b_advice" style="margin-top:6px">—</div>
-        
-        <!-- AI Advice for Team B -->
+
         <div id="aiAdviceDashB" class="ai-advice collapsed" style="margin-top:12px; display:none">
           <div class="ai-advice-header">
             <h4><i class="fa-solid fa-robot"></i> คำแนะนำจาก AI <span class="real-time-update" id="aiUpdateIndicatorDashB">• อัพเดทเรียลไทม์</span></h4>
@@ -358,7 +297,7 @@
           </div>
           <div id="aiAdviceContentDashB" class="ai-advice-content"></div>
         </div>
-        
+
         <table style="margin-top:10px">
           <thead><tr><th style="text-align:left">เวลา</th><th>Temp</th><th>RH</th><th>Soil</th><th>Light</th></tr></thead>
           <tbody id="b_tbl"></tbody>
@@ -449,7 +388,6 @@
         </div>
       </div>
 
-      <!-- Statistics Summary -->
       <div class="grid2" style="margin-bottom: 20px;">
         <div class="card" style="margin: 0;">
           <div class="hd" id="teamAStatsHeader">ทีม A - สถิติ</div>
@@ -465,7 +403,6 @@
         </div>
       </div>
 
-      <!-- Daily Scores Chart -->
       <div class="card" style="margin-bottom: 16px;">
         <div class="hd">📈 กราฟคะแนนรายวัน</div>
         <div class="bd">
@@ -473,7 +410,6 @@
         </div>
       </div>
 
-      <!-- Daily Scores Table -->
       <div class="card">
         <div class="hd">📊 ตารางคะแนนรายวัน</div>
         <div class="bd">
@@ -490,9 +426,7 @@
                   <th>สถานะ</th>
                 </tr>
               </thead>
-              <tbody id="dailyScoresTable">
-                <!-- ข้อมูลจะถูกเพิ่มโดย JavaScript -->
-              </tbody>
+              <tbody id="dailyScoresTable"></tbody>
             </table>
           </div>
         </div>
@@ -516,14 +450,17 @@ const fmtTime = iso => !iso?'-': new Date(iso).toLocaleString('th-TH',{timeZone:
 const nowTick = () => setTextSafe('nowTH', new Date().toLocaleString('th-TH',{ timeZone: tz }));
 
 // ===== Current Date - 31/10/2568 =====
-const currentDate = new Date(2025, 9, 31); // 31 ตุลาคม 2568
+const currentDate = new Date(2025, 9, 31);
 const currentDateStr = '31/10/2568';
 
 // ===== Theme & Initialization =====
 document.addEventListener('DOMContentLoaded', () => {
   setInterval(nowTick, 1000);
   nowTick();
-  
+
+  // แสดงหน้าแบบฟอร์มเป็นค่าเริ่มต้น (กันหน้าเงียบ)
+  show('secForm'); // FIX: ensure default visible
+
   const themeSel = byId('theme');
   if(themeSel){
     const saved = localStorage.getItem('theme')||'default';
@@ -531,96 +468,85 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(saved);
     themeSel.addEventListener('change',e=>applyTheme(e.target.value));
   }
-  
+
   // Load settings
   ['webapp','webappA','webappB','limit','plant','size','lightCond','airflow','ac','name','interval','demo','teamNameA','teamNameB'].forEach(id=>{
     const el = byId(id); if(!el) return;
-    const v = localStorage.getItem('gs_'+id); 
+    const v = localStorage.getItem('gs_'+id);
     if(v !== null) el.value = v;
-    el.addEventListener('change',e=> {
+    el.addEventListener('change',e=>{
       localStorage.setItem('gs_'+id, e.target.value);
-      // อัพเดทข้อมูลแบบเรียลไทม์เมื่อมีการเปลี่ยนแปลง
       updateRealTimeData();
     });
-    el.addEventListener('input',e=> {
+    el.addEventListener('input',e=>{
       localStorage.setItem('gs_'+id, e.target.value);
-      // อัพเดทข้อมูลแบบเรียลไทม์เมื่อมีการพิมพ์
       updateRealTimeData();
     });
   });
-  
-  // อัพเดทข้อมูลเริ่มต้น
+
   updateRealTimeData();
 });
 
-const applyTheme = v => { 
-  document.body.className=''; 
-  if(v && v!=='default') document.body.classList.add('theme-'+v); 
-  localStorage.setItem('theme',v||'default'); 
+const applyTheme = v => {
+  document.body.className='';
+  if(v && v!=='default') document.body.classList.add('theme-'+v);
+  localStorage.setItem('theme',v||'default');
 };
 
 // ===== Real-time Data Update =====
 function updateRealTimeData() {
-  // อัพเดทชื่อทีม
-  const teamNameA = byId('teamNameA').value || 'ทีม A';
-  const teamNameB = byId('teamNameB').value || 'ทีม B';
-  const plantName = byId('plant').value || 'มอนสเตอร่า';
-  
-  // อัพเดทส่วนหัว
+  const teamNameA = byId('teamNameA')?.value || 'ทีม A';
+  const teamNameB = byId('teamNameB')?.value || 'ทีม B';
+  const plantName = byId('plant')?.value || 'มอนสเตอร่า';
+
   setTextSafe('headerSubtitle', `ข้อมูลสุขภาพต้นไม้เรียลไทม์ | ${teamNameA} vs ${teamNameB}`);
-  
-  // อัพเดทในแดชบอร์ด
+
   setTextSafe('teamALabel', teamNameA);
   setTextSafe('teamBLabel', teamNameB);
   setTextSafe('teamAName', teamNameA);
   setTextSafe('teamBName', teamNameB);
   setTextSafe('plantLabel', plantName);
-  
-  // อัพเดทในหน้าสรุปเชิงลึก
+
   setTextSafe('plantLabelInsights', plantName);
   setTextSafe('teamAHealthHeader', `${teamNameA} — สุขภาพวันนี้`);
   setTextSafe('teamBHealthHeader', `${teamNameB} — สุขภาพวันนี้`);
-  
-  // อัพเดทในหน้าคะแนนรายวัน
+
   setTextSafe('teamALabelDaily', teamNameA);
   setTextSafe('teamBLabelDaily', teamNameB);
   setTextSafe('teamAStatsHeader', `${teamNameA} - สถิติ`);
   setTextSafe('teamBStatsHeader', `${teamNameB} - สถิติ`);
-  
-  // อัพเดทข้อมูล AI Advice ตามพันธุ์ไม้
+
   updatePlantSpecificAdvice(plantName);
 }
 
 function updatePlantSpecificAdvice(plantName) {
-  let adviceA, adviceB;
-  
-  // รับค่าจากเซนเซอร์ปัจจุบัน
-  const aTemp = byId('a_temp').textContent || '25.3';
-  const bTemp = byId('b_temp').textContent || '24.8';
-  const aSoil = byId('a_soil').textContent || '68';
-  const bSoil = byId('b_soil').textContent || '72';
-  const aLight = byId('a_light').textContent || '72';
-  const bLight = byId('b_light').textContent || '69';
-  
-  // ตรวจสอบว่ามีคำแนะนำสำหรับพันธุ์ไม้นี้หรือไม่
+  const aTemp = byId('a_temp')?.textContent || '25.3';
+  const bTemp = byId('b_temp')?.textContent || '24.8';
+  const aSoil = byId('a_soil')?.textContent || '68';
+  const bSoil = byId('b_soil')?.textContent || '72';
+  const aLight = byId('a_light')?.textContent || '72';
+  const bLight = byId('b_light')?.textContent || '69';
+
   const plantAdvice = getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight);
-  
-  // อัพเดทคำแนะนำใน AI Advice ทั้งในแดชบอร์ดและหน้าสรุปเชิงลึก
-  byId('aiAdviceContentDashA').textContent = plantAdvice.adviceA;
-  byId('aiAdviceContentDashB').textContent = plantAdvice.adviceB;
-  byId('aiAdviceContentA').textContent = plantAdvice.adviceA;
-  byId('aiAdviceContentB').textContent = plantAdvice.adviceB;
-  
-  // แสดงตัวบ่งชี้การอัพเดท
+
+  const map = {
+    aiAdviceContentDashA: plantAdvice.adviceA,
+    aiAdviceContentDashB: plantAdvice.adviceB,
+    aiAdviceContentA: plantAdvice.adviceA,
+    aiAdviceContentB: plantAdvice.adviceB
+  };
+  Object.entries(map).forEach(([id, txt])=>{
+    const el = byId(id);
+    if(el) el.textContent = txt;
+  });
+
   showAIUpdateIndicator();
 }
 
 function getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight) {
   let adviceA, adviceB;
-  
-  // ตรวจสอบพันธุ์ไม้และสร้างคำแนะนำตามพันธุ์
-  const plantLower = plantName.toLowerCase();
-  
+  const plantLower = (plantName||'').toLowerCase();
+
   if (plantLower.includes('ยาง') || plantLower.includes('อินเดีย')) {
     adviceA = `💡 คำแนะนำจาก AI สำหรับยางอินเดีย (ทีม A):
 - อุณหภูมิ ${aTemp}°C เหมาะสมมากสำหรับยางอินเดีย
@@ -633,7 +559,6 @@ function getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight) {
 ✅ หมั่นเช็ดใบเพื่อการสังเคราะห์แสงที่ดี
 ✅ วางในที่แสงรำไร
 ✅ หมุนกระถางเป็นประจำ`;
-
     adviceB = `💡 คำแนะนำจาก AI สำหรับยางอินเดีย (ทีม B):
 - อุณหภูมิ ${bTemp}°C เหมาะสมสำหรับยางอินเดีย
 - ความชื้นดิน ${bSoil}% อยู่ในเกณฑ์ดีมาก
@@ -658,7 +583,6 @@ function getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight) {
 ✅ วางในที่แสงรำไรถึงแดดจัด
 ✅ ทนแล้งได้ดี ไม่ควรรดน้ำบ่อย
 ✅ ใช้ดินผสมทรายระบายน้ำดี`;
-
     adviceB = `💡 คำแนะนำจาก AI สำหรับลิ้นมังกร (ทีม B):
 - อุณหภูมิ ${bTemp}°C เหมาะสมสำหรับลิ้นมังกร
 - ความชื้นดิน ${bSoil}% อยู่ในเกณฑ์ดีมาก
@@ -683,7 +607,6 @@ function getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight) {
 ✅ วางในที่แสงรำไร
 ✅ หมั่นตัดเล็มเพื่อให้แตกกอ
 ✅ ปลูกในกระถางแขวนได้ดี`;
-
     adviceB = `💡 คำแนะนำจาก AI สำหรับพลูด่าง (ทีม B):
 - อุณหภูมิ ${bTemp}°C เหมาะสมสำหรับพลูด่าง
 - ความชื้นดิน ${bSoil}% อยู่ในเกณฑ์ดีมาก
@@ -697,7 +620,6 @@ function getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight) {
 ✅ ใช้ปุ๋ยน้ำเดือนละครั้ง`;
   }
   else {
-    // ค่าเริ่มต้นสำหรับมอนสเตอร่าหรือพันธุ์อื่นๆ
     adviceA = `💡 คำแนะนำจาก AI สำหรับ${plantName} (ทีม A):
 - อุณหภูมิ ${aTemp}°C เหมาะสมมากสำหรับ${plantName}
 - ความชื้นดิน ${aSoil}% อยู่ในเกณฑ์ดีเยี่ยม
@@ -709,7 +631,6 @@ function getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight) {
 ✅ หมั่นพ่นละอองน้ำที่ใบ
 ✅ วางในที่แสงรำไร
 ✅ ใช้เสาหลักพยุงลำต้น`;
-
     adviceB = `💡 คำแนะนำจาก AI สำหรับ${plantName} (ทีม B):
 - อุณหภูมิ ${bTemp}°C เหมาะสมสำหรับ${plantName}
 - ความชื้นดิน ${bSoil}% อยู่ในเกณฑ์ดีมาก
@@ -722,57 +643,34 @@ function getPlantAdvice(plantName, aTemp, bTemp, aSoil, bSoil, aLight, bLight) {
 ✅ ใช้ปุ๋ยน้ำเดือนละครั้ง
 ✅ หมุนกระถางเป็นประจำเพื่อให้ได้รับแสงสม่ำเสมอ`;
   }
-  
   return { adviceA, adviceB };
 }
 
 function showAIUpdateIndicator() {
-  // แสดงตัวบ่งชี้การอัพเดท
-  const indicators = [
-    'aiUpdateIndicatorDashA', 'aiUpdateIndicatorDashB',
-    'aiUpdateIndicatorA', 'aiUpdateIndicatorB'
-  ];
-  
-  indicators.forEach(id => {
-    const indicator = byId(id);
-    if (indicator) {
-      indicator.style.display = 'inline';
-      setTimeout(() => {
-        indicator.style.display = 'none';
-      }, 3000);
+  ['aiUpdateIndicatorDashA','aiUpdateIndicatorDashB','aiUpdateIndicatorA','aiUpdateIndicatorB'].forEach(id=>{
+    const el = byId(id);
+    if(el){
+      el.style.display='inline';
+      setTimeout(()=>{ if(el) el.style.display='none'; },3000);
     }
   });
 }
 
 // ===== Navigation =====
-function show(id) { 
-  ['secForm','secDash','secInsights','secDailyScores'].forEach(x => { 
-    const el = byId(x); 
-    if(el) el.style.display = (x === id) ? 'block' : 'none'; 
-  }); 
+function show(id) {
+  ['secForm','secDash','secInsights','secDailyScores'].forEach(x=>{
+    const el = byId(x);
+    if(el) el.style.display = (x===id)?'block':'none';
+  });
 }
 
 bind('navForm','click', () => show('secForm'));
 bind('navDash','click', () => show('secDash'));
-bind('navInsight','click', () => { 
-  show('secInsights'); 
-  initHeartChart();
-  renderInsights();
-});
-bind('navDailyScores','click', () => { 
-  show('secDailyScores'); 
-  loadDailyScores();
-});
-bind('btnGoInsights','click', () => { 
-  show('secInsights'); 
-  initHeartChart();
-  renderInsights();
-});
+bind('navInsight','click', () => { show('secInsights'); initHeartChart(); renderInsights(); });
+bind('navDailyScores','click', () => { show('secDailyScores'); loadDailyScores(); });
+bind('btnGoInsights','click', () => { show('secInsights'); initHeartChart(); renderInsights(); });
 bind('btnBackDash','click', () => show('secDash'));
-bind('btnGoDailyScores','click', () => { 
-  show('secDailyScores'); 
-  loadDailyScores();
-});
+bind('btnGoDailyScores','click', () => { show('secDailyScores'); loadDailyScores(); });
 bind('btnBackToInsightsFromDaily','click', () => show('secInsights'));
 
 // ===== Reset =====
@@ -783,60 +681,52 @@ bind('btnReset','click', () => {
   }
 });
 
+// ===== Test Connect (feedback ชัดเจน) =====
+bind('btnTest','click', () => {
+  const urlCommon = byId('webapp')?.value?.trim();
+  const a = byId('webappA')?.value?.trim();
+  const b = byId('webappB')?.value?.trim();
+  const msg = `✓ โหมดสาธิต: ทำงานได้ทันที\nURL รวม: ${urlCommon||'-'}\nA: ${a||'(ใช้ URL รวม)'}\nB: ${b||'(ใช้ URL รวม)'}`;
+  alert(msg);
+});
+
 // ===== Start System =====
 bind('btnStart','click', () => {
-  const teamNameA = byId('teamNameA').value || 'ทีม A';
-  const teamNameB = byId('teamNameB').value || 'ทีม B';
-  
-  // อัพเดทชื่อทีม
-  byId('teamALabel').textContent = teamNameA;
-  byId('teamBLabel').textContent = teamNameB;
-  
-  // บันทึกการตั้งค่า
-  localStorage.setItem('gs_profile_done', '1');
-  
+  const teamNameA = byId('teamNameA')?.value || 'ทีม A';
+  const teamNameB = byId('teamNameB')?.value || 'ทีม B';
+  setTextSafe('teamALabel', teamNameA);
+  setTextSafe('teamBLabel', teamNameB);
+  localStorage.setItem('gs_profile_done','1');
   show('secDash');
-  byId('statusText').textContent = 'เริ่มระบบแล้ว';
-  byId('dot').className = 'dot ok';
-  
-  // โหลดข้อมูลเริ่มต้น
+  const dot = byId('dot'); if(dot) dot.className='dot ok';
+  setTextSafe('statusText','เริ่มระบบแล้ว');
   generateDemoData();
 });
 
 // ===== Generate Demo Data =====
 function generateDemoData() {
-  // สุ่มข้อมูลเซนเซอร์สุขภาพดี
   const aTemp = (25 + (Math.random() - 0.5)).toFixed(1);
   const bTemp = (24.8 + (Math.random() - 0.5)).toFixed(1);
-  const aHum = Math.max(55, Math.min(70, 62 + Math.floor(Math.random() * 6 - 3)));
-  const bHum = Math.max(55, Math.min(70, 65 + Math.floor(Math.random() * 6 - 3)));
-  const aSoil = Math.max(60, Math.min(75, 68 + Math.floor(Math.random() * 8 - 4)));
-  const bSoil = Math.max(60, Math.min(75, 72 + Math.floor(Math.random() * 8 - 4)));
-  const aLight = Math.max(65, Math.min(80, 72 + Math.floor(Math.random() * 10 - 5)));
-  const bLight = Math.max(60, Math.min(78, 69 + Math.floor(Math.random() * 10 - 5)));
-  
-  // อัพเดท KPI
-  setTextSafe('a_temp', aTemp);
-  setTextSafe('b_temp', bTemp);
-  setTextSafe('a_hum', aHum);
-  setTextSafe('b_hum', bHum);
-  setTextSafe('a_soil', aSoil);
-  setTextSafe('b_soil', bSoil);
-  setTextSafe('a_light', aLight);
-  setTextSafe('b_light', bLight);
-  
-  // อัพเดทหัวใจและสถานะ
-  const aScore = 7 + Math.random() * 1.5; // 7-8.5
-  const bScore = 6.5 + Math.random() * 1.5; // 6.5-8
-  
+  const aHum = Math.max(55, Math.min(70, 62 + Math.floor(Math.random()*6 - 3)));
+  const bHum = Math.max(55, Math.min(70, 65 + Math.floor(Math.random()*6 - 3)));
+  const aSoil = Math.max(60, Math.min(75, 68 + Math.floor(Math.random()*8 - 4)));
+  const bSoil = Math.max(60, Math.min(75, 72 + Math.floor(Math.random()*8 - 4)));
+  const aLight = Math.max(65, Math.min(80, 72 + Math.floor(Math.random()*10 - 5)));
+  const bLight = Math.max(60, Math.min(78, 69 + Math.floor(Math.random()*10 - 5)));
+
+  setTextSafe('a_temp', aTemp); setTextSafe('b_temp', bTemp);
+  setTextSafe('a_hum', aHum);   setTextSafe('b_hum', bHum);
+  setTextSafe('a_soil', aSoil); setTextSafe('b_soil', bSoil);
+  setTextSafe('a_light', aLight); setTextSafe('b_light', bLight);
+
+  const aScore = 7 + Math.random()*1.5;
+  const bScore = 6.5 + Math.random()*1.5;
   updateHeartsDisplay('a', aScore);
   updateHeartsDisplay('b', bScore);
-  
-  // สร้างข้อมูลตาราง
+
   generateTableData();
-  
-  // อัพเดทคำแนะนำ AI ตามพันธุ์ไม้ปัจจุบัน
-  const plantName = byId('plant').value || 'มอนสเตอร่า';
+
+  const plantName = byId('plant')?.value || 'มอนสเตอร่า';
   updatePlantSpecificAdvice(plantName);
 }
 
@@ -844,12 +734,9 @@ function updateHeartsDisplay(team, score) {
   const hearts = '❤️'.repeat(Math.max(1, Math.min(10, Math.round(score))));
   const specialHearts = score >= 7 ? '💖'.repeat(Math.round(score)) : '';
   const status = getStatusText(score);
-  
   setTextSafe(`${team}_hearts`, hearts);
   setTextSafe(`${team}_special_hearts`, specialHearts);
   setTextSafe(`${team}_status`, status);
-  
-  // อัพเดทคำแนะนำ
   const advice = getAdviceText(team, score);
   setTextSafe(`${team}_advice`, advice);
 }
@@ -862,7 +749,7 @@ function getStatusText(score) {
   return 'อันตราย 🚨';
 }
 
-function getAdviceText(team, score) {
+function getAdviceText(scoreTeam, score) {
   if (score >= 8) return 'สภาพแวดล้อมเหมาะสมมาก! อุณหภูมิและความชื้นอยู่ในเกณฑ์ดีเยี่ยม';
   if (score >= 7) return 'ต้นไม้สุขภาพดี แสงเพียงพอ รดน้ำตามปกติและหมั่นตรวจสอบดิน';
   if (score >= 6) return 'สภาพแวดล้อมพอใช้ ควรตรวจสอบความชื้นดินและแสงเพิ่มเติม';
@@ -870,138 +757,87 @@ function getAdviceText(team, score) {
 }
 
 function generateTableData() {
-  const times = ['14:30', '14:15', '14:00', '13:45', '13:30', '13:15', '13:00', '12:45'];
-  
-  // สุ่มข้อมูลสำหรับทีม A
-  let aHtml = '';
-  times.forEach(time => {
-    const temp = (24.5 + Math.random() * 1.5).toFixed(1);
-    const hum = Math.floor(58 + Math.random() * 12);
-    const soil = Math.floor(63 + Math.random() * 12);
-    const light = Math.floor(67 + Math.random() * 10);
-    aHtml += `<tr><td>${time}</td><td style="text-align:center">${temp}</td><td style="text-align:center">${hum}</td><td style="text-align:center">${soil}</td><td style="text-align:center">${light}</td></tr>`;
+  const times = ['14:30','14:15','14:00','13:45','13:30','13:15','13:00','12:45'];
+  let aHtml = '', bHtml = '';
+  times.forEach(time=>{
+    aHtml += rowHTML(time,(24.5+Math.random()*1.5).toFixed(1), rnd(58,12), rnd(63,12), rnd(67,10));
+    bHtml += rowHTML(time,(24.3+Math.random()*1.4).toFixed(1), rnd(60,10), rnd(67,10), rnd(64,12));
   });
-  byId('a_tbl').innerHTML = aHtml;
-  
-  // สุ่มข้อมูลสำหรับทีม B
-  let bHtml = '';
-  times.forEach(time => {
-    const temp = (24.3 + Math.random() * 1.4).toFixed(1);
-    const hum = Math.floor(60 + Math.random() * 10);
-    const soil = Math.floor(67 + Math.random() * 10);
-    const light = Math.floor(64 + Math.random() * 12);
-    bHtml += `<tr><td>${time}</td><td style="text-align:center">${temp}</td><td style="text-align:center">${hum}</td><td style="text-align:center">${soil}</td><td style="text-align:center">${light}</td></tr>`;
-  });
-  byId('b_tbl').innerHTML = bHtml;
+  const aT = byId('a_tbl'); if(aT) aT.innerHTML = aHtml;
+  const bT = byId('b_tbl'); if(bT) bT.innerHTML = bHtml;
+
+  function rnd(base, span){ return Math.floor(base + Math.random()*span); }
+  function rowHTML(t, temp, hum, soil, light){
+    return `<tr><td>${t}</td><td style="text-align:center">${temp}</td><td style="text-align:center">${hum}</td><td style="text-align:center">${soil}</td><td style="text-align:center">${light}</td></tr>`;
+  }
 }
 
 // ===== Refresh Data =====
 bind('btnRefresh','click', () => {
   generateDemoData();
-  
-  // แสดงสถานะอัพเดท
   showStatusMessage('อัพเดทข้อมูลเรียบร้อยแล้ว', 'secDash');
 });
 
 // ===== AI Advice =====
 bind('btnGetAIAdvice','click', () => {
-  // อัพเดทคำแนะนำตามพันธุ์ไม้ปัจจุบัน
-  const plantName = byId('plant').value || 'มอนสเตอร่า';
+  const plantName = byId('plant')?.value || 'มอนสเตอร่า';
   updatePlantSpecificAdvice(plantName);
-  
-  // แสดงคำแนะนำ AI
-  byId('aiAdviceDashA').style.display = 'block';
-  byId('aiAdviceDashB').style.display = 'block';
-  byId('aiAdviceA').style.display = 'block';
-  byId('aiAdviceB').style.display = 'block';
-  
+  ['aiAdviceDashA','aiAdviceDashB','aiAdviceA','aiAdviceB'].forEach(id=>{
+    const el = byId(id); if(el) el.style.display='block';
+  });
   showStatusMessage('ได้รับคำแนะนำจาก AI แล้ว', 'secDash');
 });
 
 // ===== Refresh Daily Scores =====
-bind('btnRefreshDaily','click', () => {
-  loadDailyScores();
-  showStatusMessage('อัพเดทข้อมูลคะแนนเรียบร้อยแล้ว', 'secDailyScores');
-});
+bind('btnRefreshDaily','click', () => { loadDailyScores(); showStatusMessage('อัพเดทข้อมูลคะแนนเรียบร้อยแล้ว', 'secDailyScores'); });
 
 // ===== Daily Scores Management =====
 let dailyScoresChart = null;
 
 function loadDailyScores() {
-  // สุ่มข้อมูลคะแนน 7 วันล่าสุด
   const scores = [];
-  const dates = ['24/10/2568', '25/10/2568', '26/10/2568', '27/10/2568', '28/10/2568', '29/10/2568', '30/10/2568', '31/10/2568'];
-  
-  dates.forEach(date => {
-    const scoreA = (7 + Math.random() * 1.5).toFixed(1);
-    const scoreB = (6.5 + Math.random() * 1.5).toFixed(1);
-    
-    scores.push({
-      วันที่: date,
-      ทีม: 'A',
-      คะแนนเฉลี่ย: scoreA,
-      จำนวนข้อมูล: Math.floor(6 + Math.random() * 4),
-      คะแนนสูงสุด: (parseFloat(scoreA) + 0.3).toFixed(1),
-      คะแนนต่ำสุด: (parseFloat(scoreA) - 0.4).toFixed(1),
-      สถานะ: getStatusText(parseFloat(scoreA))
-    });
-    
-    scores.push({
-      วันที่: date,
-      ทีม: 'B',
-      คะแนนเฉลี่ย: scoreB,
-      จำนวนข้อมูล: Math.floor(6 + Math.random() * 4),
-      คะแนนสูงสุด: (parseFloat(scoreB) + 0.3).toFixed(1),
-      คะแนนต่ำสุด: (parseFloat(scoreB) - 0.4).toFixed(1),
-      สถานะ: getStatusText(parseFloat(scoreB))
-    });
+  const dates = ['24/10/2568','25/10/2568','26/10/2568','27/10/2568','28/10/2568','29/10/2568','30/10/2568','31/10/2568'];
+  dates.forEach(date=>{
+    const scoreA = (7 + Math.random()*1.5).toFixed(1);
+    const scoreB = (6.5 + Math.random()*1.5).toFixed(1);
+    scores.push({วันที่:date,ทีม:'A',คะแนนเฉลี่ย:scoreA,จำนวนข้อมูล:Math.floor(6+Math.random()*4),คะแนนสูงสุด:(+scoreA+0.3).toFixed(1),คะแนนต่ำสุด:(+scoreA-0.4).toFixed(1),สถานะ:getStatusText(+scoreA)});
+    scores.push({วันที่:date,ทีม:'B',คะแนนเฉลี่ย:scoreB,จำนวนข้อมูล:Math.floor(6+Math.random()*4),คะแนนสูงสุด:(+scoreB+0.3).toFixed(1),คะแนนต่ำสุด:(+scoreB-0.4).toFixed(1),สถานะ:getStatusText(+scoreB)});
   });
-  
   renderDailyScores(scores);
-  setTextSafe('lastUpdateText', `อัพเดทล่าสุด: ${new Date().toLocaleString('th-TH', {timeZone: tz})}`);
+  setTextSafe('lastUpdateText', `อัพเดทล่าสุด: ${new Date().toLocaleString('th-TH',{timeZone:tz})}`);
 }
 
 function renderDailyScores(scores) {
-  const teamAScores = scores.filter(score => score.ทีม === 'A');
-  const teamBScores = scores.filter(score => score.ทีม === 'B');
-  
+  const teamAScores = scores.filter(s=>s.ทีม==='A');
+  const teamBScores = scores.filter(s=>s.ทีม==='B');
   updateTeamStats('A', teamAScores);
   updateTeamStats('B', teamBScores);
-  
   renderDailyScoresChart(teamAScores, teamBScores);
   renderDailyScoresTable(scores);
 }
 
 function updateTeamStats(team, scores) {
-  if (scores.length === 0) {
-    setTextSafe(`team${team}Stats`, 'ไม่มีข้อมูล');
-    return;
-  }
-  
-  const latestScore = scores[scores.length - 1];
-  const avgScore = scores.reduce((sum, score) => sum + parseFloat(score['คะแนนเฉลี่ย']), 0) / scores.length;
-  const maxScore = Math.max(...scores.map(score => parseFloat(score['คะแนนสูงสุด'])));
-  const minScore = Math.min(...scores.map(score => parseFloat(score['คะแนนต่ำสุด'])));
-  const totalDataPoints = scores.reduce((sum, score) => sum + parseInt(score['จำนวนข้อมูล']), 0);
-  
-  const statsHTML = `
-    <div style="margin-bottom: 8px;">
+  if (!scores.length) { setTextSafe(`team${team}Stats`, 'ไม่มีข้อมูล'); return; }
+  const latestScore = scores[scores.length-1];
+  const avgScore = scores.reduce((sum,s)=>sum+parseFloat(s['คะแนนเฉลี่ย']),0)/scores.length;
+  const maxScore = Math.max(...scores.map(s=>parseFloat(s['คะแนนสูงสุด'])));
+  const minScore = Math.min(...scores.map(s=>parseFloat(s['คะแนนต่ำสุด'])));
+  const totalDataPoints = scores.reduce((sum,s)=>sum+parseInt(s['จำนวนข้อมูล']),0);
+
+  const el = byId(`team${team}Stats`);
+  if(!el) return;
+  el.innerHTML = `
+    <div style="margin-bottom:8px;">
       <strong>ล่าสุด (${latestScore.วันที่}):</strong> ${latestScore['คะแนนเฉลี่ย']} คะแนน
       <span class="status-badge ${getStatusClass(latestScore.สถานะ)}">${latestScore.สถานะ}</span>
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
       <div>คะแนนเฉลี่ย: <strong>${avgScore.toFixed(2)}</strong></div>
       <div>คะแนนสูงสุด: <strong>${maxScore.toFixed(1)}</strong></div>
       <div>คะแนนต่ำสุด: <strong>${minScore.toFixed(1)}</strong></div>
       <div>จำนวนวัน: <strong>${scores.length}</strong></div>
     </div>
-    <div style="margin-top: 8px; font-size: 12px; color: var(--muted);">
-      ข้อมูลทั้งหมด: ${totalDataPoints} จุด
-    </div>
-  `;
-  
-  setTextSafe(`team${team}Stats`, '');
-  byId(`team${team}Stats`).innerHTML = statsHTML;
+    <div style="margin-top:8px;font-size:12px;color:var(--muted);">ข้อมูลทั้งหมด: ${totalDataPoints} จุด</div>`;
 }
 
 function getStatusClass(status) {
@@ -1013,184 +849,75 @@ function getStatusClass(status) {
 }
 
 function renderDailyScoresChart(teamAScores, teamBScores) {
-  const canvas = byId('chartDailyScores');
-  if (!canvas) return;
-  
+  const canvas = byId('chartDailyScores'); if(!canvas) return;
+  if (typeof Chart === 'undefined') return; // FIX: guard
   const ctx = canvas.getContext('2d');
   if (dailyScoresChart) dailyScoresChart.destroy();
-  
-  const labels = teamAScores.map(score => score.วันที่.split('/')[0] + '/' + score.วันที่.split('/')[1]);
-  const dataA = teamAScores.map(score => parseFloat(score['คะแนนเฉลี่ย']));
-  const dataB = teamBScores.map(score => parseFloat(score['คะแนนเฉลี่ย']));
-  
-  dailyScoresChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'ทีม A',
-          data: dataA,
-          borderColor: '#10b981',
-          backgroundColor: '#10b98120',
-          tension: 0.3,
-          fill: false
-        },
-        {
-          label: 'ทีม B',
-          data: dataB,
-          borderColor: '#8b5cf6',
-          backgroundColor: '#8b5cf620',
-          tension: 0.3,
-          fill: false
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top'
-        },
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        }
-      },
-      scales: {
-        y: {
-          min: 5,
-          max: 9,
-          ticks: {
-            stepSize: 0.5
-          },
-          title: {
-            display: true,
-            text: 'คะแนน'
-          }
-        },
-        x: {
-          title: {
-            display: true,
-            text: 'วันที่'
-          }
-        }
-      }
-    }
+  const labels = teamAScores.map(s=>s.วันที่.split('/').slice(0,2).join('/'));
+  const dataA = teamAScores.map(s=>+s['คะแนนเฉลี่ย']);
+  const dataB = teamBScores.map(s=>+s['คะแนนเฉลี่ย']);
+  dailyScoresChart = new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'ทีม A',data:dataA,borderColor:'#10b981',backgroundColor:'#10b98120',tension:.3,fill:false},
+      {label:'ทีม B',data:dataB,borderColor:'#8b5cf6',backgroundColor:'#8b5cf620',tension:.3,fill:false}
+    ]},
+    options:{responsive:true,plugins:{legend:{display:true,position:'top'},tooltip:{mode:'index',intersect:false}},scales:{y:{min:5,max:9,ticks:{stepSize:.5},title:{display:true,text:'คะแนน'}},x:{title:{display:true,text:'วันที่'}}}}
   });
 }
 
 function renderDailyScoresTable(scores) {
-  const tableBody = byId('dailyScoresTable');
-  if (!tableBody) return;
-  
-  const sortedScores = [...scores].sort((a, b) => {
-    const dateA = a.วันที่.split('/').reverse().join('');
-    const dateB = b.วันที่.split('/').reverse().join('');
-    return dateB.localeCompare(dateA);
-  });
-  
-  if (sortedScores.length === 0) {
-    tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;" class="muted">ไม่มีข้อมูลคะแนน</td></tr>';
-    return;
-  }
-  
-  let html = '';
-  sortedScores.forEach(score => {
-    const statusClass = getStatusClass(score.สถานะ);
-    html += `
-      <tr>
-        <td>${score.วันที่}</td>
-        <td style="text-align: center;">ทีม ${score.ทีม}</td>
-        <td style="text-align: center;"><strong>${score['คะแนนเฉลี่ย']}</strong></td>
-        <td style="text-align: center;">${score['จำนวนข้อมูล']}</td>
-        <td style="text-align: center;">${score['คะแนนสูงสุด']}</td>
-        <td style="text-align: center;">${score['คะแนนต่ำสุด']}</td>
-        <td style="text-align: center;"><span class="status-badge ${statusClass}">${score.สถานะ}</span></td>
-      </tr>
-    `;
-  });
-  
-  tableBody.innerHTML = html;
+  const tableBody = byId('dailyScoresTable'); if(!tableBody) return;
+  const sorted = [...scores].sort((a,b)=>b.วันที่.split('/').reverse().join('').localeCompare(a.วันที่.split('/').reverse().join('')));
+  if(!sorted.length){ tableBody.innerHTML = '<tr><td colspan="7" class="muted" style="text-align:center;padding:20px;">ไม่มีข้อมูลคะแนน</td></tr>'; return;}
+  tableBody.innerHTML = sorted.map(s=>{
+    const cls = getStatusClass(s.สถานะ);
+    return `<tr>
+      <td>${s.วันที่}</td>
+      <td style="text-align:center;">ทีม ${s.ทีม}</td>
+      <td style="text-align:center;"><strong>${s['คะแนนเฉลี่ย']}</strong></td>
+      <td style="text-align:center;">${s['จำนวนข้อมูล']}</td>
+      <td style="text-align:center;">${s['คะแนนสูงสุด']}</td>
+      <td style="text-align:center;">${s['คะแนนต่ำสุด']}</td>
+      <td style="text-align:center;"><span class="status-badge ${cls}">${s.สถานะ}</span></td>
+    </tr>`;
+  }).join('');
 }
 
 // ===== Insights =====
 let heartChart = null;
 
 function initHeartChart() {
-  const canvas = byId('chartHearts');
-  if(!canvas) return;
-  
+  const canvas = byId('chartHearts'); if(!canvas) return;
+  if (typeof Chart === 'undefined') return; // FIX: guard
   const ctx = canvas.getContext('2d');
   if(heartChart) heartChart.destroy();
-  
-  // ข้อมูลคะแนนสุขภาพ 8 ชั่วโมงล่าสุด
-  const labels = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
-  const dataA = [7.2, 7.5, 7.8, 8.0, 8.2, 8.1, 7.9, 7.8];
-  const dataB = [6.8, 7.0, 7.3, 7.5, 7.8, 7.7, 7.6, 7.5];
-  
-  heartChart = new Chart(ctx, {
-    type: 'line',
-    data: { 
-      labels, 
-      datasets: [
-        { 
-          label: 'ทีม A', 
-          data: dataA, 
-          tension: 0.25, 
-          pointRadius: 3, 
-          borderWidth: 2, 
-          borderColor: '#10b981', 
-          backgroundColor: '#10b98120', 
-          fill: false 
-        },
-        { 
-          label: 'ทีม B', 
-          data: dataB, 
-          tension: 0.25, 
-          pointRadius: 3, 
-          borderWidth: 2, 
-          borderColor: '#8b5cf6', 
-          backgroundColor: '#8b5cf620', 
-          fill: false 
-        }
-      ]
-    },
-    options: { 
-      responsive: true, 
-      scales: { 
-        y: { 
-          suggestedMin: 5, 
-          suggestedMax: 10, 
-          ticks: { stepSize: 1 } 
-        } 
-      }, 
-      plugins: { 
-        legend: { display: true },
-        tooltip: { enabled: true } 
-      } 
-    }
+  const labels = ['06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00'];
+  const dataA = [7.2,7.5,7.8,8.0,8.2,8.1,7.9,7.8];
+  const dataB = [6.8,7.0,7.3,7.5,7.8,7.7,7.6,7.5];
+  heartChart = new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'ทีม A',data:dataA,tension:.25,pointRadius:3,borderWidth:2,borderColor:'#10b981',backgroundColor:'#10b98120',fill:false},
+      {label:'ทีม B',data:dataB,tension:.25,pointRadius:3,borderWidth:2,borderColor:'#8b5cf6',backgroundColor:'#8b5cf620',fill:false}
+    ]},
+    options:{responsive:true,scales:{y:{suggestedMin:5,suggestedMax:10,ticks:{stepSize:1}}},plugins:{legend:{display:true},tooltip:{enabled:true}}}
   });
 }
 
 function renderInsights() {
-  // อัพเดทข้อมูลสุขภาพ
-  byId('healthA').innerHTML = getHealthHTML('A');
-  byId('healthB').innerHTML = getHealthHTML('B');
-  
-  // อัพเดทตารางสรุป
-  byId('dailyTable').innerHTML = getDailyTableHTML();
-  byId('weeklyTable').innerHTML = getWeeklyTableHTML();
+  const a = byId('healthA'); if(a) a.innerHTML = getHealthHTML('A');
+  const b = byId('healthB'); if(b) b.innerHTML = getHealthHTML('B');
+  const d = byId('dailyTable'); if(d) d.innerHTML = getDailyTableHTML();
+  const w = byId('weeklyTable'); if(w) w.innerHTML = getWeeklyTableHTML();
 }
 
 function getHealthHTML(team) {
   const temp = team === 'A' ? '25.3' : '24.8';
-  const hum = team === 'A' ? '62' : '65';
-  const soil = team === 'A' ? '68' : '72';
-  const light = team === 'A' ? '72' : '69';
-  const pm25 = team === 'A' ? '18' : '22';
-  
+  const hum  = team === 'A' ? '62'   : '65';
+  const soil = team === 'A' ? '68'   : '72';
+  const light= team === 'A' ? '72'   : '69';
+  const pm25 = team === 'A' ? '18'   : '22';
   return `
     <div class="chips">
       <span class="chip">เวลา: 14:30</span>
@@ -1207,40 +934,33 @@ function getHealthHTML(team) {
         <li>อุณหภูมิเหมาะสม</li>
         <li>แสงดี — เหมาะสำหรับการเจริญเติบโต</li>
       </ul>
-    </div>
-  `;
+    </div>`;
 }
 
 function getDailyTableHTML() {
   return `
     <table style="width:100%; font-size:11px;">
-      <thead>
-        <tr><th style="text-align:left">วันที่</th><th>ทีม A</th><th>ทีม B</th></tr>
-      </thead>
+      <thead><tr><th style="text-align:left">วันที่</th><th>ทีม A</th><th>ทีม B</th></tr></thead>
       <tbody>
         <tr><td>31/10/2568</td><td style="text-align:center">8.2</td><td style="text-align:center">7.8</td></tr>
         <tr><td>30/10/2568</td><td style="text-align:center">8.0</td><td style="text-align:center">7.5</td></tr>
         <tr><td>29/10/2568</td><td style="text-align:center">7.9</td><td style="text-align:center">7.6</td></tr>
         <tr><td>28/10/2568</td><td style="text-align:center">8.1</td><td style="text-align:center">7.7</td></tr>
       </tbody>
-    </table>
-  `;
+    </table>`;
 }
 
 function getWeeklyTableHTML() {
   return `
     <table style="width:100%; font-size:11px;">
-      <thead>
-        <tr><th style="text-align:left">สัปดาห์</th><th>ทีม A</th><th>ทีม B</th></tr>
-      </thead>
+      <thead><tr><th style="text-align:left">สัปดาห์</th><th>ทีม A</th><th>ทีม B</th></tr></thead>
       <tbody>
         <tr><td>43/2568</td><td style="text-align:center">8.0</td><td style="text-align:center">7.6</td></tr>
         <tr><td>42/2568</td><td style="text-align:center">7.8</td><td style="text-align:center">7.4</td></tr>
         <tr><td>41/2568</td><td style="text-align:center">7.5</td><td style="text-align:center">7.2</td></tr>
         <tr><td>40/2568</td><td style="text-align:center">7.3</td><td style="text-align:center">7.0</td></tr>
       </tbody>
-    </table>
-  `;
+    </table>`;
 }
 
 // ===== AI Advice Toggle =====
@@ -1250,15 +970,12 @@ document.addEventListener('click', function(e) {
     if (aiAdvice) {
       const isCollapsed = aiAdvice.classList.contains('collapsed');
       const toggleBtn = aiAdvice.querySelector('.ai-advice-toggle i');
-      
       if (isCollapsed) {
-        aiAdvice.classList.remove('collapsed');
-        aiAdvice.classList.add('expanded');
-        toggleBtn.className = 'fa-solid fa-chevron-up';
+        aiAdvice.classList.remove('collapsed'); aiAdvice.classList.add('expanded');
+        if(toggleBtn) toggleBtn.className = 'fa-solid fa-chevron-up';
       } else {
-        aiAdvice.classList.remove('expanded');
-        aiAdvice.classList.add('collapsed');
-        toggleBtn.className = 'fa-solid fa-chevron-down';
+        aiAdvice.classList.remove('expanded'); aiAdvice.classList.add('collapsed');
+        if(toggleBtn) toggleBtn.className = 'fa-solid fa-chevron-down';
       }
     }
   }
@@ -1266,21 +983,16 @@ document.addEventListener('click', function(e) {
 
 // ===== Utility Functions =====
 function showStatusMessage(message, section) {
-  const statusEl = document.createElement('div');
-  statusEl.className = 'ok';
-  statusEl.style.marginTop = '8px';
-  statusEl.style.fontSize = '12px';
-  statusEl.textContent = message;
-  
-  const existingStatus = document.querySelector('.update-status');
-  if(existingStatus) existingStatus.remove();
-  
-  statusEl.className = 'update-status ok';
-  document.querySelector(`#${section} .bd:last-child`).appendChild(statusEl);
-  
-  setTimeout(() => {
-    if(statusEl.parentNode) statusEl.parentNode.removeChild(statusEl);
-  }, 3000);
+  const host = document.querySelector(`#${section} .bd:last-child`) || document.querySelector(`#${section} .bd`); // FIX: safer target
+  if(!host) return;
+  const existing = host.querySelector('.update-status'); if(existing) existing.remove();
+  const el = document.createElement('div');
+  el.className = 'update-status ok';
+  el.style.marginTop = '8px';
+  el.style.fontSize = '12px';
+  el.textContent = message;
+  host.appendChild(el);
+  setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); }, 3000);
 }
 
 // ===== Initialize =====
