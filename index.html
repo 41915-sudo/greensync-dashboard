@@ -1,2153 +1,1891 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌿 GreenSync กระถางอัจฉริยะ เชื่อมใจคนรักต้นไม้ — แบบฟอร์ม → แดชบอร์ด → สรุปผล → คะแนนรายวัน</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
-    <style>
-        :root {
-            --bg: #f5f7fa;
-            --text: #1f2430;
-            --muted: #667085;
-            --card: #fff;
-            --border: #e5e7eb;
-            --primary: #10b981;
-            --primary-light: #d1fae5;
-            --primary-dark: #047857;
-            --secondary: #8b5cf6;
-            --accent: #f59e0b;
-        }
-
-        .theme-kid {
-            --bg: #e0f7fa;
-            --text: #01579b;
-            --muted: #4dd0e1;
-            --card: #fff;
-            --border: #b2ebf2;
-            --primary: #00bcd4;
-            --primary-light: #b2ebf2;
-            --primary-dark: #00838f;
-            --secondary: #ff4081;
-            --accent: #ffc107;
-        }
-
-        .theme-teen {
-            --bg: #f3e5f5;
-            --text: #4a148c;
-            --muted: #8e24aa;
-            --card: #fff;
-            --border: #e1bee7;
-            --primary: #9c27b0;
-            --primary-light: #e1bee7;
-            --primary-dark: #6a1b9a;
-            --secondary: #ff9800;
-            --accent: #4caf50;
-        }
-
-        .theme-adult {
-            --bg: #f5f5f5;
-            --text: #212121;
-            --muted: #757575;
-            --card: #fff;
-            --border: #e0e0e0;
-            --primary: #455a64;
-            --primary-light: #cfd8dc;
-            --primary-dark: #263238;
-            --secondary: #607d8b;
-            --accent: #ff5722;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--text);
-            font-family: Inter, "Noto Sans Thai", system-ui;
-            transition: .3s;
-        }
-
-        .wrap {
-            max-width: 1100px;
-            margin: 24px auto;
-            padding: 0 16px;
-        }
-
-        .h1 {
-            font-weight: 700;
-            font-size: 28px;
-        }
-
-        .muted {
-            color: var(--muted);
-        }
-
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
-            margin-bottom: 16px;
-            transition: .3s;
-        }
-
-        .hd {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-            font-weight: 600;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .bd {
-            padding: 14px 16px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            transition: .2s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-light);
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .btn {
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-            border-radius: 999px;
-            padding: 10px 16px;
-            border: 1px solid var(--primary);
-            background: var(--primary);
-            color: #fff;
-            cursor: pointer;
-            font-weight: 600;
-            transition: .2s;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
-        }
-
-        .btn.ghost {
-            background: #fff;
-            color: var(--primary-dark);
-        }
-
-        .btn.danger {
-            background: #ef4444;
-            border-color: #ef4444;
-            color: #fff;
-        }
-
-        .btn.danger:hover {
-            background: #dc2626;
-        }
-
-        .grid2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        @media (max-width: 900px) {
-            .row {
-                grid-template-columns: 1fr;
-            }
-            
-            .grid2 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .kpi {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 8px;
-        }
-
-        .kpi .it {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px 10px;
-        }
-
-        .kpi .v {
-            font-weight: 700;
-        }
-
-        .hearts {
-            font-size: 28px;
-            line-height: 1.1;
-            color: #e91e63;
-            word-break: break-word;
-        }
-
-        .special-hearts {
-            font-size: 24px;
-            line-height: 1.1;
-            word-break: break-word;
-            margin-top: 4px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 6px 8px;
-            border-bottom: 1px solid var(--border);
-            font-size: 13px;
-        }
-
-        thead th {
-            background: #f8fafc;
-        }
-
-        .flex {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 8px;
-            border-radius: 999px;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        .err {
-            color: #b91c1c;
-            font-weight: 600;
-        }
-
-        .ok {
-            color: #047857;
-            font-weight: 600;
-        }
-
-        .chips {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .chip {
-            padding: 6px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: #fff;
-        }
-
-        .sub {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .sp {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            background: #9ca3af;
-            display: inline-block;
-        }
-
-        .dot.ok {
-            background: #10b981;
-        }
-
-        .dot.fail {
-            background: #ef4444;
-        }
-
-        .dot.load {
-            background: #f59e0b;
-        }
-
-        .spinner {
-            width: 18px;
-            height: 18px;
-            border: 3px solid #e5e7eb;
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .hero {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .mascot {
-            width: 64px;
-            height: 64px;
-        }
-
-        .teamBadge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .teamIcon {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Team name editor */
-        .team-name-editor {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .team-name {
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .team-name:hover {
-            background: var(--primary-light);
-        }
-
-        .team-name-input {
-            width: 120px;
-            padding: 4px 8px;
-            font-size: 14px;
-        }
-
-        /* cartoon vibe */
-        .theme-kid .mascot, .theme-teen .mascot {
-            animation: bob 2.5s ease-in-out infinite;
-        }
-
-        @keyframes bob {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-3px);
-            }
-        }
-
-        .theme-kid body {
-            background: linear-gradient(180deg, #e0f7fa 0%, #f5f7fa 100%);
-        }
-
-        .theme-teen body {
-            background: linear-gradient(180deg, #f3e5f5 0%, #f5f7fa 100%);
-        }
-
-        /* AI Advice Styles */
-        .ai-advice {
-            background: #f8fafc;
-            border-left: 4px solid var(--primary);
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .ai-advice.collapsed {
-            max-height: 60px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .ai-advice.expanded {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .ai-advice-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            cursor: pointer;
-        }
-
-        .ai-advice-header h4 {
-            margin: 0;
-            color: var(--primary-dark);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ai-advice-toggle {
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        .ai-advice-toggle:hover {
-            background: var(--primary-light);
-        }
-
-        .ai-advice-content {
-            white-space: pre-line;
-            line-height: 1.5;
-            font-size: 14px;
-        }
-
-        .ai-advice.collapsed .ai-advice-content {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .ai-loading {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--muted);
-        }
-
-        /* Status badges */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .status-excellent {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .status-good {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .status-fair {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-poor {
-            background: #fecaca;
-            color: #991b1b;
-        }
-
-        .status-critical {
-            background: #fecaca;
-            color: #991b1b;
-        }
-
-        /* Daily Scores Styles */
-        .daily-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .daily-stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
-        }
-
-        .daily-stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 8px 0;
-        }
-
-        .daily-stat-label {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .win-badge {
-            background: #dcfce7;
-            color: #166534;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .loss-badge {
-            background: #fecaca;
-            color: #991b1b;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .tie-badge {
-            background: #fef3c7;
-            color: #92400e;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* Scrollbar for AI advice */
-        .ai-advice::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .ai-advice::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        .ai-advice::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 3px;
-        }
-
-        .ai-advice::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌿 GreenSync กระถางอัจฉริยะ เชื่อมใจคนรักต้นไม้ — แบบฟอร์ม → เลือกกระถาง → แดชบอร์ด → สรุปผล → คะแนนรายวัน</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+
+<style>
+/* ===== (CSS เดิมของครู) ===== */
+:root {
+  --bg: #f5f7fa;
+  --text: #1f2430;
+  --muted: #667085;
+  --card: #fff;
+  --border: #e5e7eb;
+  --primary: #10b981;
+  --primary-light: #d1fae5;
+  --primary-dark: #047857;
+  --secondary: #8b5cf6;
+  --accent: #f59e0b;
+}
+.theme-kid {
+  --bg: #e0f7fa;
+  --text: #01579b;
+  --muted: #4dd0e1;
+  --card: #fff;
+  --border: #b2ebf2;
+  --primary: #00bcd4;
+  --primary-light: #b2ebf2;
+  --primary-dark: #00838f;
+  --secondary: #ff4081;
+  --accent: #ffc107;
+}
+.theme-teen {
+  --bg: #f3e5f5;
+  --text: #4a148c;
+  --muted: #8e24aa;
+  --card: #fff;
+  --border: #e1bee7;
+  --primary: #9c27b0;
+  --primary-light: #e1bee7;
+  --primary-dark: #6a1b9a;
+  --secondary: #ff9800;
+  --accent: #4caf50;
+}
+.theme-adult {
+  --bg: #f5f5f5;
+  --text: #212121;
+  --muted: #757575;
+  --card: #fff;
+  --border: #e0e0e0;
+  --primary: #455a64;
+  --primary-light: #cfd8dc;
+  --primary-dark: #263238;
+  --secondary: #607d8b;
+  --accent: #ff5722;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, "Noto Sans Thai", system-ui; transition: .3s; }
+.wrap { max-width: 1400px; margin: 24px auto; padding: 0 16px; }
+.h1 { font-weight: 700; font-size: 28px; }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, .06); margin-bottom: 16px; transition: .3s; }
+.hd { padding: 14px 16px; border-bottom: 1px solid var(--border); font-weight: 600; background: var(--primary-light); color: var(--primary-dark); }
+.bd { padding: 14px 16px; }
+label { display: block; margin-bottom: 6px; font-size: 14px; }
+input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; transition: .2s; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.btn { display: inline-flex; gap: 8px; align-items: center; border-radius: 999px; padding: 10px 16px; border: 1px solid var(--primary); background: var(--primary); color: #fff; cursor: pointer; font-weight: 600; transition: .2s; }
+.btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, .1); }
+.btn.ghost { background: #fff; color: var(--primary-dark); }
+.btn.danger { background: #ef4444; border-color: #ef4444; color: #fff; }
+.btn.danger:hover { background: #dc2626; }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 1200px) { .grid3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) { .row, .grid2, .grid3 { grid-template-columns: 1fr; } }
+.kpi { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.kpi .it { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; }
+.kpi .v { font-weight: 700; }
+.hearts { font-size: 28px; line-height: 1.1; color: #e91e63; word-break: break-word; }
+.special-hearts { font-size: 24px; line-height: 1.1; word-break: break-word; margin-top: 4px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 13px; }
+thead th { background: #f8fafc; }
+.flex { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 999px; background: var(--primary-light); color: var(--primary-dark); font-weight: 600; font-size: 12px; }
+.sp { display: inline-flex; align-items: center; gap: 8px; }
+.dot { width: 10px; height: 10px; border-radius: 999px; background: #9ca3af; display: inline-block; }
+.dot.ok { background: #10b981; }
+.dot.fail { background: #ef4444; }
+.dot.load { background: #f59e0b; }
+.hero { display: flex; align-items: center; gap: 12px; }
+.mascot { width: 64px; height: 64px; }
+
+.pot-config { background: #f8fafc; border: 1px dashed var(--border); border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+.pot-config-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.pot-config-title { font-weight: 600; color: var(--primary-dark); }
+.remove-pot { background: #fecaca; color: #991b1b; border: none; border-radius: 8px; padding: 4px 12px; cursor: pointer; font-size: 12px; }
+.remove-pot:hover { background: #fca5a5; }
+
+.team-name-editor { display: flex; gap: 8px; align-items: center; }
+.team-name { cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
+.team-name:hover { background: var(--primary-light); }
+.team-name-input { width: 160px; padding: 4px 8px; font-size: 14px; }
+
+.ai-advice { background: #f8fafc; border-left: 4px solid var(--primary); padding: 12px; border-radius: 8px; margin-top: 12px; transition: all 0.3s ease; }
+.ai-advice.collapsed { max-height: 60px; overflow: hidden; cursor: pointer; }
+.ai-advice.expanded { max-height: 500px; overflow-y: auto; }
+.ai-advice-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; }
+.ai-advice-header h4 { margin: 0; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
+.ai-advice-toggle { background: none; border: none; color: var(--primary); cursor: pointer; padding: 4px; border-radius: 4px; }
+.ai-advice-toggle:hover { background: var(--primary-light); }
+.ai-advice-content { white-space: pre-line; line-height: 1.5; font-size: 14px; }
+.ai-advice.collapsed .ai-advice-content { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.status-excellent { background: #dcfce7; color: #166534; }
+.status-good { background: #dbeafe; color: #1e40af; }
+.status-fair { background: #fef3c7; color: #92400e; }
+.status-poor { background: #fecaca; color: #991b1b; }
+.status-critical { background: #fecaca; color: #991b1b; }
+
+.pot-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; transition: all 0.3s ease; position: relative; }
+.pot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.pots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+@media (max-width: 768px) { .pots-grid { grid-template-columns: 1fr; } }
+
+.pot-selection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin: 16px 0; }
+.pot-select-card { background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+.pot-select-card:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+.pot-select-card.selected { border-color: var(--primary); background: var(--primary-light); }
+.pot-select-icon { width: 48px; height: 48px; margin: 0 auto 12px; }
+
+.view-mode-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.view-mode-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; transition: all 0.2s; }
+.view-mode-btn:hover { background: #f8fafc; }
+.view-mode-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* enlarge mode */
+.pot-card.enlarged-mode { grid-column: 1 / -1 !important; z-index: 50; padding: 24px; border: 2px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,.15); transform: scale(1.02); }
+.enlarged-controls { position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; z-index: 60; }
+.enlarged-controls .btn { padding: 8px 12px; font-size: 13px; background: var(--card); border: 1px solid var(--border); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.pots-grid.has-enlarged .pot-card:not(.enlarged-mode) { opacity: .5; filter: blur(1px); transform: scale(.98); }
+
+/* CSS ใหม่สำหรับปุ่ม AI ที่ responsive */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.fa-spinner {
+  margin-right: 8px;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-effect {
+  animation: pulse 1.5s infinite;
+}
+
+/* Temporary notification */
+.temp-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateX(100%);
+  opacity: 0;
+  max-width: 300px;
+  font-weight: 500;
+}
+
+/* AI advice timestamp */
+.ai-advice-time {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+</style>
 </head>
+
 <body>
-    <div class="wrap">
-        <!-- Header -->
-        <div class="card">
-            <div class="bd flex" style="justify-content:space-between">
-                <div class="hero">
-                    <svg class="mascot" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <defs>
-                            <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
-                                <stop offset="0%" stop-opacity="1" stop-color="#34d399"/>
-                                <stop offset="100%" stop-opacity="1" stop-color="#10b981"/>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="64" cy="64" r="62" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="4"/>
-                        <path d="M64 72c-14 0-22-10-22-22 10 0 18 4 22 10 4-6 12-10 22-10 0 12-8 22-22 22z" fill="url(#g1)"/>
-                        <rect x="36" y="76" width="56" height="26" rx="8" fill="#f59e0b"/>
-                        <rect x="42" y="82" width="44" height="6" rx="3" fill="#fed7aa"/>
-                        <rect x="48" y="92" width="32" height="6" rx="3" fill="#fed7aa"/>
-                    </svg>
-                    <div>
-                        <div class="h1">🌿 GreenSync — กระถางอัจฉริยะ เชื่อมใจคนรักต้นไม้</div>
-                        <div class="muted">กรอกโปรไฟล์ → แดชบอร์ด 2 กระถาง → สรุปผล → คะแนนรายวัน</div>
-                    </div>
-                </div>
-                <div class="flex">
-                    <button class="btn ghost" id="btnEditProfile" title="แก้ไขโปรไฟล์" style="display:none"><i class="fa-solid fa-user-pen"></i> แก้ไขโปรไฟล์</button>
-                    <select id="theme" title="ธีม">
-                        <option value="default">ธีมปกติ</option>
-                        <option value="kid">ธีมเด็ก</option>
-                        <option value="teen">ธีมวัยรุ่น</option>
-                        <option value="adult">ธีมผู้ใหญ่</option>
-                    </select>
-                    <span class="badge"><i class="fa-solid fa-clock"></i> <span id="nowTH">—</span></span>
-                </div>
-            </div>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="card" id="header">
+    <div class="bd flex" style="justify-content:space-between">
+      <div class="hero">
+        <svg class="mascot" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs><linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-opacity="1" stop-color="#34d399"/><stop offset="100%" stop-opacity="1" stop-color="#10b981"/></linearGradient></defs>
+          <circle cx="64" cy="64" r="62" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="4"/>
+          <path d="M64 72c-14 0-22-10-22-22 10 0 18 4 22 10 4-6 12-10 22-10 0 12-8 22-22 22z" fill="url(#g1)"/>
+          <rect x="36" y="76" width="56" height="26" rx="8" fill="#f59e0b"/>
+          <rect x="42" y="82" width="44" height="6" rx="3" fill="#fed7aa"/>
+          <rect x="48" y="92" width="32" height="6" rx="3" fill="#fed7aa"/>
+        </svg>
+        <div>
+          <div class="h1">🌿 GreenSync — กระถางอัจฉริยะ เชื่อมใจคนรักต้นไม้</div>
+          <div class="muted">กรอกโปรไฟล์ → เลือกกระถาง → แดชบอร์ด → สรุปผล → คะแนนรายวัน</div>
         </div>
-
-        <!-- NAV -->
-        <div class="flex" style="margin:0 0 12px 2px">
-            <button class="btn ghost" id="navForm"><i class="fa-regular fa-rectangle-list"></i> แบบฟอร์ม</button>
-            <button class="btn ghost" id="navDash"><i class="fa-solid fa-gauge"></i> แดชบอร์ด</button>
-            <button class="btn ghost" id="navInsight"><i class="fa-solid fa-heart-pulse"></i> สรุปผล</button>
-            <button class="btn ghost" id="navDailyScores" style="display:none"><i class="fa-solid fa-trophy"></i> คะแนนรายวัน</button>
-            <span class="muted" id="profileBadge" style="display:none"><i class="fa-solid fa-circle-check"></i> บันทึกโปรไฟล์แล้ว</span>
-            <button class="btn danger ghost" id="btnReset" style="margin-left:auto"><i class="fa-solid fa-rotate-left"></i> ล้างการตั้งค่า</button>
-            <button class="btn danger ghost" id="btnClearURL" style="display:none"><i class="fa-solid fa-broom"></i> ล้าง URL</button>
-        </div>
-
-        <!-- FORM -->
-        <div class="card" id="secForm">
-            <div class="hd">โปรไฟล์ & การเชื่อมต่อ</div>
-            <div class="bd">
-                <div class="row">
-                    <div>
-                        <label>Web App URL (รวมทีม A/B) — ลงท้าย /exec</label>
-                        <input id="webapp" placeholder="https://script.google.com/macros/s/DEPLOYMENT_ID/exec">
-                    </div>
-                    <div>
-                        <label>จำนวนแถว (limit)</label>
-                        <select id="limit"><option>10</option><option>30</option><option selected>50</option><option>100</option></select>
-                    </div>
-                </div>
-                <div class="row" style="margin-top:8px">
-                    <div>
-                        <label>หรือกำหนด Web App แยกทีม (ไม่บังคับ) — ทีม A</label>
-                        <input id="webappA" placeholder="ปล่อยว่างได้ ถ้าใช้ URL เดียวกัน">
-                    </div>
-                    <div>
-                        <label>ทีม B</label>
-                        <input id="webappB" placeholder="ปล่อยว่างได้ ถ้าใช้ URL เดียวกัน">
-                    </div>
-                </div>
-                <div class="row" style="margin-top:8px">
-                    <div>
-                        <label>ชื่อทีม A</label>
-                        <input id="teamNameA" placeholder="ชื่อทีม A" value="ทีม A">
-                    </div>
-                    <div>
-                        <label>ชื่อทีม B</label>
-                        <input id="teamNameB" placeholder="ชื่อทีม B" value="ทีม B">
-                    </div>
-                </div>
-                <div class="row" style="margin-top:8px">
-                    <div>
-                        <label>ชื่อพันธุ์ต้นไม้</label>
-                        <input id="plant" placeholder="เช่น ยางอินเดีย / มอนสเตอร่า" value="มอนสเตอร่า">
-                    </div>
-                    <div>
-                        <label>ขนาดพื้นที่ปลูก</label>
-                        <input id="size" placeholder="เช่น 2 x 3 เมตร" value="1.5 x 2 เมตร">
-                    </div>
-                </div>
-                <div class="row" style="margin-top:8px">
-                    <div>
-                        <label>แสง</label>
-                        <select id="lightCond"><option>พอมาก</option><option selected>พอประมาณ</option><option>น้อย/อับแสง</option></select>
-                    </div>
-                    <div>
-                        <label>การถ่ายเทอากาศ</label>
-                        <select id="airflow"><option>โปร่ง</option><option selected>พอใช้</option><option>อับ</option></select>
-                    </div>
-                </div>
-                <div class="row" style="margin-top:8px">
-                    <div>
-                        <label>แอร์</label>
-                        <select id="ac"><option>ตลอดวัน</option><option selected>บางเวลา</option><option>ไม่เปิด</option></select>
-                    </div>
-                    <div>
-                        <label>ชื่อผู้ปลูก (ใช้โปรไฟล์ร่วม A/B)</label>
-                        <input id="name" placeholder="เช่น ครูรัชพล" value="ทีม GreenSync">
-                    </div>
-                </div>
-
-                <div class="row" style="margin-top:8px">
-                    <div>
-                        <label>รอบอัปเดต (วินาที)</label>
-                        <select id="interval"><option>10</option><option selected>20</option><option>30</option><option>60</option></select>
-                    </div>
-                    <div>
-                        <label>โหมดทดสอบ (ไม่มีเว็บแอป)</label>
-                        <select id="demo"><option value="off" selected>ปิด</option><option value="on">เปิด</option></select>
-                    </div>
-                </div>
-
-                <div style="margin-top:12px" class="flex">
-                    <button class="btn" id="btnStart"><i class="fa-solid fa-play"></i> เริ่มแข่งขัน ➜ เปิดแดชบอร์ด</button>
-                    <span id="status" class="muted sp"><span class="dot" id="dot"></span><span id="statusText"></span></span>
-                    <button class="btn ghost" id="btnTest"><i class="fa-solid fa-plug"></i> ทดสอบการเชื่อมต่อ</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- DASHBOARD -->
-        <div class="card" id="secDash" style="display:none">
-            <div class="hd">แดชบอร์ด 2 กระถาง (<span id="teamALabel">ทีม A</span> vs <span id="teamBLabel">ทีม B</span>)</div>
-            <div class="bd grid2">
-                <!-- LEFT -->
-                <div>
-                    <div class="flex" style="justify-content:space-between">
-                        <div class="teamBadge">
-                            <svg class="teamIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#86efac"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#16a34a"/></svg>
-                            <div class="muted team-name-editor">
-                                <span class="team-name" id="teamANameDisplay">ทีม A</span>
-                                <input type="text" class="team-name-input" id="teamANameInput" style="display:none" maxlength="20">
-                            </div>
-                        </div>
-                        <div class="badge"><i class="fa-solid fa-database"></i> <span id="dsA">—</span></div>
-                    </div>
-                    <div class="kpi" style="margin-top:8px">
-                        <div class="it"><div>อุณหภูมิ (°C)</div><div class="v" id="a_temp">-</div></div>
-                        <div class="it"><div>ความชื้น (%)</div><div class="v" id="a_hum">-</div></div>
-                        <div class="it"><div>ความชื้นดิน (%)</div><div class="v" id="a_soil">-</div></div>
-                        <div class="it"><div>แสง (%)</div><div class="v" id="a_light">-</div></div>
-                    </div>
-                    <div style="margin-top:8px">
-                        <div class="flex">
-                            <span>หัวใจวันนี้:</span>
-                            <span id="a_status" class="status-badge status-fair">—</span>
-                        </div>
-                        <div class="hearts" id="a_hearts">—</div>
-                        <div class="special-hearts" id="a_special_hearts"></div>
-                    </div>
-                    <div class="muted" id="a_advice" style="margin-top:6px">—</div>
-                    <table style="margin-top:10px">
-                        <thead><tr><th style="text-align:left">เวลา</th><th>อุณหภูมิ</th><th>ความชื้น</th><th>ดิน</th><th>แสง</th></tr></thead>
-                        <tbody id="a_tbl"></tbody>
-                    </table>
-                </div>
-
-                <!-- RIGHT -->
-                <div>
-                    <div class="flex" style="justify-content:space-between">
-                        <div class="teamBadge">
-                            <svg class="teamIcon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="#93c5fd"/><path d="M12 6c-3 0-4 2-4 4 2 0 3 .5 4 2 1.1-1.5 2-2 4-2 0-2-1-4-4-4z" fill="#2563eb"/></svg>
-                            <div class="muted team-name-editor">
-                                <span class="team-name" id="teamBNameDisplay">ทีม B</span>
-                                <input type="text" class="team-name-input" id="teamBNameInput" style="display:none" maxlength="20">
-                            </div>
-                        </div>
-                        <div class="badge"><i class="fa-solid fa-database"></i> <span id="dsB">—</span></div>
-                    </div>
-                    <div class="kpi" style="margin-top:8px">
-                        <div class="it"><div>อุณหภูมิ (°C)</div><div class="v" id="b_temp">-</div></div>
-                        <div class="it"><div>ความชื้น (%)</div><div class="v" id="b_hum">-</div></div>
-                        <div class="it"><div>ความชื้นดิน (%)</div><div class="v" id="b_soil">-</div></div>
-                        <div class="it"><div>แสง (%)</div><div class="v" id="b_light">-</div></div>
-                    </div>
-                    <div style="margin-top:8px">
-                        <div class="flex">
-                            <span>หัวใจวันนี้:</span>
-                            <span id="b_status" class="status-badge status-fair">—</span>
-                        </div>
-                        <div class="hearts" id="b_hearts">—</div>
-                        <div class="special-hearts" id="b_special_hearts"></div>
-                    </div>
-                    <div class="muted" id="b_advice" style="margin-top:6px">—</div>
-                    <table style="margin-top:10px">
-                        <thead><tr><th style="text-align:left">เวลา</th><th>อุณหภูมิ</th><th>ความชื้น</th><th>ดิน</th><th>แสง</th></tr></thead>
-                        <tbody id="b_tbl"></tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="bd" style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="btn" id="btnGoInsights"><i class="fa-solid fa-heart-pulse"></i> ไปหน้าสรุปผล</button>
-                <button class="btn ghost" id="btnRefresh"><i class="fa-solid fa-rotate"></i> รีเฟรชทันที</button>
-                <button class="btn ghost" id="btnQuickHearts"><i class="fa-solid fa-heart"></i> อัพเดทหัวใจเร็ว</button>
-            </div>
-        </div>
-
-        <!-- INSIGHTS -->
-        <div class="card" id="secInsights" style="display:none">
-            <div class="hd">สรุปผล: หัวใจสะสม + สิ่งแวดล้อม & สุขภาพ</div>
-            <div class="bd">
-                <div class="chips">
-                    <span class="chip">คะแนน = รูปหัวใจ (1–10)</span>
-                    <span class="chip">PM2.5 ใช้ µg/m³</span>
-                </div>
-                <div style="margin:12px 0">
-                    <canvas id="chartHearts" height="120"></canvas>
-                </div>
-
-                <div class="grid2" style="margin-top:12px">
-                    <div class="card" style="margin:0">
-                        <div class="hd"><span id="healthTeamA">ทีม A</span> — สุขภาพวันนี้</div>
-                        <div class="bd">
-                            <div id="healthA">—</div>
-                            <div id="aiAdviceA" class="ai-advice collapsed">
-                                <div class="ai-advice-header">
-                                    <h4><i class="fa-solid fa-robot"></i> คำแนะนำจาก AI</h4>
-                                    <button class="ai-advice-toggle" title="พับ/ขยาย">
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                                <div id="aiAdviceContentA" class="ai-advice-content"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card" style="margin:0">
-                        <div class="hd"><span id="healthTeamB">ทีม B</span> — สุขภาพวันนี้</div>
-                        <div class="bd">
-                            <div id="healthB">—</div>
-                            <div id="aiAdviceB" class="ai-advice collapsed">
-                                <div class="ai-advice-header">
-                                    <h4><i class="fa-solid fa-robot"></i> คำแนะนำจาก AI</h4>
-                                    <button class="ai-advice-toggle" title="พับ/ขยาย">
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                                <div id="aiAdviceContentB" class="ai-advice-content"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid2" style="margin-top:12px">
-                    <div>
-                        <div class="h1" style="font-size:18px;margin:0 0 6px">สรุปคะแนนรายวัน</div>
-                        <div id="dailyTable" class="sub">—</div>
-                    </div>
-                    <div>
-                        <div class="h1" style="font-size:18px;margin:0 0 6px">สรุปคะแนนรายสัปดาห์</div>
-                        <div id="weeklyTable" class="sub">—</div>
-                    </div>
-                </div>
-
-                <div class="flex" style="margin-top:12px">
-                    <button class="btn ghost" id="btnBackDash"><i class="fa-solid fa-gauge"></i> กลับแดชบอร์ด</button>
-                    <button class="btn" id="btnGetAIAdvice"><i class="fa-solid fa-robot"></i> ขอคำแนะนำจาก AI</button>
-                    <button class="btn" id="btnGoDailyScores"><i class="fa-solid fa-trophy"></i> ดูคะแนนรายวัน</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- DAILY SCORES DASHBOARD -->
-        <div class="card" id="secDailyScores" style="display:none">
-            <div class="hd">สรุปคะแนนรายวัน</div>
-            <div class="bd">
-                <div class="flex" style="justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <div>
-                        <div class="h1" style="font-size: 24px; margin: 0;">🏆 สรุปคะแนนแข่งขัน</div>
-                        <div class="muted">บันทึกคะแนนอัตโนมัติทุกเที่ยงคืน</div>
-                    </div>
-                    <div class="flex">
-                        <button class="btn" id="btnBackToInsightsFromDaily"><i class="fa-solid fa-arrow-left"></i> กลับสู่สรุปผล</button>
-                    </div>
-                </div>
-
-                <!-- Statistics Summary -->
-                <div class="grid2" style="margin-bottom: 20px;">
-                    <div class="card" style="margin: 0;">
-                        <div class="hd" id="dailyTeamALabel">ทีม A - สถิติ</div>
-                        <div class="bd">
-                            <div id="teamAStats" class="muted">กำลังโหลด...</div>
-                        </div>
-                    </div>
-                    <div class="card" style="margin: 0;">
-                        <div class="hd" id="dailyTeamBLabel">ทีม B - สถิติ</div>
-                        <div class="bd">
-                            <div id="teamBStats" class="muted">กำลังโหลด...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Daily Scores Chart -->
-                <div class="card" style="margin-bottom: 16px;">
-                    <div class="hd">📈 กราฟคะแนนรายวัน</div>
-                    <div class="bd">
-                        <canvas id="chartDailyScores" height="200"></canvas>
-                    </div>
-                </div>
-
-                <!-- Daily Scores Table -->
-                <div class="card">
-                    <div class="hd">📊 ตารางคะแนนรายวัน</div>
-                    <div class="bd">
-                        <div style="overflow-x: auto;">
-                            <table style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: left;">วันที่</th>
-                                        <th>ทีม</th>
-                                        <th>คะแนนเฉลี่ย</th>
-                                        <th>จำนวนข้อมูล</th>
-                                        <th>คะแนนสูงสุด</th>
-                                        <th>คะแนนต่ำสุด</th>
-                                        <th>สถานะ</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dailyScoresTable">
-                                    <!-- ข้อมูลจะถูกเพิ่มโดย JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex" style="margin-top: 16px; justify-content: space-between;">
-                    <div class="muted" id="lastUpdateText">อัพเดทล่าสุด: -</div>
-                    <button class="btn ghost" id="btnRefreshDaily"><i class="fa-solid fa-rotate"></i> รีเฟรชข้อมูล</button>
-                </div>
-            </div>
-        </div>
+      </div>
+      <div class="flex">
+        <button class="btn ghost" id="btnEditProfile" title="แก้ไขโปรไฟล์" style="display:none"><i class="fa-solid fa-user-pen"></i> แก้ไขโปรไฟล์</button>
+        <select id="theme" title="ธีม">
+          <option value="default">ธีมปกติ</option>
+          <option value="kid">ธีมเด็ก</option>
+          <option value="teen">ธีมวัยรุ่น</option>
+          <option value="adult">ธีมผู้ใหญ่</option>
+        </select>
+        <span class="badge"><i class="fa-solid fa-clock"></i> <span id="nowTH">—</span></span>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // ===== Helpers =====
-        const $ = s => document.querySelector(s);
-        const tz = 'Asia/Bangkok';
-        const byId = id => document.getElementById(id);
-        const setTextSafe = (id, text) => {
-            const el = byId(id);
-            if (el) el.textContent = text;
+  <!-- NAV -->
+  <div class="flex" id="nav" style="margin:0 0 12px 2px">
+    <button class="btn ghost" id="navForm"><i class="fa-regular fa-rectangle-list"></i> แบบฟอร์ม</button>
+    <button class="btn ghost" id="navSelectPots"><i class="fa-solid fa-list-check"></i> เลือกกระถาง</button>
+    <button class="btn ghost" id="navDash"><i class="fa-solid fa-gauge"></i> แดชบอร์ด</button>
+    <button class="btn ghost" id="navInsight"><i class="fa-solid fa-heart-pulse"></i> สรุปผล</button>
+    <button class="btn ghost" id="navDailyScores" style="display:none"><i class="fa-solid fa-trophy"></i> คะแนนรายวัน</button>
+
+    <span class="muted" id="profileBadge" style="display:none"><i class="fa-solid fa-circle-check"></i> บันทึกโปรไฟล์แล้ว</span>
+    <button class="btn danger ghost" id="btnReset" style="margin-left:auto"><i class="fa-solid fa-rotate-left"></i> ล้างการตั้งค่า</button>
+    <button class="btn danger ghost" id="btnClearURL" style="display:none"><i class="fa-solid fa-broom"></i> ล้าง URL</button>
+  </div>
+
+  <!-- FORM -->
+  <div class="card" id="secForm">
+    <div class="hd">โปรไฟล์ & การเชื่อมต่อ (หลายกระถาง)</div>
+    <div class="bd">
+      <div class="row">
+        <div>
+          <label>URL กระถางหลัก (ใช้ร่วมกันถ้าไม่ได้กำหนดแยก)</label>
+          <input id="webapp" placeholder="https://script.google.com/macros/s/DEPLOYMENT_ID/exec">
+        </div>
+        <div>
+          <label>จำนวนกระถางที่ต้องการแสดง</label>
+          <select id="numPots">
+            <option value="1">1 กระถาง</option>
+            <option value="2" selected>2 กระถาง</option>
+            <option value="3">3 กระถาง</option>
+            <option value="4">4 กระถาง</option>
+            <option value="5">5 กระถาง</option>
+            <option value="6">6 กระถาง</option>
+            <option value="7">7 กระถาง</option>
+            <option value="8">8 กระถาง</option>
+            <option value="9">9 กระถาง</option>
+            <option value="10">10 กระถาง</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>จำนวนแถวข้อมูลที่ดึง (limit)</label>
+          <select id="limit">
+            <option value="30">30</option>
+            <option value="50" selected>50</option>
+            <option value="80">80</option>
+            <option value="120">120</option>
+          </select>
+        </div>
+        <div>
+          <label>รอบอัปเดต (วินาที)</label>
+          <select id="interval"><option>10</option><option selected>20</option><option>30</option><option>60</option></select>
+        </div>
+      </div>
+
+      <!-- Dynamic pot configuration -->
+      <div id="potConfigContainer" style="margin-top:12px"></div>
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>ชื่อพันธุ์ต้นไม้</label>
+          <input id="plant" placeholder="เช่น ยางอินเดีย / มอนสเตอร่า" value="มอนสเตอร่า">
+        </div>
+        <div>
+          <label>ขนาดพื้นที่ปลูก</label>
+          <input id="size" placeholder="เช่น 2 x 3 เมตร" value="1.5 x 2 เมตร">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>แสง</label>
+          <select id="lightCond"><option>พอมาก</option><option selected>พอประมาณ</option><option>น้อย/อับแสง</option></select>
+        </div>
+        <div>
+          <label>การถ่ายเทอากาศ</label>
+          <select id="airflow"><option>โปร่ง</option><option selected>พอใช้</option><option>อับ</option></select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>แอร์</label>
+          <select id="ac"><option>ตลอดวัน</option><option selected>บางเวลา</option><option>ไม่เปิด</option></select>
+        </div>
+        <div>
+          <label>ชื่อผู้ปลูก (ใช้โปรไฟล์ร่วมกัน)</label>
+          <input id="name" placeholder="เช่น ครูรัชพล" value="ทีม GreenSync">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>โหมดทดสอบ (ไม่มีเว็บแอป)</label>
+          <select id="demo"><option value="off" selected>ปิด</option><option value="on">เปิด</option></select>
+        </div>
+        <div>
+          <label> </label>
+          <div class="sub">* ถ้า DEMO เปิด จะไม่เรียก WebApp</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px" class="flex">
+        <button class="btn" id="btnStart"><i class="fa-solid fa-play"></i> เริ่มแข่งขัน ➜ ไปหน้าเลือกกระถาง</button>
+        <span id="status" class="muted sp"><span class="dot" id="dot"></span><span id="statusText"></span></span>
+        <button class="btn ghost" id="btnTest"><i class="fa-solid fa-plug"></i> ทดสอบการเชื่อมต่อ (กระถางแรก)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELECT POTS PAGE -->
+  <div class="card" id="secSelectPots" style="display:none">
+    <div class="hd">เลือกกระถางที่ต้องการดู</div>
+    <div class="bd">
+      <div class="muted" style="margin-bottom: 16px;">
+        เลือกกระถางที่ต้องการแสดงในแดชบอร์ด (ดูทั้งหมด / ดูทีละกระถาง / ดูเฉพาะที่เลือก)
+      </div>
+
+      <div class="view-mode-controls">
+        <button class="view-mode-btn active" id="btnViewAll">ดูทั้งหมด</button>
+        <button class="view-mode-btn" id="btnViewSingle">ดูทีละกระถาง</button>
+        <button class="view-mode-btn" id="btnViewSelected">ดูเฉพาะที่เลือก</button>
+      </div>
+
+      <div id="potSelectionContainer" class="pot-selection-grid"></div>
+
+      <div class="flex" style="margin-top: 20px; justify-content: space-between;">
+        <button class="btn ghost" id="btnBackToFormFromSelect"><i class="fa-solid fa-arrow-left"></i> กลับไปแก้ไขโปรไฟล์</button>
+        <button class="btn" id="btnGoToDashboard"><i class="fa-solid fa-gauge"></i> ไปแดชบอร์ดตามที่เลือก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="card" id="secDash" style="display:none">
+    <div class="hd">
+      <span id="dashboardTitle">แดชบอร์ด</span>
+      <div style="float:right;">
+        <button class="btn ghost btn-sm" id="btnChangePots"><i class="fa-solid fa-list-check"></i> เปลี่ยนกระถาง</button>
+      </div>
+    </div>
+    <div class="bd">
+      <div id="viewModeInfo" class="muted" style="margin-bottom: 12px; padding: 8px; background: #f8fafc; border-radius: 8px;"></div>
+
+      <div class="flex" style="justify-content: space-between; margin-bottom: 16px;">
+        <div>
+          <button class="btn ghost" id="btnRefresh"><i class="fa-solid fa-rotate"></i> รีเฟรชทันที</button>
+          <button class="btn ghost" id="btnQuickHearts"><i class="fa-solid fa-heart"></i> อัพเดทหัวใจเร็ว</button>
+        </div>
+        <div class="flex">
+          <button class="btn" id="btnGoInsights"><i class="fa-solid fa-heart-pulse"></i> ไปหน้าสรุปผล</button>
+        </div>
+      </div>
+
+      <div id="potsGrid" class="pots-grid"></div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="card" id="secInsights" style="display:none">
+    <div class="hd">สรุปผล: หัวใจสะสม + สิ่งแวดล้อม & สุขภาพ (<span id="insightsPotsCount">-</span> กระถาง)</div>
+    <div class="bd">
+      <div class="chips">
+        <span class="badge">คะแนน = รูปหัวใจ (1–10)</span>
+        <span class="badge">PM2.5 ใช้ µg/m³</span>
+      </div>
+
+      <div style="margin:12px 0">
+        <canvas id="chartHearts" height="120"></canvas>
+      </div>
+
+      <div id="insightsHealthGrid" class="grid3"></div>
+
+      <div class="flex" style="margin-top:12px">
+        <button class="btn ghost" id="btnBackDash"><i class="fa-solid fa-gauge"></i> กลับแดชบอร์ด</button>
+        <button class="btn" id="btnGetAIAdvice"><i class="fa-solid fa-robot"></i> ขอคำแนะนำจาก AI (ทุกกระถางที่แสดง)</button>
+        <button class="btn" id="btnGoDailyScores"><i class="fa-solid fa-trophy"></i> ดูคะแนนรายวัน</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY SCORES DASHBOARD -->
+  <div class="card" id="secDailyScores" style="display:none">
+    <div class="hd">สรุปคะแนนรายวัน</div>
+    <div class="bd">
+      <div class="flex" style="justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <div class="h1" style="font-size: 24px; margin: 0;">🏆 สรุปคะแนนแข่งขัน</div>
+          <div class="muted">ดึงจาก action=daily_scores ของแต่ละกระถาง</div>
+        </div>
+        <div class="flex">
+          <button class="btn" id="btnBackToInsightsFromDaily"><i class="fa-solid fa-arrow-left"></i> กลับสู่สรุปผล</button>
+        </div>
+      </div>
+
+      <div id="dailyStatsContainer" class="grid3" style="margin-bottom: 20px;"></div>
+
+      <div class="card" style="margin-bottom: 16px;">
+        <div class="hd">📈 กราฟคะแนนรายวัน</div>
+        <div class="bd">
+          <canvas id="chartDailyScores" height="200"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hd">📊 ตารางคะแนนรายวัน</div>
+        <div class="bd">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="text-align:left;">วันที่</th>
+                  <th>ทีม</th>
+                  <th>คะแนนเฉลี่ย</th>
+                  <th>จำนวนข้อมูล</th>
+                  <th>สูงสุด</th>
+                  <th>ต่ำสุด</th>
+                  <th>สถานะ</th>
+                </tr>
+              </thead>
+              <tbody id="dailyScoresTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex" style="margin-top: 16px; justify-content: space-between;">
+        <div class="muted" id="lastUpdateText">อัพเดทล่าสุด: -</div>
+        <button class="btn ghost" id="btnRefreshDaily"><i class="fa-solid fa-rotate"></i> รีเฟรชข้อมูล</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== Global variables =====
+let ctx = {
+  pots: [],
+  selectedPots: [],
+  viewMode: 'all',
+  singlePotView: '',
+  limit: 50,
+  interval: 20000,
+  cache: {},
+  aiAdvice: {} // <-- เพิ่มตัวแปรเก็บคำแนะนำ AI
+};
+
+let timer = null;
+let heartChart = null;
+let dailyScoresChart = null;
+
+const tz = 'Asia/Bangkok';
+const byId = id => document.getElementById(id);
+const setTextSafe = (id, text) => { const el = byId(id); if (el) el.textContent = text; };
+const bind = (id, ev, fn) => { const el = byId(id); if (el) el.addEventListener(ev, fn); };
+const fmtTime = iso => !iso ? '-' : new Date(iso).toLocaleString('th-TH', { timeZone: tz, hour:'2-digit', minute:'2-digit', day:'2-digit', month:'short' });
+const fmtDate = iso => !iso ? '-' : new Date(iso).toLocaleDateString('th-TH', { timeZone: tz });
+const safeNum = v => { const n = Number(String(v).replace(/,/g,'')); return isFinite(n) ? n : null; };
+
+const COLS = {
+  ts: ['Timestamp (Asia/Bangkok)', 'Timestamp', 'time', 'Time'],
+  tC: ['Temperature (°C)', 'AirTemp_C', 'Temp_C', 'Temp', 'Temperature'],
+  rh: ['Air Humidity (%)', 'Humid (%)', 'AirHumid_%RH', 'Humidity'],
+  soil: ['Soil Moisture (%)', 'SoilMoist_%', 'Soil'],
+  light: ['Light (%)', 'Light_%', 'Light'],
+  pm25: ['PM2.5 (µg/m³)', 'PM2.5 (μg/m³)', 'PM2_5', 'pm25', 'PM2.5']
+};
+
+const SCORE = {
+  score: ['Score_1_10', 'Score', 'Score1_10'],
+  advice: ['Advice', 'AI_Advice', 'Note'],
+  ts: ['Timestamp', 'Timestamp (Asia/Bangkok)', 'time'],
+  hearts: ['Hearts', 'hearts'],
+  special_hearts: ['SpecialHearts', 'special_hearts'],
+  status: ['Status', 'status']
+};
+
+const pick = (row, keys) => {
+  for (const k of keys) if (row && row[k] != null && row[k] !== '') return row[k];
+  return null;
+};
+
+function setStatus(type, msg) {
+  const dot = byId('dot');
+  const statusText = byId('statusText');
+  if (!dot || !statusText) return;
+  dot.classList.remove('ok','fail','load');
+  if (type === 'ok') dot.classList.add('ok');
+  else if (type === 'fail') dot.classList.add('fail');
+  else dot.classList.add('load');
+  statusText.textContent = msg || '';
+}
+
+function show(id) {
+  ['secForm','secSelectPots','secDash','secInsights','secDailyScores'].forEach(x=>{
+    const el = byId(x);
+    if (el) el.style.display = (x===id)?'block':'none';
+  });
+}
+
+function updateStatusBadge(potPrefix, score) {
+  const badge = byId(`${potPrefix}_status`);
+  if (!badge) return;
+  badge.className = 'status-badge ';
+  if (score >= 9) { badge.classList.add('status-excellent'); badge.textContent='ดีเยี่ยม 🎉'; }
+  else if (score >= 7) { badge.classList.add('status-good'); badge.textContent='ดีมาก 👍'; }
+  else if (score >= 5) { badge.classList.add('status-fair'); badge.textContent='ปานกลาง ✅'; }
+  else if (score >= 3) { badge.classList.add('status-poor'); badge.textContent='ต้องดูแล ⚠️'; }
+  else { badge.classList.add('status-critical'); badge.textContent='อันตราย 🚨'; }
+}
+
+/* ===== Enlarged Pot Card ===== */
+function togglePotEnlarged(potCard) {
+  const isEnlarged = potCard.classList.contains('enlarged-mode');
+  const potsGrid = potCard.closest('.pots-grid');
+
+  if (isEnlarged) {
+    potCard.classList.remove('enlarged-mode');
+    potsGrid.classList.remove('has-enlarged');
+    const controls = potCard.querySelector('.enlarged-controls');
+    if (controls) controls.remove();
+    potCard.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  } else {
+    document.querySelectorAll('.pot-card.enlarged-mode').forEach(card=>{
+      card.classList.remove('enlarged-mode');
+      const existingControls = card.querySelector('.enlarged-controls');
+      if (existingControls) existingControls.remove();
+    });
+    potCard.classList.add('enlarged-mode');
+    potsGrid.classList.add('has-enlarged');
+    addEnlargedControls(potCard);
+    potCard.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+}
+
+function addEnlargedControls(potCard) {
+  const existing = potCard.querySelector('.enlarged-controls');
+  if (existing) existing.remove();
+  const controls = document.createElement('div');
+  controls.className = 'enlarged-controls';
+  controls.innerHTML = `
+    <button class="btn ghost btn-sm btn-enlarged-refresh" title="รีเฟรชข้อมูลนี้"><i class="fa-solid fa-rotate"></i></button>
+    <button class="btn ghost btn-sm btn-enlarged-close" title="ย่อกลับ"><i class="fa-solid fa-compress"></i></button>
+  `;
+  potCard.appendChild(controls);
+
+  controls.querySelector('.btn-enlarged-refresh')?.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const potLetter = potCard.id.replace('potCard','');
+    const pot = ctx.pots.find(p=>p.letter===potLetter);
+    if (pot) renderPot(pot);
+  });
+
+  controls.querySelector('.btn-enlarged-close')?.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    togglePotEnlarged(potCard);
+  });
+}
+
+function addEnlargeButtonToPotCard(potCard) {
+  const potHeader = potCard.querySelector('.pot-header');
+  if (!potHeader) return;
+  if (potHeader.querySelector('.btn-enlarge-pot')) return;
+
+  const enlargeBtn = document.createElement('button');
+  enlargeBtn.className = 'btn ghost btn-sm btn-enlarge-pot';
+  enlargeBtn.innerHTML = '<i class="fa-solid fa-expand"></i>';
+  enlargeBtn.title = 'ขยายกรอบนี้';
+  enlargeBtn.style.marginLeft = '8px';
+  enlargeBtn.addEventListener('click',(e)=>{ e.stopPropagation(); togglePotEnlarged(potCard); });
+  potHeader.appendChild(enlargeBtn);
+}
+
+/* ===== Pot configs ===== */
+function generatePotConfigs(numPots) {
+  const container = byId('potConfigContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  for (let i=1;i<=numPots;i++){
+    const letter = String.fromCharCode(64+i);
+
+    const potDiv = document.createElement('div');
+    potDiv.className = 'pot-config';
+
+    const removeBtn = (i>1)
+      ? `<button type="button" class="remove-pot" data-pot="${letter}"><i class="fa-solid fa-trash"></i> ลบ</button>`
+      : '';
+
+    potDiv.innerHTML = `
+      <div class="pot-config-header">
+        <div class="pot-config-title">กระถาง ${letter}</div>
+        ${removeBtn}
+      </div>
+      <div class="row">
+        <div>
+          <label>Web App URL (กระถาง ${letter})</label>
+          <input id="webapp${letter}" placeholder="https://script.google.com/macros/s/DEPLOYMENT_ID/exec">
+        </div>
+        <div>
+          <label>ชื่อทีม ${letter}</label>
+          <input id="teamName${letter}" placeholder="ชื่อทีม ${letter}" value="ทีม ${letter}">
+        </div>
+      </div>
+    `;
+    container.appendChild(potDiv);
+  }
+
+  container.querySelectorAll('.remove-pot').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const numPotsSelect = byId('numPots');
+      const currentNum = parseInt(numPotsSelect.value);
+      if (currentNum>1){
+        const newNum = currentNum-1;
+        numPotsSelect.value = String(newNum);
+        localStorage.setItem('gs_numPots', String(newNum));
+        generatePotConfigs(newNum);
+      }
+    });
+  });
+
+  loadPotConfigs();
+}
+
+function loadPotConfigs() {
+  const numPots = parseInt(byId('numPots').value);
+  for (let i=1;i<=numPots;i++){
+    const letter = String.fromCharCode(64+i);
+    const savedUrl = localStorage.getItem(`gs_webapp${letter}`);
+    const savedName= localStorage.getItem(`gs_teamName${letter}`);
+    const urlInput = byId(`webapp${letter}`);
+    const nameInput= byId(`teamName${letter}`);
+    if (urlInput && savedUrl) urlInput.value = savedUrl;
+    if (nameInput && savedName) nameInput.value = savedName;
+  }
+}
+
+/* ===== View Mode ===== */
+function updateViewModeButtons(){
+  document.querySelectorAll('.view-mode-btn').forEach(btn=>btn.classList.remove('active'));
+  const map = { all:'btnViewAll', single:'btnViewSingle', selected:'btnViewSelected' };
+  byId(map[ctx.viewMode])?.classList.add('active');
+}
+function getPotsToDisplay(){
+  if (ctx.viewMode==='all') return ctx.pots;
+  if (ctx.viewMode==='single') return ctx.pots.filter(p=>p.letter===ctx.singlePotView);
+  if (ctx.viewMode==='selected') return ctx.pots.filter(p=>ctx.selectedPots.includes(p.letter));
+  return ctx.pots;
+}
+function getViewModeInfoText(){
+  if (ctx.viewMode==='all') return `กำลังดูทั้งหมด ${ctx.pots.length} กระถาง`;
+  if (ctx.viewMode==='single'){
+    const p = ctx.pots.find(x=>x.letter===ctx.singlePotView);
+    return `กำลังดูเฉพาะ: ${p?p.name:''}`;
+  }
+  if (ctx.viewMode==='selected'){
+    if (!ctx.selectedPots.length) return 'กรุณาเลือกอย่างน้อย 1 กระถาง';
+    return `กำลังดู ${ctx.selectedPots.length} กระถางที่เลือก`;
+  }
+  return '';
+}
+
+/* ===== Selection Page ===== */
+function createPotSelectionPage(){
+  const container = byId('potSelectionContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  getPotsToDisplay(); // ensure in sync
+  ctx.pots.forEach(pot=>{
+    const card = document.createElement('div');
+    card.className = 'pot-select-card';
+    card.dataset.pot = pot.letter;
+
+    const selected =
+      (ctx.viewMode==='all') ||
+      (ctx.viewMode==='single' && ctx.singlePotView===pot.letter) ||
+      (ctx.viewMode==='selected' && ctx.selectedPots.includes(pot.letter));
+
+    if (selected) card.classList.add('selected');
+
+    card.innerHTML = `
+      <svg class="pot-select-icon" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="22" fill="#86efac"/>
+        <path d="M24 12c-6 0-8 4-8 8 4 0 6 1 8 4 2-3 4-4 8-4 0-4-2-8-8-8z" fill="#16a34a"/>
+      </svg>
+      <div style="font-weight:600">${pot.name}</div>
+      <div class="muted" style="font-size:12px;margin-top:4px">${pot.demo ? 'โหมดทดสอบ' : pot.host}</div>
+    `;
+
+    card.addEventListener('click', ()=>{
+      if (ctx.viewMode==='single'){
+        ctx.singlePotView = pot.letter;
+      } else if (ctx.viewMode==='selected'){
+        const idx = ctx.selectedPots.indexOf(pot.letter);
+        if (idx===-1) ctx.selectedPots.push(pot.letter);
+        else ctx.selectedPots.splice(idx,1);
+      }
+      createPotSelectionPage();
+    });
+
+    container.appendChild(card);
+  });
+
+  updateViewModeButtons();
+}
+
+/* ===== Data Fetch ===== */
+async function fetchPotData(pot){
+  if (pot.demo) return getDemoData(pot.letter);
+
+  try{
+    const url = new URL(pot.url);
+    const base = `${url.origin}${url.pathname}`;
+    const dataUrl   = `${base}?action=data&team=${pot.teamParam}&limit=${ctx.limit}`;
+    const scoreUrl  = `${base}?action=score&team=${pot.teamParam}&limit=10`;
+    const heartsUrl = `${base}?action=get_hearts&team=${pot.teamParam}`;
+
+    const [dataRes, scoreRes, heartsRes] = await Promise.allSettled([
+      fetch(dataUrl, {cache:'no-store'}),
+      fetch(scoreUrl,{cache:'no-store'}),
+      fetch(heartsUrl,{cache:'no-store'})
+    ]);
+
+    return {
+      data:   dataRes.status==='fulfilled'   ? await dataRes.value.json()   : {rows:[]},
+      score:  scoreRes.status==='fulfilled'  ? await scoreRes.value.json()  : {scores:[]},
+      hearts: heartsRes.status==='fulfilled' ? await heartsRes.value.json() : null
+    };
+  }catch(err){
+    console.error('fetchPotData error', pot.letter, err);
+    return { data:{rows:[]}, score:{scores:[]}, hearts:null };
+  }
+}
+
+function getDemoData(letter){
+  const now = Date.now();
+  const rows = Array.from({length:50}, (_,i)=>({
+    'Timestamp (Asia/Bangkok)': new Date(now - i*60000).toISOString(),
+    'Temperature (°C)': +(25 + Math.sin(i/6)*2).toFixed(1),
+    'Air Humidity (%)': 55 + ((i*7)%10),
+    'Soil Moisture (%)': 40 + ((i*5)%20),
+    'Light (%)': 60 + ((i*3)%20),
+    'PM2.5 (µg/m³)': 22 + ((i*13)%40)
+  }));
+
+  const scores = Array.from({length:20}, (_,i)=>({
+    'Timestamp': new Date(now - i*3600000).toISOString(),
+    'Score': 5 + Math.round(Math.sin(i/3)*3),
+    'Hearts': '❤️'.repeat(Math.max(1, Math.min(10, 5 + Math.round(Math.sin(i/3)*3)))),
+    'SpecialHearts': '💖'.repeat(Math.max(1, Math.min(10, 5 + Math.round(Math.sin(i/3)*3)))),
+    'Advice': 'รดน้ำเล็กน้อย/ตรวจแสง',
+    'Status': 'ดีมาก 👍'
+  }));
+
+  return {
+    data:{rows},
+    score:{scores},
+    hearts:{ ok:true, score:7, hearts:'❤️❤️❤️❤️❤️❤️❤️', special_hearts:'💖💖💖💖💖💖💖', status:'ดีมาก 👍', advice:'เดโม' }
+  };
+}
+
+async function renderPot(pot){
+  const prefix = pot.letter.toLowerCase();
+  const {data, score, hearts} = await fetchPotData(pot);
+
+  ctx.cache[pot.letter] = { data: data.rows||[], score: score.scores||[] };
+
+  if (data.rows && data.rows.length){
+    const latest = data.rows[0];
+    setTextSafe(`${prefix}_temp`, (pick(latest,COLS.tC) ?? '-').toString());
+    setTextSafe(`${prefix}_hum`,  (pick(latest,COLS.rh) ?? '-').toString());
+    setTextSafe(`${prefix}_soil`, (pick(latest,COLS.soil)?? '-').toString());
+    setTextSafe(`${prefix}_light`,(pick(latest,COLS.light)?? '-').toString());
+
+    const tbody = byId(`${prefix}_tbl`);
+    if (tbody){
+      tbody.innerHTML='';
+      data.rows.slice(0,8).forEach(row=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${fmtTime(pick(row,COLS.ts))}</td>
+          <td style="text-align:center">${pick(row,COLS.tC) ?? '-'}</td>
+          <td style="text-align:center">${pick(row,COLS.rh) ?? '-'}</td>
+          <td style="text-align:center">${pick(row,COLS.soil) ?? '-'}</td>
+          <td style="text-align:center">${pick(row,COLS.light) ?? '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  }
+
+  // hearts fast - เอาคำแนะนำออก (เหลือแค่หัวใจและสถานะ)
+  if (hearts && hearts.ok){
+    setTextSafe(`${prefix}_hearts`, hearts.hearts || '—');
+    setTextSafe(`${prefix}_special_hearts`, hearts.special_hearts || '');
+    // เอาคำแนะนำออก: ไม่แสดงคำแนะนำในแดชบอร์ด
+    // setTextSafe(`${prefix}_advice`, hearts.advice ? `คำแนะนำ: ${hearts.advice}` : '—');
+    updateStatusBadge(prefix, safeNum(hearts.score) || 5);
+  } else if (score.scores && score.scores.length){
+    const latestScore = score.scores[0];
+    const sv = safeNum(pick(latestScore,SCORE.score)) || 0;
+    setTextSafe(`${prefix}_hearts`, pick(latestScore,SCORE.hearts) || '❤️'.repeat(Math.max(1, Math.min(10, sv))));
+    setTextSafe(`${prefix}_special_hearts`, pick(latestScore,SCORE.special_hearts) || '');
+    // เอาคำแนะนำออก: ไม่แสดงคำแนะนำในแดชบอร์ด
+    // setTextSafe(`${prefix}_advice`, pick(latestScore,SCORE.advice) ? `คำแนะนำ: ${pick(latestScore,SCORE.advice)}` : '—');
+    updateStatusBadge(prefix, sv);
+  } else {
+    setTextSafe(`${prefix}_hearts`, '—');
+    setTextSafe(`${prefix}_special_hearts`, '');
+    // เอาคำแนะนำออก: ไม่แสดงคำแนะนำในแดชบอร์ด
+    // setTextSafe(`${prefix}_advice`, '—');
+    updateStatusBadge(prefix, 5);
+  }
+}
+
+/* ===== Cards ===== */
+function createPotCards(){
+  const grid = byId('potsGrid');
+  if (!grid) return;
+  grid.innerHTML='';
+
+  const potsToDisplay = getPotsToDisplay();
+  if (!potsToDisplay.length){
+    grid.innerHTML = `<div class="muted" style="text-align:center;padding:40px;">กรุณาเลือกกระถางที่ต้องการดู</div>`;
+    return;
+  }
+
+  potsToDisplay.forEach(pot=>{
+    const card = document.createElement('div');
+    card.className = 'pot-card';
+    card.id = `potCard${pot.letter}`;
+    card.innerHTML = `
+      <div class="pot-header">
+        <div class="team-name-editor">
+          <span class="team-name" id="team${pot.letter}NameDisplay">${pot.name}</span>
+          <input class="team-name-input" id="team${pot.letter}NameInput" style="display:none" maxlength="24">
+        </div>
+        <div class="badge"><i class="fa-solid fa-database"></i> <span id="ds${pot.letter}">${pot.demo?'DEMO':pot.host}</span></div>
+      </div>
+
+      <div class="kpi">
+        <div class="it"><div>อุณหภูมิ</div><div class="v" id="${pot.letter.toLowerCase()}_temp">-</div></div>
+        <div class="it"><div>ความชื้น</div><div class="v" id="${pot.letter.toLowerCase()}_hum">-</div></div>
+        <div class="it"><div>ดิน</div><div class="v" id="${pot.letter.toLowerCase()}_soil">-</div></div>
+        <div class="it"><div>แสง</div><div class="v" id="${pot.letter.toLowerCase()}_light">-</div></div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="flex">
+          <span>หัวใจวันนี้:</span>
+          <span id="${pot.letter.toLowerCase()}_status" class="status-badge status-fair">—</span>
+        </div>
+        <div class="hearts" id="${pot.letter.toLowerCase()}_hearts">—</div>
+        <div class="special-hearts" id="${pot.letter.toLowerCase()}_special_hearts"></div>
+      </div>
+
+      <!-- เอาคำแนะนำออกจากแดชบอร์ด -->
+      <!-- <div class="muted" id="${pot.letter.toLowerCase()}_advice" style="margin-top:6px">—</div> -->
+
+      <table style="margin-top:10px">
+        <thead><tr><th style="text-align:left">เวลา</th><th>อุณหภูมิ</th><th>ความชื้น</th><th>ดิน</th><th>แสง</th></tr></thead>
+        <tbody id="${pot.letter.toLowerCase()}_tbl"></tbody>
+      </table>
+    `;
+    grid.appendChild(card);
+    addEnlargeButtonToPotCard(card);
+  });
+
+  // title/info
+  let title='แดชบอร์ด';
+  if (ctx.viewMode==='all') title = `แดชบอร์ด (${potsToDisplay.length}/${ctx.pots.length} กระถาง)`;
+  if (ctx.viewMode==='single') title = `แดชบอร์ด: ${potsToDisplay[0]?.name || ''}`;
+  if (ctx.viewMode==='selected') title = `แดชบอร์ด (${potsToDisplay.length}/${ctx.pots.length} กระถางที่เลือก)`;
+  setTextSafe('dashboardTitle', title);
+
+  const infoEl = byId('viewModeInfo');
+  if (infoEl){
+    infoEl.innerHTML = `<i class="fa-solid fa-info-circle"></i> ${getViewModeInfoText()}`;
+  }
+
+  setupTeamNameEditing();
+}
+
+function setupTeamNameEditing(){
+  getPotsToDisplay().forEach(pot=>{
+    const displayEl = byId(`team${pot.letter}NameDisplay`);
+    const inputEl = byId(`team${pot.letter}NameInput`);
+    if (!displayEl || !inputEl) return;
+
+    displayEl.addEventListener('click', ()=>{
+      displayEl.style.display='none';
+      inputEl.style.display='block';
+      inputEl.value = displayEl.textContent;
+      inputEl.focus(); inputEl.select();
+    });
+    inputEl.addEventListener('blur', ()=>saveTeamName(pot.letter, inputEl.value));
+    inputEl.addEventListener('keypress', (e)=>{ if (e.key==='Enter') saveTeamName(pot.letter, inputEl.value); });
+  });
+}
+
+function saveTeamName(letter, name){
+  const v = (name||'').trim() || `ทีม ${letter}`;
+  const displayEl = byId(`team${letter}NameDisplay`);
+  const inputEl = byId(`team${letter}NameInput`);
+  if (displayEl) displayEl.textContent=v;
+  if (inputEl){
+    inputEl.style.display='none';
+    if (displayEl) displayEl.style.display='block';
+  }
+  const idx = ctx.pots.findIndex(p=>p.letter===letter);
+  if (idx!==-1) ctx.pots[idx].name=v;
+  localStorage.setItem(`gs_teamName${letter}`, v);
+}
+
+/* ===== Dashboard loop ===== */
+async function updateDisplayedPots(){
+  const potsToDisplay = getPotsToDisplay();
+  await Promise.all(potsToDisplay.map(p=>renderPot(p)));
+}
+async function startDashboard(){
+  await updateDisplayedPots();
+  if (timer) clearInterval(timer);
+  timer = setInterval(()=>updateDisplayedPots().catch(console.error), ctx.interval || 20000);
+}
+
+/* ===== Quick hearts only ===== */
+async function quickHearts(){
+  const potsToDisplay = getPotsToDisplay();
+  await Promise.all(potsToDisplay.map(async pot=>{
+    if (pot.demo) { await renderPot(pot); return; }
+    try{
+      const u = new URL(pot.url);
+      const base = `${u.origin}${u.pathname}`;
+      const r = await fetch(`${base}?action=get_hearts&team=${pot.teamParam}`, {cache:'no-store'}).then(x=>x.json());
+      const prefix = pot.letter.toLowerCase();
+      if (r && r.ok){
+        setTextSafe(`${prefix}_hearts`, r.hearts || '—');
+        setTextSafe(`${prefix}_special_hearts`, r.special_hearts || '');
+        // เอาคำแนะนำออก: ไม่แสดงคำแนะนำในแดชบอร์ด
+        // setTextSafe(`${prefix}_advice`, r.advice ? `คำแนะนำ: ${r.advice}` : '—');
+        updateStatusBadge(prefix, safeNum(r.score) || 5);
+      }
+    }catch(e){ console.error('quickHearts error', pot.letter, e); }
+  }));
+}
+
+/* ===== Profile push to server ===== */
+async function pushProfileToAllPots(){
+  const pots = ctx.pots;
+  const plant = byId('plant')?.value || '';
+  const area = byId('size')?.value || '';
+  const light_pref = byId('lightCond')?.value || '';
+  const airflow = byId('airflow')?.value || '';
+  const aircon = byId('ac')?.value || '';
+
+  await Promise.allSettled(pots.map(async pot=>{
+    if (pot.demo) return;
+    try{
+      const u = new URL(pot.url);
+      const base = `${u.origin}${u.pathname}`;
+      const qs = new URLSearchParams({
+        action:'saveProfile',
+        team: pot.teamParam,
+        plant, area,
+        light_pref, airflow, aircon
+      });
+      await fetch(`${base}?${qs.toString()}`, {cache:'no-store'}).then(r=>r.json()).catch(()=>null);
+    }catch(e){}
+  }));
+}
+
+/* ===== Start competition ===== */
+async function startCompetition(){
+  const baseUrl = byId('webapp').value.trim();
+  const numPots = parseInt(byId('numPots').value);
+  const demo = (byId('demo').value === 'on');
+
+  const pots = [];
+  for (let i=1;i<=numPots;i++){
+    const letter = String.fromCharCode(64+i);
+    const urlInput = byId(`webapp${letter}`);
+    const nameInput= byId(`teamName${letter}`);
+
+    const potUrl = demo ? `demo://${letter}` : (urlInput?.value.trim() || baseUrl);
+    const potName= (nameInput?.value.trim() || `ทีม ${letter}`);
+
+    if (!demo && !potUrl) { setStatus('fail', `กรุณาระบุ URL สำหรับกระถาง ${letter}`); return; }
+
+    let host='DEMO';
+    if (!demo){
+      try{ host = new URL(potUrl).host; }catch(e){ setStatus('fail', `URL ไม่ถูกต้องสำหรับกระถาง ${letter}`); return; }
+    }
+
+    pots.push({ letter, name: potName, url: potUrl, host, demo, teamParam: letter });
+
+    if (urlInput) localStorage.setItem(`gs_webapp${letter}`, urlInput.value);
+    if (nameInput) localStorage.setItem(`gs_teamName${letter}`, potName);
+  }
+
+  const settings = {
+    webapp: baseUrl,
+    numPots,
+    plant: byId('plant').value,
+    size: byId('size').value,
+    lightCond: byId('lightCond').value,
+    airflow: byId('airflow').value,
+    ac: byId('ac').value,
+    name: byId('name').value,
+    interval: byId('interval').value,
+    demo: byId('demo').value,
+    limit: byId('limit').value
+  };
+  Object.entries(settings).forEach(([k,v])=>localStorage.setItem(`gs_${k}`, v));
+
+  ctx.pots = pots;
+  ctx.selectedPots = pots.map(p=>p.letter);
+  ctx.viewMode = 'all';
+  ctx.singlePotView = pots[0]?.letter || '';
+  ctx.limit = parseInt(byId('limit').value || '50');
+  ctx.interval = parseInt(byId('interval').value || '20') * 1000;
+  ctx.cache = {};
+  ctx.aiAdvice = {}; // รีเซ็ตคำแนะนำ AI
+
+  localStorage.setItem('gs_profile_done','1');
+  localStorage.setItem('gs_last_numPots', String(numPots));
+
+  // UI
+  byId('navForm').style.display='none';
+  byId('btnEditProfile').style.display='inline-flex';
+  byId('profileBadge').style.display='inline-flex';
+  byId('btnClearURL').style.display='inline-flex';
+  byId('navDailyScores').style.display='inline-flex';
+
+  setStatus('load','กำลังบันทึกโปรไฟล์ไปยังทุกกระถาง...');
+  await pushProfileToAllPots();
+  setStatus('ok','พร้อมแล้ว - ไปหน้าเลือกกระถาง...');
+  show('secSelectPots');
+  createPotSelectionPage();
+}
+
+/* ===== Insights ===== */
+function pm25Cat(v){
+  if (v == null) return { cat:'—', tip:'ไม่มีข้อมูล PM2.5' };
+  if (v <= 25) return { cat:'ดีมาก', tip:'อากาศดี ออกกำลังกายกลางแจ้งได้' };
+  if (v <= 37) return { cat:'ดี', tip:'ทำกิจกรรมกลางแจ้งได้ตามปกติ' };
+  if (v <= 50) return { cat:'ปานกลาง', tip:'ผู้ป่วยโรคทางเดินหายใจควรลดกิจกรรมหนัก' };
+  if (v <= 90) return { cat:'เริ่มมีผล', tip:'สวมหน้ากากเมื่อต้องอยู่นอกอาคารนาน' };
+  return { cat:'มีผลกระทบ', tip:'ควรสวมหน้ากาก/อยู่ในอาคารที่มีการกรองอากาศ' };
+}
+function lightTip(light){
+  if (light == null) return 'ไม่มีข้อมูลแสง';
+  if (light < 30) return 'แสงน้อย — ขยับใกล้หน้าต่างหรือเพิ่มไฟปลูก';
+  if (light < 50) return 'แสงพอประมาณ — เหมาะสมสำหรับพืชส่วนใหญ่';
+  if (light < 70) return 'แสงดี — เหมาะสำหรับการเจริญเติบโต';
+  if (light < 85) return 'แสงแรง — ใช้ม่านกรองแสงหากจำเป็น';
+  return 'แสงแรงมาก — อาจต้องพรางแสง';
+}
+
+function createHealthCards(){
+  const grid = byId('insightsHealthGrid');
+  if (!grid) return;
+  grid.innerHTML='';
+
+  const potsToDisplay = getPotsToDisplay();
+  potsToDisplay.forEach(pot=>{
+    const card = document.createElement('div');
+    card.className='card';
+    card.innerHTML = `
+      <div class="hd">${pot.name} — สุขภาพวันนี้</div>
+      <div class="bd">
+        <div id="health${pot.letter}">—</div>
+        <div id="aiAdvice${pot.letter}" class="ai-advice collapsed">
+          <div class="ai-advice-header">
+            <h4><i class="fa-solid fa-robot"></i> คำแนะนำจาก AI</h4>
+            <button class="ai-advice-toggle" title="พับ/ขยาย"><i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+          <div id="aiAdviceContent${pot.letter}" class="ai-advice-content">กดปุ่ม "ขอคำแนะนำจาก AI" เพื่อดึงคำแนะนำ</div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  setTextSafe('insightsPotsCount', potsToDisplay.length);
+  initializeAIToggle();
+  
+  // โหลดคำแนะนำเก่าคืนถ้ามี
+  setTimeout(() => {
+    restoreAIAdvice();
+  }, 100);
+}
+
+function generateHealthHTML(potLetter){
+  const data = ctx.cache[potLetter]?.data || [];
+  if (!data.length) return `<div class="muted">ไม่มีข้อมูล</div>`;
+
+  const latest = data[0];
+  const env = {
+    ts: pick(latest, COLS.ts),
+    tC: safeNum(pick(latest, COLS.tC)),
+    rh: safeNum(pick(latest, COLS.rh)),
+    pm25: safeNum(pick(latest, COLS.pm25)),
+    light: safeNum(pick(latest, COLS.light)),
+    soil: safeNum(pick(latest, COLS.soil))
+  };
+
+  const pm = pm25Cat(env.pm25);
+  const humidTip = env.rh != null ? (env.rh < 40 ? 'อากาศแห้ง — เติมความชื้น' : env.rh > 70 ? 'อับชื้น — เพิ่มการถ่ายเท' : 'ความชื้นเหมาะสม') : 'ไม่มีข้อมูลความชื้น';
+  const tempTip  = env.tC != null ? (env.tC < 22 ? 'ค่อนข้างเย็น — เลี่ยงลมเย็นจัด' : env.tC > 30 ? 'ค่อนข้างร้อน — ระบายอากาศ' : 'อุณหภูมิเหมาะสม') : 'ไม่มีข้อมูลอุณหภูมิ';
+  const soilTip  = env.soil!= null ? (env.soil < 30 ? 'ดินแห้ง — ควรรดน้ำ' : env.soil > 70 ? 'ดินแฉะ — ลดการรดน้ำ' : 'ความชื้นดินเหมาะสม') : 'ไม่มีข้อมูลความชื้นดิน';
+
+  return `
+    <div class="flex" style="flex-wrap:wrap;margin-bottom:8px;">
+      <span class="badge">เวลา: ${fmtTime(env.ts)}</span>
+      <span class="badge">PM2.5: ${env.pm25 ?? '—'} (${pm.cat})</span>
+      <span class="badge">RH: ${env.rh ?? '—'}%</span>
+      <span class="badge">Temp: ${env.tC ?? '—'}°C</span>
+      <span class="badge">Light: ${env.light ?? '—'}%</span>
+      <span class="badge">Soil: ${env.soil ?? '—'}%</span>
+    </div>
+    <div style="font-size:14px;">
+      <div><strong>คำแนะนำด้านสุขภาพ:</strong></div>
+      <ul style="margin:6px 0 0 18px;">
+        <li>${pm.tip}</li>
+        <li>${humidTip}</li>
+        <li>${tempTip}</li>
+        <li>${soilTip}</li>
+        <li>${lightTip(env.light)}</li>
+      </ul>
+    </div>
+  `;
+}
+
+function getColorForPot(letter){
+  const colors = { A:'#10b981', B:'#8b5cf6', C:'#f59e0b', D:'#ef4444', E:'#3b82f6', F:'#8b5cf6', G:'#10b981', H:'#f59e0b', I:'#ef4444', J:'#3b82f6' };
+  return colors[letter] || '#666';
+}
+
+function renderInsights(){
+  const potsToDisplay = getPotsToDisplay();
+
+  // update health blocks
+  potsToDisplay.forEach(pot=>{
+    const el = byId(`health${pot.letter}`);
+    if (el) el.innerHTML = generateHealthHTML(pot.letter);
+  });
+
+  // chart from score cache
+  const datasets = [];
+  const labelsSet = new Set();
+
+  potsToDisplay.forEach(pot=>{
+    const scores = (ctx.cache[pot.letter]?.score || []).map(o=>({
+      ts: pick(o, SCORE.ts),
+      s: +(pick(o, SCORE.score) || 0)
+    })).slice(0,30).reverse();
+
+    if (scores.length){
+      const labs = scores.map(x=> x.ts ? new Date(x.ts).toLocaleTimeString('th-TH',{timeZone:tz,hour:'2-digit',minute:'2-digit'}) : '');
+      labs.forEach(l=>labelsSet.add(l));
+      datasets.push({
+        label: pot.name,
+        data: scores.map(x=>x.s),
+        borderColor: getColorForPot(pot.letter),
+        backgroundColor: `${getColorForPot(pot.letter)}20`,
+        tension: 0.25,
+        fill: false
+      });
+    }
+  });
+
+  const canvas = byId('chartHearts');
+  if (canvas && datasets.length){
+    const c2 = canvas.getContext('2d');
+    const labels = Array.from(labelsSet).slice(-30);
+    if (heartChart) heartChart.destroy();
+    heartChart = new Chart(c2, {
+      type:'line',
+      data:{ labels, datasets },
+      options:{
+        responsive:true,
+        scales:{ y:{ suggestedMin:0, suggestedMax:10, ticks:{ stepSize:1 } } },
+        plugins:{ legend:{display:true}, tooltip:{enabled:true} }
+      }
+    });
+  }
+}
+
+/* ===== AI Advice pull (แก้ไขให้สั้นลง) ===== */
+async function fetchAIAdviceForPot(pot, fresh=0){
+  const out = { ok:false, advice:'', score:null };
+  if (pot.demo) {
+    // คำแนะนำ DEMO แบบสั้น
+    await new Promise(resolve => setTimeout(resolve, 800));
+    return { 
+      ok:true, 
+      advice: '🪴 คะแนนสุขภาพ: 5/10\n• ความชื้นดินต่ำเกินไป\n• แสงไม่เพียงพอ\n• RH สูงเกินไป\n\n💡 แนะนำ: รดน้ำเพิ่มเล็กน้อย ขยับไปที่แสงดีขึ้น เปิดพัดลมช่วยระบายอากาศ', 
+      score:5 
+    };
+  }
+
+  try{
+    const u = new URL(pot.url);
+    const base = `${u.origin}${u.pathname}`;
+    const qs = new URLSearchParams({ action:'ai_advice', team: pot.teamParam, fresh: String(fresh||0) });
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    
+    const r = await fetch(`${base}?${qs.toString()}`, {
+      cache:'no-store',
+      signal: controller.signal
+    }).then(x => x.json());
+    
+    clearTimeout(timeoutId);
+    
+    // ฟังก์ชันสำหรับทำให้คำแนะนำสั้นลง
+    if (r && r.ok && r.advice) {
+      r.advice = shortenAIAdvice(r.advice);
+    }
+    
+    return r;
+  }catch(e){
+    console.error('AI advice error', pot.letter, e);
+    if (e.name === 'AbortError') {
+      return { ok:false, advice: '⏰ เกินเวลารอ', score: null };
+    }
+    return { ok:false, advice: '❌ เชื่อมต่อไม่ได้', score: null };
+  }
+}
+
+// ฟังก์ชันทำให้คำแนะนำสั้นลง
+function shortenAIAdvice(adviceText) {
+  if (!adviceText) return '';
+  
+  let shortAdvice = adviceText;
+  
+  // ลบหัวข้อที่ไม่จำเป็น
+  const patternsToRemove = [
+    /Plant Health Report.*คะแนนสุขภาพรวม:/,
+    /\[.*?\]/g,
+    /คาเฉลี่ย.*แถวลาสุด.*ชิ้งโปรไฟลพืช\)/,
+    /เปาหมายหลังปรับ.*คะแนนขึ้นโอ\)/,
+    /เปา.*?%/g,
+    /\(ควร.*?\)/g,
+    /\s+/g
+  ];
+  
+  patternsToRemove.forEach(pattern => {
+    shortAdvice = shortAdvice.replace(pattern, ' ');
+  });
+  
+  // แยกข้อความที่เป็น bullet points
+  const lines = shortAdvice.split('\n').filter(line => line.trim().length > 0);
+  
+  // เลือกเฉพาะส่วนสำคัญ
+  let importantPoints = [];
+  const keywords = ['คะแนน', 'แนะนำ', 'เพิ่ม', 'ลด', 'ควร', 'ไม่ควร', 'ตรวจ', 'ปรับ'];
+  
+  lines.forEach(line => {
+    const trimmedLine = line.trim();
+    // ถ้าบรรทัดสั้นและมีความหมาย
+    if (trimmedLine.length < 100) {
+      // ตรวจสอบว่ามี keyword สำคัญหรือไม่
+      const hasKeyword = keywords.some(keyword => trimmedLine.includes(keyword));
+      if (hasKeyword || trimmedLine.includes('•') || trimmedLine.includes(':')) {
+        importantPoints.push(trimmedLine);
+      }
+    } else if (trimmedLine.length < 200) {
+      // ถ้ายาวเกินไป ให้ย่อ
+      const sentences = trimmedLine.split(/[.!?]/);
+      if (sentences.length > 0) {
+        importantPoints.push(sentences[0] + (sentences[0].trim().endsWith(':') ? '' : '.'));
+      }
+    }
+  });
+  
+  // ถ้ายังยาวเกินไป ให้เลือกเฉพาะ 3-5 ข้อแรก
+  if (importantPoints.length > 5) {
+    importantPoints = importantPoints.slice(0, 5);
+  }
+  
+  // รวมข้อความใหม่
+  if (importantPoints.length > 0) {
+    return importantPoints.join('\n');
+  }
+  
+  // ถ้าไม่สามารถย่อได้ ให้คืนค่าต้นฉบับแต่ตัดให้สั้นลง
+  return adviceText.length > 300 ? adviceText.substring(0, 300) + '...' : adviceText;
+}
+
+/* ===== Restore AI Advice ===== */
+function restoreAIAdvice() {
+  const potsToDisplay = getPotsToDisplay();
+  potsToDisplay.forEach(pot => {
+    const aiData = ctx.aiAdvice[pot.letter];
+    const contentEl = byId(`aiAdviceContent${pot.letter}`);
+    const containerEl = byId(`aiAdvice${pot.letter}`);
+    
+    if (contentEl && aiData) {
+      // ลบ timestamp เก่าถ้ามี
+      const oldTimeEl = contentEl.querySelector('.ai-advice-time');
+      if (oldTimeEl) oldTimeEl.remove();
+      
+      contentEl.textContent = aiData.advice;
+      contentEl.style.color = aiData.success ? '#166534' : '#dc2626';
+      
+      // เพิ่ม timestamp ใหม่
+      if (aiData.timestamp) {
+        const timeInfo = document.createElement('div');
+        timeInfo.className = 'ai-advice-time';
+        timeInfo.innerHTML = `<i class="fa-solid fa-clock"></i> ดึงเมื่อ: ${fmtTime(aiData.timestamp)}`;
+        contentEl.appendChild(timeInfo);
+      }
+      
+      // ตั้งค่าให้ expanded ถ้ามีข้อมูล
+      if (containerEl && aiData.success) {
+        containerEl.classList.remove('collapsed');
+        containerEl.classList.add('expanded');
+        const icon = containerEl.querySelector('.ai-advice-toggle i');
+        if (icon) icon.className = 'fa-solid fa-chevron-up';
+      }
+    } else if (contentEl) {
+      contentEl.textContent = 'กดปุ่ม "ขอคำแนะนำจาก AI" เพื่อดึงคำแนะนำ';
+      contentEl.style.color = '#6b7280';
+    }
+  });
+}
+
+async function fetchAIAdviceForDisplayedPots(){
+  const potsToDisplay = getPotsToDisplay();
+  const aiAdviceBtn = byId('btnGetAIAdvice');
+  
+  // ปิดปุ่มและแสดง spinner
+  if (aiAdviceBtn) {
+    aiAdviceBtn.disabled = true;
+    aiAdviceBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังขอคำแนะนำ...';
+    aiAdviceBtn.classList.add('pulse-effect');
+  }
+  
+  // แสดงสถานะเริ่มต้น
+  setStatus('load', 'กำลังดึงคำแนะนำ AI...');
+  
+  try {
+    // ดึงคำแนะนำพร้อมแสดง progress
+    const promises = potsToDisplay.map(async (pot, index) => {
+      const startTime = Date.now();
+      
+      // อัพเดทสถานะสำหรับแต่ละกระถาง
+      setStatus('load', `ขอคำแนะนำจาก ${pot.name}...`);
+      
+      const r = await fetchAIAdviceForPot(pot, 0);
+      const elapsed = Date.now() - startTime;
+      
+      // เก็บคำแนะนำลงใน ctx.aiAdvice
+      if (r && r.ok) {
+        ctx.aiAdvice[pot.letter] = {
+          advice: r.advice,
+          score: r.score,
+          timestamp: new Date().toISOString(),
+          success: true
         };
-        const bind = (id, ev, fn) => {
-            const el = byId(id);
-            if (el) el.addEventListener(ev, fn);
-            else console.warn('Missing element:', id);
+      } else {
+        ctx.aiAdvice[pot.letter] = {
+          advice: r?.advice || 'ดึงข้อมูลไม่สำเร็จ',
+          score: null,
+          timestamp: new Date().toISOString(),
+          success: false
         };
-        const fmtTime = iso => !iso ? '-' : new Date(iso).toLocaleString('th-TH', {
-            timeZone: tz,
-            hour: '2-digit',
-            minute: '2-digit',
-            day: '2-digit',
-            month: 'short'
-        });
-        const fmtDate = iso => !iso ? '-' : new Date(iso).toLocaleDateString('th-TH', {
-            timeZone: tz
-        });
-        const safeNum = v => {
-            const n = Number(String(v).replace(/,/g, ''));
-            return isFinite(n) ? n : null;
-        };
-        const nowTick = () => setTextSafe('nowTH', new Date().toLocaleString('th-TH', {
-            timeZone: tz
-        }));
-
-        function onReady(fn) {
-            if (document.readyState !== 'loading') fn();
-            else document.addEventListener('DOMContentLoaded', fn);
+      }
+      
+      const el = byId(`aiAdviceContent${pot.letter}`);
+      if (el) {
+        // ลบ timestamp เก่าถ้ามี
+        const oldTimeEl = el.querySelector('.ai-advice-time');
+        if (oldTimeEl) oldTimeEl.remove();
+        
+        if (r && r.ok) {
+          el.textContent = r.advice || '(ไม่มีคำแนะนำ)';
+          el.style.color = '#166534'; // สีเขียวเข้มสำหรับสำเร็จ
+          
+          // เพิ่มข้อมูลเวลาดำเนินการ
+          const timeInfo = document.createElement('div');
+          timeInfo.className = 'ai-advice-time';
+          timeInfo.innerHTML = `✓ สำเร็จ (${elapsed}ms) | ดึงเมื่อ: ${fmtTime(new Date().toISOString())}`;
+          el.appendChild(timeInfo);
+        } else {
+          el.textContent = `⚠️ ${r?.advice || 'ดึงข้อมูลไม่สำเร็จ'}`;
+          el.style.color = '#dc2626'; // สีแดงสำหรับผิดพลาด
         }
+      }
+      
+      // เพิ่ม animation เสมือนกำลังโหลด
+      const aiAdviceEl = byId(`aiAdvice${pot.letter}`);
+      if (aiAdviceEl) {
+        aiAdviceEl.classList.remove('collapsed');
+        aiAdviceEl.classList.add('expanded');
+        const icon = aiAdviceEl.querySelector('.ai-advice-toggle i');
+        if (icon) icon.className = 'fa-solid fa-chevron-up';
+        
+        // animation highlight
+        aiAdviceEl.style.animation = 'none';
+        setTimeout(() => {
+          aiAdviceEl.style.boxShadow = '0 0 0 2px #10b981';
+          setTimeout(() => {
+            aiAdviceEl.style.boxShadow = '';
+            aiAdviceEl.style.transition = 'box-shadow 0.3s ease';
+          }, 500);
+        }, 100);
+      }
+      
+      // ส่งผลลัพธ์กลับ
+      return { pot: pot.letter, success: r?.ok || false };
+    });
+    
+    const results = await Promise.allSettled(promises);
+    
+    // นับผลสำเร็จ
+    const successCount = results.filter(r => 
+      r.status === 'fulfilled' && r.value?.success
+    ).length;
+    
+    // อัพเดทสถานะสรุป
+    const successMsg = successCount === potsToDisplay.length 
+      ? `✅ ดึงคำแนะนำสำเร็จ ${successCount} กระถาง`
+      : `⚠️ ดึงสำเร็จ ${successCount}/${potsToDisplay.length} กระถาง`;
+    
+    setStatus('ok', successMsg);
+    
+    // แสดง notification เล็กๆ
+    showTempNotification(successMsg, successCount === potsToDisplay.length ? 'success' : 'warning');
+    
+  } catch (error) {
+    console.error('AI advice overall error:', error);
+    setStatus('fail', 'เกิดข้อผิดพลาดในการดึงคำแนะนำ');
+    showTempNotification('❌ เกิดข้อผิดพลาด', 'error');
+  } finally {
+    // คืนค่าปุ่มเป็นปกติ
+    if (aiAdviceBtn) {
+      aiAdviceBtn.disabled = false;
+      aiAdviceBtn.innerHTML = '<i class="fa-solid fa-robot"></i> ขอคำแนะนำจาก AI (ทุกกระถางที่แสดง)';
+      aiAdviceBtn.classList.remove('pulse-effect');
+    }
+  }
+}
 
-        // ===== Theme & local persistence =====
-        onReady(() => {
-            setInterval(nowTick, 1000);
-            nowTick();
-            const themeSel = byId('theme');
-            if (themeSel) {
-                const saved = localStorage.getItem('theme') || 'default';
-                themeSel.value = saved;
-                applyTheme(saved);
-                themeSel.addEventListener('change', e => applyTheme(e.target.value));
-            }
+// เพิ่มฟังก์ชันแสดง notification ชั่วคราว
+function showTempNotification(message, type = 'info') {
+  // ลบ notification เก่าถ้ามี
+  const oldNotif = document.querySelector('.temp-notification');
+  if (oldNotif) oldNotif.remove();
+  
+  const notification = document.createElement('div');
+  notification.className = 'temp-notification';
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: ${type === 'success' ? '#dcfce7' : type === 'error' ? '#fee2e2' : type === 'warning' ? '#fef3c7' : '#e0f2fe'};
+    color: ${type === 'success' ? '#166534' : type === 'error' ? '#991b1b' : type === 'warning' ? '#92400e' : '#075985'};
+    border: 1px solid ${type === 'success' ? '#86efac' : type === 'error' ? '#fca5a5' : type === 'warning' ? '#fde68a' : '#bae6fd'};
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateX(100%);
+    opacity: 0;
+    max-width: 300px;
+    font-weight: 500;
+  `;
+  
+  notification.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-xmark' : type === 'warning' ? 'fa-triangle-exclamation' : 'fa-circle-info'}"></i>
+      <span>${message}</span>
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // animation เข้า
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+    notification.style.opacity = '1';
+  }, 10);
+  
+  // animation ออกและลบทิ้ง
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
+    notification.style.opacity = '0';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
 
-            // Load all settings including team names
-            ['webapp', 'webappA', 'webappB', 'limit', 'plant', 'size', 'lightCond', 'airflow', 'ac', 'name', 'interval', 'demo', 'teamNameA', 'teamNameB'].forEach(id => {
-                const el = byId(id);
-                if (!el) return;
-                const v = localStorage.getItem('gs_' + id);
-                if (v !== null) {
-                    el.value = v;
-                    // Update team name displays if they exist
-                    if (id === 'teamNameA' && byId('teamANameDisplay')) {
-                        byId('teamANameDisplay').textContent = v || 'ทีม A';
-                        byId('teamALabel').textContent = v || 'ทีม A';
-                        byId('healthTeamA').textContent = v || 'ทีม A';
-                        byId('dailyTeamALabel').textContent = `${v || 'ทีม A'} - สถิติ`;
-                    }
-                    if (id === 'teamNameB' && byId('teamBNameDisplay')) {
-                        byId('teamBNameDisplay').textContent = v || 'ทีม B';
-                        byId('teamBLabel').textContent = v || 'ทีม B';
-                        byId('healthTeamB').textContent = v || 'ทีม B';
-                        byId('dailyTeamBLabel').textContent = `${v || 'ทีม B'} - สถิติ`;
-                    }
-                }
-                el.addEventListener('change', e => {
-                    localStorage.setItem('gs_' + id, e.target.value);
-                    // Update team name displays in real-time
-                    if (id === 'teamNameA') updateTeamName('A', e.target.value);
-                    if (id === 'teamNameB') updateTeamName('B', e.target.value);
-                });
-            });
+/* ===== Daily Scores (multi-pots real) ===== */
+async function fetchDailyScoresForPot(pot, days=14){
+  if (pot.demo){
+    // demo rows
+    const today = new Date();
+    const rows = Array.from({length:days}, (_,i)=>{
+      const d = new Date(today.getTime() - i*86400000);
+      const avg = +(6 + Math.sin(i/2)*2).toFixed(2);
+      return { date: d.toISOString().slice(0,10), pot_id:`P${String(pot.letter.charCodeAt(0)-64).padStart(2,'0')}`, avg, count: 12, max: Math.min(10, avg+1), min: Math.max(1, avg-1), status: avg>=7?'ดีมาก 👍':avg>=5?'ปานกลาง ✅':'ต้องดูแล ⚠️' };
+    });
+    return { ok:true, rows, pot };
+  }
 
-            // Show Clear URL button if profile is already saved
-            if (localStorage.getItem('gs_profile_done') === '1') {
-                byId('btnClearURL').style.display = 'inline-flex';
-                byId('navDailyScores').style.display = 'inline-flex';
-            }
+  try{
+    const u = new URL(pot.url);
+    const base = `${u.origin}${u.pathname}`;
+    const qs = new URLSearchParams({ action:'daily_scores', team: pot.teamParam, days: String(days) });
+    const r = await fetch(`${base}?${qs.toString()}`, {cache:'no-store'}).then(x=>x.json());
+    return { ok:true, rows: (r.rows||[]), pot };
+  }catch(e){
+    console.error('daily_scores error', pot.letter, e);
+    return { ok:false, rows:[], pot, error:e.message };
+  }
+}
 
-            // Initialize AI advice toggle functionality
-            initializeAIToggle();
-        });
+function statusBadgeHTML(status){
+  if (!status) return `<span class="status-badge status-fair">—</span>`;
+  if (status.includes('ดีเยี่ยม')) return `<span class="status-badge status-excellent">${status}</span>`;
+  if (status.includes('ดีมาก')) return `<span class="status-badge status-good">${status}</span>`;
+  if (status.includes('ปานกลาง')) return `<span class="status-badge status-fair">${status}</span>`;
+  if (status.includes('ต้องดูแล')) return `<span class="status-badge status-poor">${status}</span>`;
+  return `<span class="status-badge status-critical">${status}</span>`;
+}
 
-        const applyTheme = v => {
-            document.body.className = '';
-            if (v && v !== 'default') document.body.classList.add('theme-' + v);
-            localStorage.setItem('theme', v || 'default');
-        };
+async function loadDailyScores(){
+  const potsToDisplay = getPotsToDisplay();
+  if (!potsToDisplay.length) return;
 
-        // ===== AI Advice Toggle System =====
-        function initializeAIToggle() {
-            document.addEventListener('click', function (e) {
-                if (e.target.closest('.ai-advice-header') || e.target.closest('.ai-advice-toggle')) {
-                    const aiAdvice = e.target.closest('.ai-advice');
-                    if (aiAdvice) {
-                        toggleAIAdvice(aiAdvice);
-                    }
-                }
-            });
+  setTextSafe('lastUpdateText','กำลังโหลด...');
+
+  const days = 14;
+  const results = await Promise.all(potsToDisplay.map(p=>fetchDailyScoresForPot(p, days)));
+
+  // Build table rows merged by date
+  const all = [];
+  results.forEach(r=>{
+    (r.rows||[]).forEach(row=>{
+      all.push({ ...row, teamName: r.pot?.name || '', letter: r.pot?.letter || '' });
+    });
+  });
+
+  // sort by date desc
+  all.sort((a,b)=> String(b.date).localeCompare(String(a.date)));
+
+  // stats per pot
+  const statsContainer = byId('dailyStatsContainer');
+  if (statsContainer){
+    statsContainer.innerHTML='';
+    results.forEach(r=>{
+      const rows = r.rows||[];
+      if (!rows.length){
+        const c = document.createElement('div');
+        c.className='card';
+        c.innerHTML = `<div class="hd">${r.pot.name}</div><div class="bd"><div class="muted">ไม่มีข้อมูลคะแนนรายวัน</div></div>`;
+        statsContainer.appendChild(c);
+        return;
+      }
+      const avgs = rows.map(x=>Number(x.avg)||0).filter(x=>x>0);
+      const avgAll = avgs.length ? (avgs.reduce((a,b)=>a+b,0)/avgs.length) : 0;
+      const maxAll = avgs.length ? Math.max(...avgs) : 0;
+      const minAll = avgs.length ? Math.min(...avgs) : 0;
+      const last = rows[0];
+
+      const c = document.createElement('div');
+      c.className='card';
+      c.innerHTML = `
+        <div class="hd">${r.pot.name} - สถิติ</div>
+        <div class="bd">
+          <div style="margin-bottom:8px;">
+            <strong>ล่าสุด (${fmtDate(last.date)}):</strong> ${Number(last.avg||0).toFixed(2)} คะแนน
+            ${statusBadgeHTML(last.status)}
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+            <div>คะแนนเฉลี่ย: <strong>${avgAll.toFixed(2)}</strong></div>
+            <div>คะแนนสูงสุด: <strong>${maxAll.toFixed(2)}</strong></div>
+            <div>คะแนนต่ำสุด: <strong>${minAll.toFixed(2)}</strong></div>
+            <div>จำนวนวัน: <strong>${rows.length}</strong></div>
+          </div>
+        </div>
+      `;
+      statsContainer.appendChild(c);
+    });
+  }
+
+  // table
+  const tbody = byId('dailyScoresTable');
+  if (tbody){
+    tbody.innerHTML='';
+    all.slice(0, 200).forEach(r=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:left">${r.date || '-'}</td>
+        <td style="text-align:center">${r.teamName || ('ทีม '+(r.letter||''))}</td>
+        <td style="text-align:center">${Number(r.avg||0).toFixed(2)}</td>
+        <td style="text-align:center">${Number(r.count||0)}</td>
+        <td style="text-align:center">${Number(r.max||0).toFixed(2)}</td>
+        <td style="text-align:center">${Number(r.min||0).toFixed(2)}</td>
+        <td style="text-align:center">${statusBadgeHTML(r.status)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // chart (group by pot)
+  const canvas = byId('chartDailyScores');
+  if (canvas){
+    const c2 = canvas.getContext('2d');
+    if (dailyScoresChart) dailyScoresChart.destroy();
+
+    const dates = Array.from(new Set(all.map(x=>x.date))).sort();
+    const labels = dates.slice(-days);
+
+    const datasets = results.map(r=>{
+      const map = new Map((r.rows||[]).map(x=>[String(x.date), Number(x.avg)||0]));
+      return {
+        label: r.pot.name,
+        data: labels.map(d=>map.get(d) ?? 0),
+        borderColor: getColorForPot(r.pot.letter),
+        backgroundColor: `${getColorForPot(r.pot.letter)}20`,
+        tension: 0.25,
+        fill: false
+      };
+    });
+
+    dailyScoresChart = new Chart(c2, {
+      type:'line',
+      data:{ labels, datasets },
+      options:{
+        responsive:true,
+        scales:{ y:{ suggestedMin:0, suggestedMax:10, ticks:{ stepSize:1 } } },
+        plugins:{ legend:{display:true}, tooltip:{enabled:true} }
+      }
+    });
+  }
+
+  setTextSafe('lastUpdateText', `อัพเดทล่าสุด: ${new Date().toLocaleString('th-TH', {timeZone:tz})}`);
+}
+
+/* ===== AI advice toggle ===== */
+function initializeAIToggle(){
+  document.addEventListener('click', function(e){
+    if (e.target.closest('.ai-advice-header') || e.target.closest('.ai-advice-toggle')){
+      const aiAdvice = e.target.closest('.ai-advice');
+      if (!aiAdvice) return;
+      const isCollapsed = aiAdvice.classList.contains('collapsed');
+      const icon = aiAdvice.querySelector('.ai-advice-toggle i');
+      if (isCollapsed){
+        aiAdvice.classList.remove('collapsed'); aiAdvice.classList.add('expanded');
+        if (icon) icon.className='fa-solid fa-chevron-up';
+      } else {
+        aiAdvice.classList.remove('expanded'); aiAdvice.classList.add('collapsed');
+        if (icon) icon.className='fa-solid fa-chevron-down';
+      }
+    }
+  });
+}
+
+/* ===== Init ===== */
+function onReady(fn){ if (document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+
+onReady(()=>{
+  // time
+  setInterval(()=>setTextSafe('nowTH', new Date().toLocaleString('th-TH',{timeZone:tz})), 1000);
+  setTextSafe('nowTH', new Date().toLocaleString('th-TH',{timeZone:tz}));
+
+  // theme
+  const themeSel = byId('theme');
+  const applyTheme = (v)=>{
+    document.body.className='';
+    if (v && v!=='default') document.body.classList.add('theme-'+v);
+    localStorage.setItem('theme', v || 'default');
+  };
+  if (themeSel){
+    const saved = localStorage.getItem('theme') || 'default';
+    themeSel.value = saved;
+    applyTheme(saved);
+    themeSel.addEventListener('change', e=>applyTheme(e.target.value));
+  }
+
+  // numPots
+  const numPotsSelect = byId('numPots');
+  const savedNumPots = localStorage.getItem('gs_numPots') || '2';
+  numPotsSelect.value = savedNumPots;
+  generatePotConfigs(parseInt(savedNumPots));
+  numPotsSelect.addEventListener('change', function(){
+    localStorage.setItem('gs_numPots', this.value);
+    generatePotConfigs(parseInt(this.value));
+  });
+
+  // other settings
+  ['webapp','plant','size','lightCond','airflow','ac','name','interval','demo','limit'].forEach(id=>{
+    const el = byId(id);
+    if (!el) return;
+    const v = localStorage.getItem('gs_'+id);
+    if (v!==null) el.value=v;
+    el.addEventListener('change', e=>localStorage.setItem('gs_'+id, e.target.value));
+  });
+
+  // restore session
+  if (localStorage.getItem('gs_profile_done')==='1'){
+    const savedN = parseInt(localStorage.getItem('gs_last_numPots')||'2');
+    const demo = localStorage.getItem('gs_demo')==='on';
+
+    const pots = [];
+    for (let i=1;i<=savedN;i++){
+      const letter = String.fromCharCode(64+i);
+      const url = localStorage.getItem(`gs_webapp${letter}`) || localStorage.getItem('gs_webapp') || '';
+      const name= localStorage.getItem(`gs_teamName${letter}`) || `ทีม ${letter}`;
+      if (url || demo){
+        let host='DEMO';
+        if (!demo && url){
+          try{ host=new URL(url).host; }catch(e){ host='INVALID'; }
         }
-
-        function toggleAIAdvice(aiAdviceElement) {
-            const isCollapsed = aiAdviceElement.classList.contains('collapsed');
-            const toggleBtn = aiAdviceElement.querySelector('.ai-advice-toggle i');
-
-            if (isCollapsed) {
-                aiAdviceElement.classList.remove('collapsed');
-                aiAdviceElement.classList.add('expanded');
-                toggleBtn.className = 'fa-solid fa-chevron-up';
-            } else {
-                aiAdviceElement.classList.remove('expanded');
-                aiAdviceElement.classList.add('collapsed');
-                toggleBtn.className = 'fa-solid fa-chevron-down';
-            }
-        }
-
-        // ===== Team Name Management =====
-        function updateTeamName(team, name) {
-            const displayName = name || (team === 'A' ? 'ทีม A' : 'ทีม B');
-            byId(`team${team}NameDisplay`).textContent = displayName;
-            byId(`team${team}Label`).textContent = displayName;
-            byId(`healthTeam${team}`).textContent = displayName;
-            byId(`dailyTeam${team}Label`).textContent = `${displayName} - สถิติ`;
-        }
-
-        function setupTeamNameEditing() {
-            // Team A
-            const teamANameDisplay = byId('teamANameDisplay');
-            const teamANameInput = byId('teamANameInput');
-            teamANameDisplay.addEventListener('click', () => {
-                teamANameDisplay.style.display = 'none';
-                teamANameInput.style.display = 'block';
-                teamANameInput.value = teamANameDisplay.textContent;
-                teamANameInput.focus();
-                teamANameInput.select();
-            });
-            teamANameInput.addEventListener('blur', () => {
-                saveTeamName('A', teamANameInput.value);
-            });
-            teamANameInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') saveTeamName('A', teamANameInput.value);
-            });
-
-            // Team B
-            const teamBNameDisplay = byId('teamBNameDisplay');
-            const teamBNameInput = byId('teamBNameInput');
-            teamBNameDisplay.addEventListener('click', () => {
-                teamBNameDisplay.style.display = 'none';
-                teamBNameInput.style.display = 'block';
-                teamBNameInput.value = teamBNameDisplay.textContent;
-                teamBNameInput.focus();
-                teamBNameInput.select();
-            });
-            teamBNameInput.addEventListener('blur', () => {
-                saveTeamName('B', teamBNameInput.value);
-            });
-            teamBNameInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') saveTeamName('B', teamBNameInput.value);
-            });
-        }
-
-        function saveTeamName(team, name) {
-            const displayName = name.trim() || (team === 'A' ? 'ทีม A' : 'ทีม B');
-            const inputId = `teamName${team}`;
-            const displayEl = byId(`team${team}NameDisplay`);
-            const inputEl = byId(`team${team}NameInput`);
-            updateTeamName(team, displayName);
-            const formInput = byId(inputId);
-            if (formInput) formInput.value = displayName;
-            localStorage.setItem('gs_' + inputId, displayName);
-            displayEl.style.display = 'block';
-            inputEl.style.display = 'none';
-        }
-
-        // ===== Reset & Clear URL =====
-        function resetAllSettings() {
-            if (confirm('ต้องการล้างการตั้งค่าทั้งหมดใช่ไหม? การดำเนินการนี้ไม่สามารถย้อนกลับได้')) {
-                const keys = [
-                    'gs_profile_done', 'gs_last_urlA', 'gs_last_urlB', 'gs_last_limit',
-                    'gs_last_interval', 'gs_last_demo', 'gs_webapp', 'gs_webappA', 'gs_webappB',
-                    'gs_limit', 'gs_plant', 'gs_size', 'gs_lightCond', 'gs_airflow', 'gs_ac',
-                    'gs_name', 'gs_interval', 'gs_demo', 'gs_teamNameA', 'gs_teamNameB'
-                ];
-                keys.forEach(key => localStorage.removeItem(key));
-                byId('webapp').value = '';
-                byId('webappA').value = '';
-                byId('webappB').value = '';
-                byId('limit').value = '50';
-                byId('teamNameA').value = 'ทีม A';
-                byId('teamNameB').value = 'ทีม B';
-                byId('plant').value = 'มอนสเตอร่า';
-                byId('size').value = '1.5 x 2 เมตร';
-                byId('lightCond').value = 'พอประมาณ';
-                byId('airflow').value = 'พอใช้';
-                byId('ac').value = 'บางเวลา';
-                byId('name').value = 'ทีม GreenSync';
-                byId('interval').value = '20';
-                byId('demo').value = 'off';
-                updateTeamName('A', 'ทีม A');
-                updateTeamName('B', 'ทีม B');
-                show('secForm');
-                byId('navForm').style.display = 'inline-flex';
-                byId('btnEditProfile').style.display = 'none';
-                byId('profileBadge').style.display = 'none';
-                byId('btnClearURL').style.display = 'none';
-                byId('navDailyScores').style.display = 'none';
-                setStatus('', '');
-                alert('ล้างการตั้งค่าสำเร็จ! กรอกข้อมูลใหม่เพื่อเริ่มใช้งาน');
-            }
-        }
-
-        function clearURLSettings() {
-            if (confirm('ต้องการล้าง URL ที่บันทึกไว้และเริ่มใหม่ใช่ไหม?')) {
-                localStorage.removeItem('gs_last_urlA');
-                localStorage.removeItem('gs_last_urlB');
-                localStorage.removeItem('gs_profile_done');
-                show('secForm');
-                byId('navForm').style.display = 'inline-flex';
-                byId('btnEditProfile').style.display = 'none';
-                byId('profileBadge').style.display = 'none';
-                byId('btnClearURL').style.display = 'none';
-                byId('navDailyScores').style.display = 'none';
-                setStatus('ok', 'ล้าง URL สำเร็จ - กรอกข้อมูลใหม่');
-            }
-        }
-
-        // ===== Column adapters =====
-        const COLS = {
-            ts: ['Timestamp (Asia/Bangkok)', 'Timestamp', 'Timestamp (Asia)', 'time', 'Time'],
-            tC: ['Temperature (°C)', 'Temperature (°C', 'AirTemp_C', 'Temp_C', 'Temp', 'Temperature'],
-            rh: ['Air Humidity (%)', 'Humid (%)', 'AirHumid_%RH', 'Humidity'],
-            soil: ['Soil Moisture (%)', 'Soil Moisture (%', 'SoilMoist_%', 'Soil'],
-            light: ['Light (%)', 'Light_%', 'Light'],
-            pm25: ['PM2.5 (µg/m³)', 'PM2.5 (μg/m³)', 'PM2_5', 'pm25', 'PM2.5'],
-            uv: ['UV Index', 'UV', 'UV_Index']
-        };
-        const SCORE = {
-            score: ['Score_1_10', 'Score', 'Score1_10'],
-            advice: ['Advice', 'AI_Advice', 'Note'],
-            ts: ['Timestamp', 'Timestamp (Asia/Bangkok)', 'time'],
-            hearts: ['Hearts', 'hearts'],
-            special_hearts: ['SpecialHearts', 'special_hearts'],
-            status: ['Status', 'status']
-        };
-        const pick = (row, keys) => {
-            for (const k of keys) {
-                if (row && row[k] != null && row[k] !== '' && row[k] !== undefined) return row[k];
-            }
-            return null;
-        };
-
-        // ===== Backend helper =====
-        const buildURL = (base, obj = {}) => {
-            const u = new URL(base);
-            Object.entries(obj).forEach(([k, v]) => u.searchParams.set(k, v));
-            return u.toString();
-        };
-
-        async function getJSON(url) {
-            try {
-                console.log('Fetching:', url);
-                const r = await fetch(url, {
-                    cache: 'no-store'
-                });
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return await r.json();
-            } catch (e) {
-                console.error('Fetch error:', e);
-                throw e;
-            }
-        }
-
-        async function postJSON(url, payload) {
-            const r = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-            return r.json().catch(() => ({}));
-        }
-
-        // ===== UI status helpers =====
-        function setStatus(type, msg) {
-            const dot = byId('dot');
-            const statusText = byId('statusText');
-            if (!dot || !statusText) return;
-            dot.classList.remove('ok', 'fail', 'load');
-            if (type === 'ok') dot.classList.add('ok');
-            else if (type === 'fail') dot.classList.add('fail');
-            else dot.classList.add('load');
-            statusText.textContent = msg || '';
-        }
-
-        // ===== Navigation =====
-        const show = id => {
-            ['secForm', 'secDash', 'secInsights', 'secDailyScores'].forEach(x => {
-                const el = byId(x);
-                if (el) el.style.display = (x === id) ? 'block' : 'none';
-            });
-        };
-        onReady(() => {
-            bind('navForm', 'click', () => {
-                show('secForm');
-            });
-            bind('navDash', 'click', () => show('secDash'));
-            bind('navInsight', 'click', () => show('secInsights'));
-            bind('navDailyScores', 'click', () => {
-                show('secDailyScores');
-                loadDailyScores();
-            });
-            bind('btnEditProfile', 'click', () => show('secForm'));
-            bind('btnReset', 'click', resetAllSettings);
-            bind('btnClearURL', 'click', clearURLSettings);
-            bind('btnQuickHearts', 'click', updateHeartsQuickly);
-            bind('btnGoDailyScores', 'click', () => {
-                show('secDailyScores');
-                loadDailyScores();
-            });
-            bind('btnBackToInsightsFromDaily', 'click', () => show('secInsights'));
-        });
-
-        // ===== Start flow & auto-continue =====
-        let ctx = {
-            urlA: '',
-            urlB: '',
-            limit: 50,
-            interval: 20000,
-            cache: {
-                A: {},
-                B: {}
-            }
-        };
-        (function autoStart() {
-            onReady(() => {
-                const done = localStorage.getItem('gs_profile_done') === '1';
-                const currentWebapp = byId('webapp')?.value.trim() || '';
-                const currentWebappA = byId('webappA')?.value.trim() || '';
-                const currentWebappB = byId('webappB')?.value.trim() || '';
-                const savedWebapp = localStorage.getItem('gs_webapp');
-                const savedWebappA = localStorage.getItem('gs_webappA');
-                const savedWebappB = localStorage.getItem('gs_webappB');
-                const urlsChanged = (currentWebapp !== savedWebapp) || (currentWebappA !== savedWebappA) || (currentWebappB !== savedWebappB);
-                let urlA = localStorage.getItem('gs_last_urlA') || '';
-                let urlB = localStorage.getItem('gs_last_urlB') || '';
-                const limit = +(localStorage.getItem('gs_last_limit') || 50);
-                const interval = +(localStorage.getItem('gs_last_interval') || 20000);
-                const demo = localStorage.getItem('gs_last_demo') === 'on';
-                const teamNameA = localStorage.getItem('gs_teamNameA') || 'ทีม A';
-                const teamNameB = localStorage.getItem('gs_teamNameB') || 'ทีม B';
-                updateTeamName('A', teamNameA);
-                updateTeamName('B', teamNameB);
-                if (done && (urlA || urlB) && !urlsChanged) {
-                    if (!urlA && urlB) urlA = urlB;
-                    if (!urlB && urlA) urlB = urlA;
-                    ctx = {
-                        urlA,
-                        urlB,
-                        limit,
-                        interval,
-                        cache: {
-                            A: {},
-                            B: {}
-                        }
-                    };
-                    try {
-                        byId('dsA') && (byId('dsA').textContent = demo ? 'DEMO' : (new URL(urlA)).host);
-                    } catch (e) {}
-                    try {
-                        byId('dsB') && (byId('dsB').textContent = demo ? 'DEMO' : (new URL(urlB)).host);
-                    } catch (e) {}
-                    const navForm = byId('navForm');
-                    if (navForm) navForm.style.display = 'none';
-                    const btnEdit = byId('btnEditProfile');
-                    if (btnEdit) btnEdit.style.display = 'inline-flex';
-                    const profBadge = byId('profileBadge');
-                    if (profBadge) profBadge.style.display = 'inline-flex';
-                    byId('btnClearURL').style.display = 'inline-flex';
-                    byId('navDailyScores').style.display = 'inline-flex';
-                    show('secDash');
-                    startDashboard();
-                    setupTeamNameEditing();
-                } else if (urlsChanged) {
-                    show('secForm');
-                    byId('btnClearURL').style.display = 'inline-flex';
-                    setStatus('info', 'ตรวจพบการเปลี่ยนแปลง URL - กด "เริ่มแข่งขัน" เพื่ออัพเดท');
-                }
-            });
-        })();
-
-        // ===== Buttons =====
-        onReady(() => {
-            bind('btnTest', 'click', async () => {
-                const baseA = (byId('webappA')?.value.trim() || byId('webapp')?.value.trim() || '');
-                if (!baseA) {
-                    setStatus('fail', 'ยังไม่ได้ใส่ URL');
-                    return;
-                }
-                try {
-                    new URL(baseA);
-                } catch (_) {
-                    setStatus('fail', 'URL ไม่ถูกต้อง');
-                    return;
-                }
-                setStatus('load', 'ทดสอบเชื่อมต่อ…');
-                try {
-                    const ping = await getJSON(buildURL(baseA, {
-                        action: 'ping'
-                    }));
-                    if (ping && ping.ok) setStatus('ok', 'เชื่อมต่อได้ ✔ เวอร์ชัน: ' + (ping.version || '2.2'));
-                    else setStatus('fail', 'ตอบกลับไม่ถูกต้อง');
-                } catch (e) {
-                    console.error('Connection test failed:', e);
-                    setStatus('fail', 'ติดต่อไม่ได้: ' + e.message);
-                }
-            });
-
-            bind('btnStart', 'click', async () => {
-                const base = byId('webapp')?.value.trim() || '';
-                const baseA = byId('webappA')?.value.trim() || '';
-                const baseB = byId('webappB')?.value.trim() || '';
-                const demo = byId('demo')?.value === 'on';
-                if (!demo && !base && !(baseA && baseB)) {
-                    setStatus('fail', 'ใส่ Web App URL หรือเปิดโหมดทดสอบ');
-                    return;
-                }
-                const urlA = demo ? 'demo://A' : (baseA || base);
-                const urlB = demo ? 'demo://B' : (baseB || base);
-                if (!demo) {
-                    try {
-                        new URL(urlA);
-                        new URL(urlB);
-                    } catch (_) {
-                        setStatus('fail', 'URL ไม่ถูกต้อง');
-                        return;
-                    }
-                }
-
-                const pf = {
-                    action: 'saveProfile',
-                    name: byId('name')?.value.trim() || '',
-                    plant: byId('plant')?.value.trim() || '',
-                    size: byId('size')?.value.trim() || '',
-                    light: byId('lightCond')?.value,
-                    airflow: byId('airflow')?.value,
-                    ac: byId('ac')?.value
-                };
-                setStatus('load', 'กำลังบันทึกโปรไฟล์…');
-                if (!demo) {
-                    try {
-                        await Promise.allSettled([postJSON(urlA, { ...pf,
-                            team: 'pot1'
-                        }), postJSON(urlB, { ...pf,
-                            team: 'pot2'
-                        })]);
-                    } catch (e) {
-                        console.warn('Profile save warning:', e);
-                    }
-                }
-
-                const teamNameA = byId('teamNameA')?.value.trim() || 'ทีม A';
-                const teamNameB = byId('teamNameB')?.value.trim() || 'ทีม B';
-                localStorage.setItem('gs_teamNameA', teamNameA);
-                localStorage.setItem('gs_teamNameB', teamNameB);
-                updateTeamName('A', teamNameA);
-                updateTeamName('B', teamNameB);
-
-                localStorage.setItem('gs_webapp', base);
-                localStorage.setItem('gs_webappA', baseA);
-                localStorage.setItem('gs_webappB', baseB);
-                localStorage.setItem('gs_last_urlA', urlA);
-                localStorage.setItem('gs_last_urlB', urlB);
-                localStorage.setItem('gs_last_limit', String(Number(byId('limit')?.value || 50)));
-                localStorage.setItem('gs_last_interval', String(Number(byId('interval')?.value || 20) * 1000));
-                localStorage.setItem('gs_last_demo', demo ? 'on' : 'off');
-                localStorage.setItem('gs_profile_done', '1');
-
-                const navForm = byId('navForm');
-                if (navForm) navForm.style.display = 'none';
-                const btnEdit = byId('btnEditProfile');
-                if (btnEdit) btnEdit.style.display = 'inline-flex';
-                const profBadge = byId('profileBadge');
-                if (profBadge) profBadge.style.display = 'inline-flex';
-                byId('btnClearURL').style.display = 'inline-flex';
-                byId('navDailyScores').style.display = 'inline-flex';
-
-                ctx = {
-                    urlA,
-                    urlB,
-                    limit: Number(byId('limit')?.value || 50),
-                    interval: Number(byId('interval')?.value || 20) * 1000,
-                    cache: {
-                        A: {},
-                        B: {}
-                    }
-                };
-                try {
-                    byId('dsA') && (byId('dsA').textContent = (demo ? 'DEMO' : (new URL(urlA)).host));
-                } catch (e) {}
-                try {
-                    byId('dsB') && (byId('dsB').textContent = (demo ? 'DEMO' : (new URL(urlB)).host));
-                } catch (e) {}
-                setStatus('ok', 'พร้อมแล้ว - กำลังโหลดข้อมูล...');
-                show('secDash');
-                startDashboard();
-                setupTeamNameEditing();
-            });
-
-            bind('btnGoInsights', 'click', async () => {
-                show('secInsights');
-                renderInsights();
-            });
-
-            bind('btnBackDash', 'click', () => show('secDash'));
-            bind('btnRefresh', 'click', () => {
-                setStatus('load', 'รีเฟรช...');
-                tickOnce().finally(() => setStatus('ok', 'อัพเดทแล้ว'));
-            });
-
-            // AI Advice button
-            bind('btnGetAIAdvice', 'click', async () => {
-                setStatus('load', 'กำลังขอคำแนะนำจาก AI...');
-                try {
-                    await getAIAdviceForBothTeams();
-                    setStatus('ok', 'ได้รับคำแนะนำจาก AI แล้ว');
-                } catch (error) {
-                    console.error('AI Advice error:', error);
-                    setStatus('fail', 'ไม่สามารถขอคำแนะนำจาก AI ได้');
-                }
-            });
-
-            // Daily Scores buttons
-            bind('btnRefreshDaily', 'click', () => {
-                loadDailyScores();
-            });
-        });
-
-        // ===== AI Advice Functions =====
-        async function getAIAdvice(team) {
-            try {
-                const url = team === 'A' ? ctx.urlA : ctx.urlB;
-                const teamForAPI = team === 'A' ? 'pot1' : 'pot2';
-
-                if (url.startsWith('demo://')) {
-                    return "💡 คำแนะนำจาก AI (โหมดทดสอบ): \n- อุณหภูมิอยู่ในระดับเหมาะสม\n- ความชื้นดินค่อนข้างน้อย ควรรดน้ำเพิ่ม\n- แสงเพียงพอสำหรับการเจริญเติบโต\n- ระดับ PM2.5 อยู่ในเกณฑ์ดี\n\nคำแนะนำ: รดน้ำเพิ่มเล็กน้อยและตรวจสอบการระบายอากาศ";
-                }
-
-                const aiUrl = buildURL(url, {
-                    action: 'ai_advice',
-                    team: teamForAPI,
-                    limit: 50
-                });
-                const response = await getJSON(aiUrl);
-
-                if (response && response.ok) {
-                    return response.advice || "ไม่มีคำแนะนำจาก AI ในขณะนี้";
-                } else {
-                    return "ไม่สามารถเชื่อมต่อกับ AI ได้: " + (response?.error || "Unknown error");
-                }
-            } catch (error) {
-                console.error('AI Advice error:', error);
-                return "เกิดข้อผิดพลาดในการขอคำแนะนำจาก AI: " + error.message;
-            }
-        }
-
-        async function getAIAdviceForBothTeams() {
-            const aiAdviceA = byId('aiAdviceA');
-            const aiAdviceB = byId('aiAdviceB');
-            const aiContentA = byId('aiAdviceContentA');
-            const aiContentB = byId('aiAdviceContentB');
-
-            aiAdviceA.className = 'ai-advice collapsed';
-            aiAdviceB.className = 'ai-advice collapsed';
-
-            aiAdviceA.querySelector('.ai-advice-toggle i').className = 'fa-solid fa-chevron-down';
-            aiAdviceB.querySelector('.ai-advice-toggle i').className = 'fa-solid fa-chevron-down';
-
-            aiAdviceA.style.display = 'block';
-            aiAdviceB.style.display = 'block';
-
-            aiContentA.innerHTML = '<div class="ai-loading"><div class="spinner"></div>กำลังขอคำแนะนำจาก AI...</div>';
-            aiContentB.innerHTML = '<div class="ai-loading"><div class="spinner"></div>กำลังขอคำแนะนำจาก AI...</div>';
-
-            try {
-                const [adviceA, adviceB] = await Promise.all([
-                    getAIAdvice('A'),
-                    getAIAdvice('B')
-                ]);
-
-                aiContentA.textContent = adviceA;
-                aiContentB.textContent = adviceB;
-            } catch (error) {
-                aiContentA.textContent = "เกิดข้อผิดพลาด: " + error.message;
-                aiContentB.textContent = "เกิดข้อผิดพลาด: " + error.message;
-            }
-        }
-
-        // ===== Demo generators =====
-        function demoRows() {
-            const now = Date.now();
-            const mk = i => ({
-                'Timestamp (Asia/Bangkok)': new Date(now - i * 60000).toISOString(),
-                'Temperature (°C)': +(25 + Math.sin(i / 6) * 2).toFixed(1),
-                'Air Humidity (%)': 55 + ((i * 7) % 10),
-                'Soil Moisture (%)': 40 + ((i * 5) % 20),
-                'Light (%)': 60 + ((i * 3) % 20),
-                'PM2.5 (µg/m³)': 22 + ((i * 13) % 40)
-            });
-            return Array.from({
-                length: 50
-            }, (_, i) => mk(i));
-        }
-
-        function demoScores() {
-            const now = Date.now();
-            const scores = [];
-            for (let i = 0; i < 20; i++) {
-                const score = 5 + Math.round(Math.sin(i / 3) * 3);
-                scores.push({
-                    'Timestamp': new Date(now - i * 3600000).toISOString(),
-                    'Score': score,
-                    'Hearts': '❤️'.repeat(Math.max(1, Math.min(10, score))),
-                    'SpecialHearts': score >= 7 ? '💖'.repeat(score) : '❤️'.repeat(score),
-                    'Advice': 'รดน้ำเล็กน้อย/ตรวจแสง',
-                    'Status': score >= 9 ? 'ดีเยี่ยม 🎉' : score >= 7 ? 'ดีมาก 👍' : score >= 5 ? 'ปานกลาง ✅' : 'ต้องดูแล ⚠️'
-                });
-            }
-            return scores;
-        }
-
-        // ===== Heart status functions =====
-        function updateStatusBadge(team, score) {
-            const badge = byId(`${team}_status`);
-            if (!badge) return;
-
-            badge.className = 'status-badge ';
-            if (score >= 9) {
-                badge.classList.add('status-excellent');
-                badge.textContent = 'ดีเยี่ยม 🎉';
-            } else if (score >= 7) {
-                badge.classList.add('status-good');
-                badge.textContent = 'ดีมาก 👍';
-            } else if (score >= 5) {
-                badge.classList.add('status-fair');
-                badge.textContent = 'ปานกลาง ✅';
-            } else if (score >= 3) {
-                badge.classList.add('status-poor');
-                badge.textContent = 'ต้องดูแล ⚠️';
-            } else {
-                badge.classList.add('status-critical');
-                badge.textContent = 'อันตราย 🚨';
-            }
-        }
-
-        // ===== Dashboard polling =====
-        async function pack(url, team, limit) {
-            // แปลงชื่อทีมให้ตรงกับ Apps Script
-            const teamForAPI = team === 'A' ? 'pot1' : 'pot2';
-
-            // ใช้ URL ที่ถูกต้องสำหรับแต่ละทีม
-            const actualUrl = team === 'A' ? ctx.urlA : ctx.urlB;
-
-            if (actualUrl.startsWith('demo://')) {
-                return {
-                    data: demoRows(),
-                    score: demoScores(),
-                    hearts: {
-                        score: 7,
-                        hearts: '❤️❤️❤️❤️❤️❤️❤️',
-                        special_hearts: '💖💖💖💖💖💖💖',
-                        status: 'ดีมาก 👍'
-                    }
-                };
-            }
-            try {
-                const dataUrl = buildURL(actualUrl, {
-                    action: 'data',
-                    team: teamForAPI,
-                    limit
-                });
-                const scoreUrl = buildURL(actualUrl, {
-                    action: 'score',
-                    team: teamForAPI,
-                    limit: 10
-                });
-                const heartsUrl = buildURL(actualUrl, {
-                    action: 'get_hearts',
-                    team: teamForAPI
-                });
-
-                const [dRes, sRes, hRes] = await Promise.allSettled([
-                    getJSON(dataUrl),
-                    getJSON(scoreUrl),
-                    getJSON(heartsUrl)
-                ]);
-
-                return {
-                    data: dRes.status === 'fulfilled' ? (dRes.value.rows || []) : [],
-                    score: sRes.status === 'fulfilled' ? (sRes.value.scores || []) : [],
-                    hearts: hRes.status === 'fulfilled' ? hRes.value : null
-                };
-            } catch (e) {
-                console.error(`Pack error for ${team}:`, e);
-                return {
-                    data: [],
-                    score: [],
-                    hearts: null
-                };
-            }
-        }
-
-        async function renderTeam(url, team, prefix) {
-            try {
-                const {
-                    data,
-                    score,
-                    hearts
-                } = await pack(url, team, ctx.limit);
-                ctx.cache[team] = {
-                    data,
-                    score
-                };
-
-                if (data.length > 0) {
-                    const latest = data[0];
-                    const tC = safeNum(pick(latest, COLS.tC));
-                    const rh = safeNum(pick(latest, COLS.rh));
-                    const soil = safeNum(pick(latest, COLS.soil));
-                    const light = safeNum(pick(latest, COLS.light));
-                    setTextSafe(prefix + 'temp', tC != null ? tC.toFixed(1) : '-');
-                    setTextSafe(prefix + 'hum', rh != null ? rh : '-');
-                    setTextSafe(prefix + 'soil', soil != null ? soil : '-');
-                    setTextSafe(prefix + 'light', light != null ? light : '-');
-
-                    const tb = byId(prefix + 'tbl');
-                    if (tb) {
-                        tb.innerHTML = '';
-                        data.slice(0, 8).forEach(row => {
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
-                                <td>${fmtTime(pick(row, COLS.ts))}</td>
-                                <td style="text-align:center">${pick(row, COLS.tC) ?? '-'}</td>
-                                <td style="text-align:center">${pick(row, COLS.rh) ?? '-'}</td>
-                                <td style="text-align:center">${pick(row, COLS.soil) ?? '-'}</td>
-                                <td style="text-align:center">${pick(row, COLS.light) ?? '-'}</td>
-                            `;
-                            tb.appendChild(tr);
-                        });
-                    }
-                }
-
-                if (hearts && hearts.ok) {
-                    setTextSafe(prefix + 'hearts', hearts.hearts || '—');
-                    setTextSafe(prefix + 'special_hearts', hearts.special_hearts || '');
-                    updateStatusBadge(team.toLowerCase(), hearts.score || 5);   // ✅ แก้แล้ว
-                } else if (score.length > 0) {
-                    const latestScore = score[0];
-                    const scoreValue = safeNum(pick(latestScore, SCORE.score)) || 0;
-                    const hearts = pick(latestScore, SCORE.hearts);
-                    const specialHearts = pick(latestScore, SCORE.special_hearts);
-                    const status = pick(latestScore, SCORE.status);
-
-                    setTextSafe(prefix + 'hearts', hearts || '❤️'.repeat(Math.max(1, Math.min(10, scoreValue))));
-                    setTextSafe(prefix + 'special_hearts', specialHearts || '');
-                    updateStatusBadge(team.toLowerCase(), scoreValue);          // ✅ แก้แล้ว
-
-                    const advice = pick(latestScore, SCORE.advice);
-                    setTextSafe(prefix + 'advice', advice ? `คำแนะนำ: ${advice}` : '—');
-                } else {
-                    setTextSafe(prefix + 'hearts', '—');
-                    setTextSafe(prefix + 'special_hearts', '');
-                    setTextSafe(prefix + 'advice', '—');
-                    updateStatusBadge(team.toLowerCase(), 5);                   // ✅ แก้แล้ว
-                }
-            } catch (e) {
-                console.error(`Render error for ${team}:`, e);
-                setTextSafe(prefix + 'hearts', '—');
-                setTextSafe(prefix + 'special_hearts', '');
-                setTextSafe(prefix + 'advice', 'ติดต่อข้อมูลไม่สำเร็จ');
-                updateStatusBadge(team.toLowerCase(), 5);
-            }
-        }
-
-        async function updateHeartsQuickly() {
-            setStatus('load', 'อัพเดทหัวใจ...');
-            try {
-                const [heartsA, heartsB] = await Promise.all([
-                    getJSON(buildURL(ctx.urlA, {
-                        action: 'get_hearts',
-                        team: 'pot1'
-                    })),
-                    getJSON(buildURL(ctx.urlB, {
-                        action: 'get_hearts',
-                        team: 'pot2'
-                    }))
-                ]);
-
-                if (heartsA.ok) {
-                    setTextSafe('a_hearts', heartsA.hearts || '—');
-                    setTextSafe('a_special_hearts', heartsA.special_hearts || '');
-                    updateStatusBadge('a', heartsA.score || 5);
-                }
-
-                if (heartsB.ok) {
-                    setTextSafe('b_hearts', heartsB.hearts || '—');
-                    setTextSafe('b_special_hearts', heartsB.special_hearts || '');
-                    updateStatusBadge('b', heartsB.score || 5);
-                }
-
-                setStatus('ok', 'อัพเดทหัวใจสำเร็จ');
-            } catch (e) {
-                console.error('Quick hearts update error:', e);
-                setStatus('fail', 'อัพเดทหัวใจล้มเหลว');
-            }
-        }
-
-        async function tickOnce() {
-            try {
-                await Promise.all([
-                    renderTeam(ctx.urlA, 'A', 'a_'),
-                    renderTeam(ctx.urlB, 'B', 'b_')
-                ]);
-            } catch (e) {
-                console.error('Tick error:', e);
-            }
-        }
-
-        let timer = null;
-
-        async function startDashboard() {
-            await tickOnce();
-            if (timer) clearInterval(timer);
-            timer = setInterval(() => {
-                tickOnce().catch(e => console.error('Interval tick error:', e));
-            }, ctx.interval || 20000);
-        }
-
-        // ===== Daily Scores Management =====
-        let dailyScoresChart = null;
-
-        async function loadDailyScores() {
-            setTextSafe('lastUpdateText', 'กำลังโหลด...');
-
-            try {
-                const response = await getJSON(buildURL(ctx.urlA, {
-                    action: 'get_daily_scores',
-                    days: 60
-                }));
-
-                if (response.ok && response.scores) {
-                    renderDailyScores(response.scores);
-                    setTextSafe('lastUpdateText', `อัพเดทล่าสุด: ${new Date().toLocaleString('th-TH', {timeZone: tz})}`);
-                } else {
-                    throw new Error(response.error || 'ไม่สามารถโหลดข้อมูลคะแนนรายวันได้');
-                }
-            } catch (error) {
-                console.error('Load daily scores error:', error);
-                setTextSafe('lastUpdateText', 'โหลดข้อมูลล้มเหลว');
-                setStatus('fail', 'โหลดข้อมูลคะแนนรายวันล้มเหลว: ' + error.message);
-
-                // แสดงข้อความ error ในตาราง
-                const tableBody = byId('dailyScoresTable');
-                if (tableBody) {
-                    tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;" class="err">โหลดข้อมูลไม่สำเร็จ: ' + error.message + '</td></tr>';
-                }
-            }
-        }
-
-        function renderDailyScores(scores) {
-            const teamAScores = scores.filter(score => score.ทีม === 'A');
-            const teamBScores = scores.filter(score => score.ทีม === 'B');
-
-            teamAScores.sort((a, b) => new Date(a.วันที่) - new Date(b.วันที่));
-            teamBScores.sort((a, b) => new Date(a.วันที่) - new Date(b.วันที่));
-
-            updateTeamStats('A', teamAScores);
-            updateTeamStats('B', teamBScores);
-
-            renderDailyScoresChart(teamAScores, teamBScores);
-            renderDailyScoresTable(scores);
-        }
-
-        function updateTeamStats(team, scores) {
-            if (scores.length === 0) {
-                setTextSafe(`team${team}Stats`, 'ไม่มีข้อมูล');
-                return;
-            }
-
-            const latestScore = scores[scores.length - 1];
-            const avgScore = scores.reduce((sum, score) => sum + parseFloat(score['คะแนนเฉลี่ย']), 0) / scores.length;
-            const maxScore = Math.max(...scores.map(score => parseFloat(score['คะแนนสูงสุด'])));
-            const minScore = Math.min(...scores.map(score => parseFloat(score['คะแนนต่ำสุด'])));
-            const totalDataPoints = scores.reduce((sum, score) => sum + parseInt(score['จำนวนข้อมูล']), 0);
-
-            const statsHTML = `
-                <div style="margin-bottom: 8px;">
-                    <strong>ล่าสุด (${latestScore.วันที่}):</strong> ${latestScore['คะแนนเฉลี่ย']} คะแนน
-                    <span class="status-badge ${getStatusClass(latestScore.สถานะ)}">${latestScore.สถานะ}</span>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
-                    <div>คะแนนเฉลี่ย: <strong>${avgScore.toFixed(2)}</strong></div>
-                    <div>คะแนนสูงสุด: <strong>${maxScore.toFixed(1)}</strong></div>
-                    <div>คะแนนต่ำสุด: <strong>${minScore.toFixed(1)}</strong></div>
-                    <div>จำนวนวัน: <strong>${scores.length}</strong></div>
-                </div>
-                <div style="margin-top: 8px; font-size: 12px; color: var(--muted);">
-                    ข้อมูลทั้งหมด: ${totalDataPoints} จุด
-                </div>
-            `;
-
-            setTextSafe(`team${team}Stats`, '');
-            byId(`team${team}Stats`).innerHTML = statsHTML;
-        }
-
-        function getStatusClass(status) {
-            if (status.includes('ดีเยี่ยม')) return 'status-excellent';
-            if (status.includes('ดีมาก')) return 'status-good';
-            if (status.includes('ปานกลาง')) return 'status-fair';
-            if (status.includes('ต้องดูแล')) return 'status-poor';
-            return 'status-critical';
-        }
-
-        function renderDailyScoresChart(teamAScores, teamBScores) {
-            const canvas = byId('chartDailyScores');
-            if (!canvas) return;
-
-            const ctx = canvas.getContext('2d');
-            if (dailyScoresChart) dailyScoresChart.destroy();
-
-            const labels = teamAScores.map(score => {
-                const date = new Date(score.วันที่);
-                return date.toLocaleDateString('th-TH', {
-                    timeZone: tz,
-                    day: '2-digit',
-                    month: 'short'
-                });
-            });
-
-            const dataA = teamAScores.map(score => parseFloat(score['คะแนนเฉลี่ย']));
-            const dataB = teamBScores.map(score => parseFloat(score['คะแนนเฉลี่ย']));
-
-            dailyScoresChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                            label: byId('teamANameDisplay').textContent,
-                            data: dataA,
-                            borderColor: '#10b981',
-                            backgroundColor: '#10b98120',
-                            tension: 0.3,
-                            fill: false
-                        },
-                        {
-                            label: byId('teamBNameDisplay').textContent,
-                            data: dataB,
-                            borderColor: '#8b5cf6',
-                            backgroundColor: '#8b5cf620',
-                            tension: 0.3,
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 10,
-                            ticks: {
-                                stepSize: 1
-                            },
-                            title: {
-                                display: true,
-                                text: 'คะแนน'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'วันที่'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderDailyScoresTable(scores) {
-            const tableBody = byId('dailyScoresTable');
-            if (!tableBody) return;
-
-            const sortedScores = [...scores].sort((a, b) => new Date(b.วันที่) - new Date(a.วันที่));
-
-            if (sortedScores.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;" class="muted">ไม่มีข้อมูลคะแนน</td></tr>';
-                return;
-            }
-
-            let html = '';
-            sortedScores.forEach(score => {
-                const statusClass = getStatusClass(score.สถานะ);
-                html += `
-                    <tr>
-                        <td>${score.วันที่}</td>
-                        <td style="text-align: center;">ทีม ${score.ทีม}</td>
-                        <td style="text-align: center;"><strong>${score['คะแนนเฉลี่ย']}</strong></td>
-                        <td style="text-align: center;">${score['จำนวนข้อมูล']}</td>
-                        <td style="text-align: center;">${score['คะแนนสูงสุด']}</td>
-                        <td style="text-align: center;">${score['คะแนนต่ำสุด']}</td>
-                        <td style="text-align: center;"><span class="status-badge ${statusClass}">${score.สถานะ}</span></td>
-                    </tr>
-                `;
-            });
-
-            tableBody.innerHTML = html;
-        }
-
-        // ===== Insights =====
-        let heartChart = null;
-
-        function renderInsights() {
-            try {
-                const A = (ctx.cache.A.score || []).map(o => ({
-                    ts: pick(o, SCORE.ts),
-                    s: +(pick(o, SCORE.score) || 0)
-                })).slice(0, 30).reverse();
-                const B = (ctx.cache.B.score || []).map(o => ({
-                    ts: pick(o, SCORE.ts),
-                    s: +(pick(o, SCORE.score) || 0)
-                })).slice(0, 30).reverse();
-                const labels = (A.length > 0 ? A : B).map(x => x.ts ? new Date(x.ts).toLocaleTimeString('th-TH', {
-                    timeZone: tz,
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }) : '');
-                const dataA = A.map(x => x.s);
-                const dataB = B.map(x => x.s);
-
-                const canvas = byId('chartHearts');
-                if (!canvas) return;
-                const ctx2 = canvas.getContext('2d');
-                if (heartChart) heartChart.destroy();
-                heartChart = new Chart(ctx2, {
-                    type: 'line',
-                    data: {
-                        labels,
-                        datasets: [{
-                                label: byId('teamANameDisplay').textContent,
-                                data: dataA,
-                                tension: 0.25,
-                                pointRadius: 2,
-                                borderWidth: 2,
-                                borderColor: '#10b981',
-                                backgroundColor: '#10b98120',
-                                fill: false
-                            },
-                            {
-                                label: byId('teamBNameDisplay').textContent,
-                                data: dataB,
-                                tension: 0.25,
-                                pointRadius: 2,
-                                borderWidth: 2,
-                                borderColor: '#8b5cf6',
-                                backgroundColor: '#8b5cf620',
-                                fill: false
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                suggestedMin: 0,
-                                suggestedMax: 10,
-                                ticks: {
-                                    stepSize: 1
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true
-                            },
-                            tooltip: {
-                                enabled: true
-                            }
-                        }
-                    }
-                });
-
-                byId('healthA') && (byId('healthA').innerHTML = healthHTML(latestEnv('A')));
-                byId('healthB') && (byId('healthB').innerHTML = healthHTML(latestEnv('B')));
-                byId('dailyTable') && (byId('dailyTable').innerHTML = tableSummary(avgBy('day')));
-                byId('weeklyTable') && (byId('weeklyTable').innerHTML = tableSummary(avgBy('week')));
-            } catch (e) {
-                console.error('Render insights error:', e);
-            }
-        }
-
-        function latestEnv(team) {
-            const rows = (team === 'A' ? ctx.cache.A.data : ctx.cache.B.data);
-            if (!rows || !rows.length) return null;
-            const r = rows[0];
-            return {
-                ts: pick(r, COLS.ts),
-                tC: safeNum(pick(r, COLS.tC)),
-                rh: safeNum(pick(r, COLS.rh)),
-                pm25: safeNum(pick(r, COLS.pm25)),
-                light: safeNum(pick(r, COLS.light))
-            };
-        }
-
-        function pm25Cat(v) {
-            if (v == null) return {
-                cat: '—',
-                tip: 'ไม่มีข้อมูล PM2.5'
-            };
-            if (v <= 25) return {
-                cat: 'ดีมาก',
-                tip: 'อากาศดี ออกกำลังกายกลางแจ้งได้'
-            };
-            if (v <= 37) return {
-                cat: 'ดี',
-                tip: 'ทำกิจกรรมกลางแจ้งได้ตามปกติ'
-            };
-            if (v <= 50) return {
-                cat: 'ปานกลาง',
-                tip: 'ผู้ป่วยโรคทางเดินหายใจควรลดกิจกรรมหนัก'
-            };
-            if (v <= 90) return {
-                cat: 'เริ่มมีผล',
-                tip: 'สวมหน้ากากเมื่อต้องอยู่นอกอาคารนาน'
-            };
-            return {
-                cat: 'มีผลกระทบ',
-                tip: 'ควรสวมหน้ากาก/อยู่ในอาคารที่มีการกรองอากาศ'
-            };
-        }
-
-        function lightTip(light) {
-            if (light == null) return 'ไม่มีข้อมูลแสง';
-            if (light < 30) return 'แสงน้อย — ขยับใกล้หน้าต่างหรือเพิ่มไฟปลูก';
-            if (light < 50) return 'แสงพอประมาณ — เหมาะสมสำหรับพืชส่วนใหญ่';
-            if (light < 70) return 'แสงดี — เหมาะสำหรับการเจริญเติบโต';
-            if (light < 85) return 'แสงแรง — ใช้ม่านกรองแสงหากจำเป็น';
-            return 'แสงแรงมาก — อาจต้องพรางแสง';
-        }
-
-        function healthHTML(env) {
-            if (!env) return '<div class="muted">ไม่มีข้อมูล</div>';
-            const pm = pm25Cat(env.pm25);
-            const humidTip = env.rh != null ? (env.rh < 40 ? 'อากาศแห้ง — เติมความชื้น' : env.rh > 70 ? 'อับชื้น — เพิ่มการถ่ายเท' : 'ความชื้นเหมาะสม') : 'ไม่มีข้อมูลความชื้น';
-            const tempTip = env.tC != null ? (env.tC < 22 ? 'ค่อนข้างเย็น — เลี่ยงลมเย็นจัด' : env.tC > 30 ? 'ค่อนข้างร้อน — ระบายอากาศ' : 'อุณหภูมิเหมาะสม') : 'ไม่มีข้อมูลอุณหภูมิ';
-            return `
-                <div class="chips">
-                    <span class="chip">เวลา: ${fmtTime(env.ts)}</span>
-                    <span class="chip">PM2.5: ${env.pm25 ?? '—'} µg/m³ (${pm.cat})</span>
-                    <span class="chip">ความชื้น: ${env.rh ?? '—'}%</span>
-                    <span class="chip">อุณหภูมิ: ${env.tC ?? '—'}°C</span>
-                    <span class="chip">แสง: ${env.light ?? '—'}%</span>
-                </div>
-                <div style="margin-top:8px">
-                    <div><strong>คำแนะนำด้านสุขภาพ:</strong></div>
-                    <ul style="margin:6px 0 0 18px; font-size:14px;">
-                        <li>${pm.tip}</li>
-                        <li>${humidTip}</li>
-                        <li>${tempTip}</li>
-                        <li>${lightTip(env.light)}</li>
-                    </ul>
-                </div>
-            `;
-        }
-
-        function avgBy(kind) {
-            const coll = (rows) => (rows || []).map(o => ({
-                d: kind === 'day' ? fmtDate(pick(o, SCORE.ts)) : weekKey(pick(o, SCORE.ts)),
-                s: +(pick(o, SCORE.score) || 0)
-            }));
-            const A = coll(ctx.cache.A.score);
-            const B = coll(ctx.cache.B.score);
-            const agg = (arr) => arr.reduce((m, x) => {
-                (m[x.d] = m[x.d] || []).push(x.s);
-                return m;
-            }, {});
-            const avg = (obj) => Object.entries(obj).map(([d, vals]) => ({
-                date: d,
-                avg: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2)
-            })).sort((a, b) => a.date.localeCompare(b.date));
-            return {
-                A: avg(agg(A)),
-                B: avg(agg(B))
-            };
-        }
-
-        function weekKey(iso) {
-            if (!iso) return '-';
-            const d = new Date(iso);
-            const y = d.getFullYear();
-            const firstDay = new Date(y, 0, 1);
-            const days = Math.floor((d - firstDay) / 86400000) + firstDay.getDay() + 1;
-            const w = Math.floor(days / 7);
-            return `${y}-W${('0' + w).slice(-2)}`;
-        }
-
-        function tableSummary(obj) {
-            const keys = Array.from(new Set([...(obj.A || []).map(x => x.date), ...(obj.B || []).map(x => x.date)])).sort();
-            if (keys.length === 0) return '<div class="muted">ไม่มีข้อมูล</div>';
-            let html = `<table style="width:100%; font-size:11px;"><thead><tr><th style="text-align:left">ช่วงเวลา</th><th>${byId('teamANameDisplay').textContent}</th><th>${byId('teamBNameDisplay').textContent}</th></tr></thead><tbody>`;
-            keys.forEach(k => {
-                const a = (obj.A || []).find(x => x.date === k)?.avg ?? '-';
-                const b = (obj.B || []).find(x => x.date === k)?.avg ?? '-';
-                html += `<tr><td>${k}</td><td style="text-align:center">${a}</td><td style="text-align:center">${b}</td></tr>`;
-            });
-            html += `</tbody></table>`;
-            return html;
-        }
-
-        onReady(() => {
-            console.log('GreenSync Duel loaded successfully');
-        });
-    </script>
+        pots.push({ letter, name, url: demo?`demo://${letter}`:url, host, demo, teamParam: letter });
+      }
+    }
+
+    if (pots.length){
+      ctx.pots = pots;
+      ctx.selectedPots = JSON.parse(localStorage.getItem('gs_selectedPots') || JSON.stringify(pots.map(p=>p.letter)));
+      ctx.viewMode = localStorage.getItem('gs_viewMode') || 'all';
+      ctx.singlePotView = localStorage.getItem('gs_singlePotView') || pots[0].letter;
+      ctx.limit = parseInt(localStorage.getItem('gs_limit') || '50');
+      ctx.interval = parseInt(localStorage.getItem('gs_interval') || '20')*1000;
+      ctx.cache = {};
+      ctx.aiAdvice = {}; // เริ่มต้นด้วย object ว่าง
+
+      byId('navForm').style.display='none';
+      byId('btnEditProfile').style.display='inline-flex';
+      byId('profileBadge').style.display='inline-flex';
+      byId('btnClearURL').style.display='inline-flex';
+      byId('navDailyScores').style.display='inline-flex';
+
+      show('secDash');
+      createPotCards();
+      startDashboard();
+    }
+  }
+
+  // nav
+  bind('navForm','click',()=>show('secForm'));
+  bind('navSelectPots','click',()=>{ show('secSelectPots'); createPotSelectionPage(); });
+  bind('navDash','click',()=>{ show('secDash'); createPotCards(); startDashboard(); });
+
+  // 🔧 แก้จุดสำคัญ: เข้าหน้าสรุปผลให้ดึงข้อมูลก่อนแล้วค่อย render
+  bind('navInsight','click',()=>{
+    show('secInsights');
+    createHealthCards();
+    updateDisplayedPots().then(()=>{
+      renderInsights();
+      restoreAIAdvice(); // <-- โหลดคำแนะนำเก่ากลับมา
+    }).catch(console.error);
+  });
+
+  bind('navDailyScores','click',()=>{ show('secDailyScores'); loadDailyScores(); });
+
+  // view mode
+  bind('btnViewAll','click',()=>{ ctx.viewMode='all'; createPotSelectionPage(); });
+  bind('btnViewSingle','click',()=>{ ctx.viewMode='single'; if (!ctx.singlePotView && ctx.pots.length) ctx.singlePotView=ctx.pots[0].letter; createPotSelectionPage(); });
+  bind('btnViewSelected','click',()=>{ ctx.viewMode='selected'; createPotSelectionPage(); });
+
+  // buttons
+  bind('btnStart','click', startCompetition);
+  bind('btnRefresh','click', ()=>{ setStatus('load','รีเฟรช...'); updateDisplayedPots().finally(()=>setStatus('ok','อัพเดทแล้ว')); });
+  bind('btnQuickHearts','click', ()=>{ setStatus('load','อัพเดทหัวใจ...'); quickHearts().finally(()=>setStatus('ok','หัวใจอัพเดทแล้ว')); });
+
+  // 🔧 แก้ตรงปุ่ม "ไปหน้าสรุปผล" ให้ดึงข้อมูลก่อนเหมือนกัน
+  bind('btnGoInsights','click', ()=>{
+    show('secInsights');
+    createHealthCards();
+    updateDisplayedPots().then(()=>{
+      renderInsights();
+      restoreAIAdvice(); // <-- โหลดคำแนะนำเก่ากลับมา
+    }).catch(console.error);
+  });
+
+  bind('btnBackDash','click', ()=>{ show('secDash'); createPotCards(); startDashboard(); });
+
+  // 🔧 ปุ่มขอคำแนะนำ AI (แก้ไขให้สั้นลงและมี feedback ดีขึ้น)
+  bind('btnGetAIAdvice','click', async function() {
+    // เพิ่ม animation ให้ปุ่ม
+    this.classList.add('pulse-effect');
+    
+    // รอสักครู่เพื่อให้เห็น animation
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    // เรียกฟังก์ชันหลัก
+    await fetchAIAdviceForDisplayedPots();
+  });
+
+  bind('btnGoDailyScores','click', ()=>{ show('secDailyScores'); loadDailyScores(); });
+  bind('btnBackToInsightsFromDaily','click', ()=>{ show('secInsights'); });
+
+  bind('btnRefreshDaily','click', loadDailyScores);
+
+  bind('btnEditProfile','click', ()=>show('secForm'));
+  bind('btnBackToFormFromSelect','click', ()=>show('secForm'));
+  bind('btnGoToDashboard','click', ()=>{
+    localStorage.setItem('gs_viewMode', ctx.viewMode);
+    localStorage.setItem('gs_singlePotView', ctx.singlePotView || '');
+    localStorage.setItem('gs_selectedPots', JSON.stringify(ctx.selectedPots || []));
+    show('secDash'); createPotCards(); startDashboard();
+  });
+  bind('btnChangePots','click', ()=>{ show('secSelectPots'); createPotSelectionPage(); });
+
+  bind('btnReset','click', ()=>{
+    if (confirm('ต้องการล้างการตั้งค่าทั้งหมดใช่ไหม?')){ 
+      localStorage.clear(); 
+      location.reload(); 
+    }
+  });
+
+  bind('btnClearURL','click', ()=>{
+    if (confirm('ต้องการล้าง URL ที่บันทึกไว้และเริ่มใหม่ใช่ไหม?')){
+      localStorage.removeItem('gs_profile_done');
+      localStorage.removeItem('gs_last_numPots');
+      localStorage.removeItem('gs_viewMode');
+      localStorage.removeItem('gs_singlePotView');
+      localStorage.removeItem('gs_selectedPots');
+      show('secForm');
+      byId('navForm').style.display='inline-flex';
+      byId('btnEditProfile').style.display='none';
+      byId('profileBadge').style.display='none';
+      byId('btnClearURL').style.display='none';
+      byId('navDailyScores').style.display='none';
+      setStatus('ok','ล้าง URL สำเร็จ - กรอกใหม่ได้เลย');
+    }
+  });
+
+  // test connection (first pot)
+  bind('btnTest','click', async ()=>{
+    const baseUrl = byId('webapp').value.trim() || byId('webappA')?.value.trim() || '';
+    if (!baseUrl) { setStatus('fail','ยังไม่ได้ใส่ URL'); return; }
+    try{ new URL(baseUrl); }catch(e){ setStatus('fail','URL ไม่ถูกต้อง'); return; }
+
+    setStatus('load','ทดสอบเชื่อมต่อ...');
+    try{
+      const r = await fetch(`${baseUrl}?action=ping`, {cache:'no-store'}).then(x=>x.json());
+      if (r && r.ok) setStatus('ok', `เชื่อมต่อได้ ✔ ${r.pot_id || ''}`);
+      else setStatus('fail','ตอบกลับไม่ถูกต้อง');
+    }catch(e){
+      setStatus('fail','ติดต่อไม่ได้: '+e.message);
+    }
+  });
+});
+</script>
 </body>
 </html>
